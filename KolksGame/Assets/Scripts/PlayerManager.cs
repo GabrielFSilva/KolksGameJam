@@ -6,14 +6,8 @@ public class PlayerManager : MonoBehaviour
 	public GameSceneManager	gameSceneManager;
 	public SpriteRenderer playerSprite;
 	public Rigidbody2D	rigidBody2D;
-	public enum PlayerOrientation
-	{
-		RIGHT,
-		UP,
-		LEFT,
-		DOWN
-	}
-	public PlayerOrientation playerOrientation = PlayerOrientation.RIGHT;
+
+	public Tile.PlayerOrientation playerOrientation = Tile.PlayerOrientation.RIGHT;
 	public KeyCode playerDirection = KeyCode.Q;
 
 	public float playerSpeed;
@@ -43,22 +37,22 @@ public class PlayerManager : MonoBehaviour
 			if (Input.GetKey (KeyCode.W)) 
 			{
 				playerDirection = KeyCode.W;
-				playerOrientation = PlayerOrientation.UP;
+				playerOrientation = Tile.PlayerOrientation.UP;
 			}
 			else if (Input.GetKey (KeyCode.A)) 
 			{
 				playerDirection = KeyCode.A;
-				playerOrientation = PlayerOrientation.LEFT;
+				playerOrientation = Tile.PlayerOrientation.LEFT;
 			}
 			else if (Input.GetKey (KeyCode.S)) 
 			{
 				playerDirection = KeyCode.S;
-				playerOrientation = PlayerOrientation.DOWN;
+				playerOrientation = Tile.PlayerOrientation.DOWN;
 			}
 			else if (Input.GetKey (KeyCode.D)) 
 			{
 				playerDirection = KeyCode.D;
-				playerOrientation = PlayerOrientation.RIGHT;
+				playerOrientation = Tile.PlayerOrientation.RIGHT;
 			}
 			UpdateSpriteOriantation ();
 		} 

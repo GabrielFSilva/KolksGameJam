@@ -148,7 +148,11 @@ public class GameSceneManager : MonoBehaviour
 			__enemyHit = TryToHitEnemy (p_position,(Tile.PlayerOrientation)i, true);
 			if (__enemyHit == null) 
 				continue;
-			__enemyHit.StartYawn ();
+			int __orientation = (int)__enemyHit.enemyOrientation + 2;
+			if (__orientation >= 4)
+				__orientation -= 4;
+			if (__orientation == i)
+				__enemyHit.StartYawn ();
 		}
 	}
 	public void PlayerHelloAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)

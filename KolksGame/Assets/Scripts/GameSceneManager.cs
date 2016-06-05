@@ -138,8 +138,11 @@ public class GameSceneManager : MonoBehaviour
 		}
 		return null;
 	}
-	public void PlayerYawnAction(Vector2 p_position)
+	public void PlayerYawnAction(Vector2 p_position, bool p_calledByPlayer)
 	{
+		if (p_calledByPlayer) 
+			foreach (Enemy __enemy in enemies)
+				__enemy.StopYawnChain ();
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{

@@ -19,7 +19,12 @@ public class Tile
 		PLANT_1,
 		TABLE_SMALL,
 		TABLE_1_LEFT,
-		TABLE_1_RIGHT
+		TABLE_1_RIGHT,
+		TABLE_2_UP,
+		TABLE_2_DOWN,
+		BOOKSHELF,
+		FILESHELF,
+		LEAVES
 	}
 	public enum PlayerOrientation
 	{

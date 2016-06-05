@@ -67,7 +67,12 @@ public class Enemy : MonoBehaviour
 		yawned = true;
 		yield return new WaitForSeconds (enemyYawnDelay);
 		animator.SetBool ("Yawning",true);
-		gameSceneManager.PlayerYawnAction (gridPosition);
+		gameSceneManager.PlayerYawnAction (gridPosition,false);
+	}
+	public void StopYawnChain()
+	{
+		yawned = false;
+		StopCoroutine (Yawn ());
 	}
 	public void EndYawn()
 	{

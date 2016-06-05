@@ -70,22 +70,22 @@ public class PlayerManager : MonoBehaviour
 			{
 				Debug.Log("Hello");
 				gameSceneManager.PlayerHelloAction (gridPosition, playerOrientation);
-				isTalking = true;
-				talkTweenCount = 0f;
+				StartAction ();
+				return;
 			} 
 			else if (Input.GetKeyDown(KeyCode.E))
 			{
 				Debug.Log("Excuse me");
 				gameSceneManager.PlayerExcuseMeAction (gridPosition, playerOrientation);
-				isTalking = true;
-				talkTweenCount = 0f;
+				StartAction ();
+				return;
 			} 
 			else if (Input.GetKey (KeyCode.Space))
 			{
 				animator.StartYawn ();
-				isTalking = true;
-				talkTweenCount = 0f;
-				gameSceneManager.PlayerYawnAction (gridPosition);
+				gameSceneManager.PlayerYawnAction (gridPosition,true);
+				StartAction ();
+				return;
 			}
 			UpdateSpriteOriantation ();
 		} 
@@ -96,6 +96,11 @@ public class PlayerManager : MonoBehaviour
 			if (moveKeyPressedTimer >= moveTimerThreshold) 
 				SetPlayerDestination ();
 		}
+	}
+	private void StartAction()
+	{
+		isTalking = true;
+		talkTweenCount = 0f;
 	}
 	private void UpdatePlayerPosition()
 	{

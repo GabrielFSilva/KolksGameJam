@@ -25,6 +25,14 @@ public class PlayerManager : MonoBehaviour
 	void Start () 
 	{
 		animator.SetPlayerOrientation ((int)playerOrientation);
+		if (playerOrientation == Tile.PlayerOrientation.UP)
+			playerDirection = KeyCode.W;
+		else if (playerOrientation == Tile.PlayerOrientation.RIGHT)
+			playerDirection = KeyCode.D;
+		else if (playerOrientation == Tile.PlayerOrientation.DOWN)
+			playerDirection = KeyCode.S;
+		else
+			playerDirection = KeyCode.A;
 	}
 
 	void Update () 
@@ -68,23 +76,17 @@ public class PlayerManager : MonoBehaviour
 			} 
 			else if (Input.GetKeyDown(KeyCode.Q))
 			{
-				Debug.Log("Hello");
-				gameSceneManager.PlayerHelloAction (gridPosition, playerOrientation);
-				StartAction ();
+				gameSceneManager.HelloButtonClicked ();
 				return;
 			} 
 			else if (Input.GetKeyDown(KeyCode.E))
 			{
-				Debug.Log("Excuse me");
-				gameSceneManager.PlayerExcuseMeAction (gridPosition, playerOrientation);
-				StartAction ();
+				gameSceneManager.ExcuseMeButtonClicked ();
 				return;
 			} 
 			else if (Input.GetKey (KeyCode.Space))
 			{
-				animator.StartYawn ();
-				gameSceneManager.PlayerYawnAction (gridPosition,true);
-				StartAction ();
+				gameSceneManager.YawnButtonClicked ();
 				return;
 			}
 			UpdateSpriteOriantation ();
@@ -97,7 +99,7 @@ public class PlayerManager : MonoBehaviour
 				SetPlayerDestination ();
 		}
 	}
-	private void StartAction()
+	public void StartAction()
 	{
 		isTalking = true;
 		talkTweenCount = 0f;

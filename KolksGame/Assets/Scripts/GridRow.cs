@@ -51,5 +51,4 @@ public class Tile
 	public TileContent content;
 	public TileOrientation orientation;
 	public TileConstraints constraints;
-
 }

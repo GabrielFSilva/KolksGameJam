@@ -6,15 +6,13 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
-	//temp UI
-	public Text	movimentCountLabel;
-	public Text	yawnedCountLabel;
-
+	//Level Control
 	public List<GameObject> levels;
 	public LevelInfo testLevel;
 	public LevelInfo currentLevel;
-	public static int currentLevelIndex = 0;
+	public static int currentLevelIndex = 1;
 
+	//Entities
 	public PlayerManager player;
 	public int playerMovimentCount;
 	public List<Enemy> enemies;
@@ -28,7 +26,16 @@ public class GameSceneManager : MonoBehaviour
 	public int gridWidth;
 	public int gridHeight;
 
-
+	//UI
+	public Text	movimentCountLabel;
+	public Text	yawnedCountLabel;
+	public Button helloButton;
+	public Button excuseMeButton;
+	public Text	helloHint;
+	public Text	excuseMeHint;
+	public RectTransform fillBar;
+	public RectTransform fillBarFull;
+	public RectTransform fillBarEmpty;
 
 	void Start () 
 	{
@@ -47,17 +54,64 @@ public class GameSceneManager : MonoBehaviour
 		}
 		player.transform.localPosition = new Vector3 ((player.gridPosition.x * 2f) - gridWidth + 1f,
 			(player.gridPosition.y * -2f) + grid.Count - 1f);
+
+		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO) 
+		{
+			helloButton.gameObject.SetActive (false);
+			helloHint.gameObject.SetActive (false);
+		}
+		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE) 
+		{
+			excuseMeButton.gameObject.SetActive (false);
+			excuseMeHint.gameObject.SetActive (false);
+		}
 	}
 	void Update()
 	{
-		movimentCountLabel.text = "Mov: " + playerMovimentCount.ToString () + "/" + currentLevel.movesAvailable.ToString();
+		movimentCountLabel.text = playerMovimentCount.ToString () + "/" + currentLevel.movesAvailable.ToString();
 		int __count = 0;
 		foreach (Enemy __enemy in enemies)
 			if (__enemy.yawned)
 				__count++;
 		yawnedCountLabel.text = __count.ToString () + "/" + enemies.Count.ToString();
-		if (Input.GetKeyDown(KeyCode.R))
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		fillBar.anchoredPosition = Vector2.Lerp (fillBarEmpty.anchoredPosition, fillBarFull.anchoredPosition,
+			1f - ((float)playerMovimentCount/(float)currentLevel.movesAvailable));
+	}
+	public void RestartLevelButtonClicked()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+	public void HomeButtonClicked()
+	{
+		Debug.Log ("HomeButton Clicked");
+	}
+	public void YawnButtonClicked()
+	{
+		if (player.isTalking || player.isMoving)
+			return;
+		player.animator.StartYawn ();
+		PlayerYawnAction (player.gridPosition,true);
+		player.StartAction ();
+	}
+	public void HelloButtonClicked()
+	{
+		if (player.isTalking || player.isMoving)
+			return;
+		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO)
+			return;
+		
+		PlayerHelloAction (player.gridPosition, player.playerOrientation);
+		player.StartAction ();
+	}
+	public void ExcuseMeButtonClicked()
+	{
+		if (player.isTalking || player.isMoving)
+			return;
+		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE)
+			return;
+		
+		PlayerExcuseMeAction (player.gridPosition,player.playerOrientation);
+		player.StartAction ();
 	}
 	private void LoadLevel()
 	{

@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour
 {
 	public GameSceneManager	gameSceneManager;
 	public SpriteRenderer playerSprite;
+	public PlayerSpriteAnimator animator;
 	public Rigidbody2D	rigidBody2D;
 
 	public Tile.PlayerOrientation playerOrientation = Tile.PlayerOrientation.RIGHT;
@@ -12,16 +13,18 @@ public class PlayerManager : MonoBehaviour
 
 	public float playerSpeed;
 	public float moveTimerThreshold;
+	public float talkTimerCooldown;
 	public float moveKeyPressedTimer = 0f;
 	public Vector2 gridPosition;
 	public Vector2 moveStartPosition;
 	public Vector2 moveEndPosition;
 	public bool isMoving = false;
 	public float moveTweenCount = 0f;
-
+	public bool isTalking = false;
+	public float talkTweenCount = 0f;
 	void Start () 
 	{
-	
+		animator.SetPlayerOrientation ((int)playerOrientation);
 	}
 
 	void Update () 
@@ -31,6 +34,15 @@ public class PlayerManager : MonoBehaviour
 			UpdatePlayerPosition ();
 			return;
 		}
+		if (isTalking) 
+		{
+			talkTweenCount += Time.deltaTime;
+			if (talkTweenCount >= talkTimerCooldown)
+				isTalking = false;
+
+			return;
+		}
+			
 		if (!Input.GetKey (playerDirection)) 
 		{
 			moveKeyPressedTimer = 0f;
@@ -38,27 +50,49 @@ public class PlayerManager : MonoBehaviour
 			{
 				playerDirection = KeyCode.W;
 				playerOrientation = Tile.PlayerOrientation.UP;
-			}
+			} 
 			else if (Input.GetKey (KeyCode.A)) 
 			{
 				playerDirection = KeyCode.A;
 				playerOrientation = Tile.PlayerOrientation.LEFT;
-			}
+			} 
 			else if (Input.GetKey (KeyCode.S)) 
 			{
 				playerDirection = KeyCode.S;
 				playerOrientation = Tile.PlayerOrientation.DOWN;
-			}
+			} 
 			else if (Input.GetKey (KeyCode.D)) 
 			{
 				playerDirection = KeyCode.D;
 				playerOrientation = Tile.PlayerOrientation.RIGHT;
+			} 
+			else if (Input.GetKeyDown(KeyCode.Q))
+			{
+				Debug.Log("Hello");
+				gameSceneManager.PlayerHelloAction (gridPosition, playerOrientation);
+				isTalking = true;
+				talkTweenCount = 0f;
+			} 
+			else if (Input.GetKeyDown(KeyCode.E))
+			{
+				Debug.Log("Excuse me");
+				gameSceneManager.PlayerExcuseMeAction (gridPosition, playerOrientation);
+				isTalking = true;
+				talkTweenCount = 0f;
+			} 
+			else if (Input.GetKey (KeyCode.Space))
+			{
+				animator.StartYawn ();
+				isTalking = true;
+				talkTweenCount = 0f;
+				gameSceneManager.PlayerYawnAction (gridPosition);
 			}
 			UpdateSpriteOriantation ();
 		} 
 		else 
 		{
-			moveKeyPressedTimer += Time.deltaTime;
+			if (!animator.yawning)
+				moveKeyPressedTimer += Time.deltaTime;
 			if (moveKeyPressedTimer >= moveTimerThreshold) 
 				SetPlayerDestination ();
 		}
@@ -93,6 +127,6 @@ public class PlayerManager : MonoBehaviour
 
 	private void UpdateSpriteOriantation()
 	{
-		playerSprite.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, (int)playerOrientation * 90f));
+		animator.SetPlayerOrientation ((int)playerOrientation);
 	}
 }

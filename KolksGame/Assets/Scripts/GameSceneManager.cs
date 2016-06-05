@@ -10,11 +10,12 @@ public class GameSceneManager : MonoBehaviour
 	public List<GameObject> levels;
 	public LevelInfo testLevel;
 	public LevelInfo currentLevel;
-	public static int currentLevelIndex = 1;
+	public static int currentLevelIndex = 3;
 
 	//Entities
 	public PlayerManager player;
 	public int playerMovimentCount;
+	public int enemyYawnCount;
 	public List<Enemy> enemies;
 
 	//Grid Stuff
@@ -27,18 +28,36 @@ public class GameSceneManager : MonoBehaviour
 	public int gridHeight;
 
 	//UI
+	public GameObject endLevelPanel;
 	public Text	movimentCountLabel;
 	public Text	yawnedCountLabel;
 	public Button helloButton;
 	public Button excuseMeButton;
+	public Button nextButton;
+	public Image muteButtonImage;
 	public Text	helloHint;
 	public Text	excuseMeHint;
 	public RectTransform fillBar;
 	public RectTransform fillBarFull;
 	public RectTransform fillBarEmpty;
 
+	public RectTransform starBar;
+	public RectTransform starBarFull;
+	public RectTransform starBarEmpty;
+	public Image star0;
+	public Image star1;
+	public Image star2;
+	public Sprite starOn;
+	public Sprite starOff;
+
+	public Sprite soundOnSprite;
+	public Sprite soundOffSprite;
+
+	public SoundManager soundManager;
 	void Start () 
 	{
+		endLevelPanel.SetActive (false);
+		nextButton.gameObject.SetActive (false);
 		LoadLevel ();
 
 		gridHeight = grid.Count;
@@ -65,37 +84,111 @@ public class GameSceneManager : MonoBehaviour
 			excuseMeButton.gameObject.SetActive (false);
 			excuseMeHint.gameObject.SetActive (false);
 		}
+		soundManager = SoundManager.GetInstance ();
+		soundManager.PlayBGM ();
+		UpdateMuteButtonSprite ();
 	}
 	void Update()
 	{
 		movimentCountLabel.text = playerMovimentCount.ToString () + "/" + currentLevel.movesAvailable.ToString();
-		int __count = 0;
+		enemyYawnCount = 0;
 		foreach (Enemy __enemy in enemies)
 			if (__enemy.yawned)
-				__count++;
-		yawnedCountLabel.text = __count.ToString () + "/" + enemies.Count.ToString();
+				enemyYawnCount++;
+		yawnedCountLabel.text = enemyYawnCount.ToString () + "/" + enemies.Count.ToString();
 		fillBar.anchoredPosition = Vector2.Lerp (fillBarEmpty.anchoredPosition, fillBarFull.anchoredPosition,
 			1f - ((float)playerMovimentCount/(float)currentLevel.movesAvailable));
 	}
+	IEnumerator EndLevel()
+	{
+		yield return new WaitForSeconds (2f);
+		soundManager.PlayEndOfLevelSFX ();
+		endLevelPanel.SetActive (true);
+
+		float __t = -0.25f;
+		float __limit = 1f;
+		__limit = 0.2f + (enemyYawnCount / enemies.Count) * 0.8f;
+		while (__t < __limit) 
+		{
+			__t += Time.deltaTime * 0.3f;
+			starBar.anchoredPosition = Vector2.Lerp (starBarEmpty.anchoredPosition, starBarFull.anchoredPosition,
+				Mathf.Clamp(__t,0f,__limit));
+			UpdateStarSprites (__t);
+			yield return null;
+		}
+		yield return new WaitForSeconds (0.25f);
+		if (__t >= 0.5f)
+			nextButton.gameObject.SetActive (true);
+	}
+	private void UpdateStarSprites(float p_value)
+	{
+		if (p_value >= 0.5f && star0.sprite == starOff) 
+		{
+			star0.sprite = starOn;
+			soundManager.PlayEndOfLevelSFX ();
+		}
+		if (p_value >= 0.75f && star1.sprite == starOff)
+		{
+			star1.sprite = starOn;
+			soundManager.PlayEndOfLevelSFX ();
+		}
+		if (p_value >= 0.98f && star2.sprite == starOff)
+		{
+			star2.sprite = starOn;
+			soundManager.PlayEndOfLevelSFX ();
+		}
+	}
+	private void UpdateMuteButtonSprite()
+	{
+		if (AudioListener.volume == 0f)
+			muteButtonImage.sprite = soundOffSprite;
+		else
+			muteButtonImage.sprite = soundOnSprite;
+	}
 	public void RestartLevelButtonClicked()
 	{
+		soundManager.PlayClickSFX ();
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 	public void HomeButtonClicked()
 	{
-		Debug.Log ("HomeButton Clicked");
+		soundManager.PlayClickSFX ();
+		SceneManager.LoadScene("TitleScreen");
 	}
-	public void YawnButtonClicked()
+	public void NextButtonClicked()
 	{
-		if (player.isTalking || player.isMoving)
+		soundManager.PlayClickSFX ();
+		currentLevelIndex++; 
+		if (currentLevelIndex == 11)
+			SceneManager.LoadScene("TitleScreen");
+		else
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+	public void MuteButtonClicked()
+	{
+		soundManager.PlayClickSFX ();
+		Debug.Log ("HomeButton Clicked");
+		AudioListener.volume = 1f - AudioListener.volume;
+		UpdateMuteButtonSprite ();
+	}
+	public void YawnButtonClicked(bool p_isFromButton)
+	{
+		if (p_isFromButton)
+			soundManager.PlayClickSFX ();
+		if (player.isTalking || player.isMoving || player.yawned)
 			return;
+		player.yawned = true;
 		player.animator.StartYawn ();
 		PlayerYawnAction (player.gridPosition,true);
 		player.StartAction ();
+		soundManager.PlayPlayerYawnSFX ();
+		StartCoroutine (EndLevel());
 	}
-	public void HelloButtonClicked()
+	public void HelloButtonClicked(bool p_isFromButton)
 	{
-		if (player.isTalking || player.isMoving)
+		if (p_isFromButton)
+			soundManager.PlayClickSFX ();
+		if (player.isTalking || player.isMoving || player.yawned)
 			return;
 		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO)
 			return;
@@ -103,9 +196,11 @@ public class GameSceneManager : MonoBehaviour
 		PlayerHelloAction (player.gridPosition, player.playerOrientation);
 		player.StartAction ();
 	}
-	public void ExcuseMeButtonClicked()
+	public void ExcuseMeButtonClicked(bool p_isFromButton)
 	{
-		if (player.isTalking || player.isMoving)
+		if (p_isFromButton)
+			soundManager.PlayClickSFX ();
+		if (player.isTalking || player.isMoving || player.yawned)
 			return;
 		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE)
 			return;
@@ -133,6 +228,7 @@ public class GameSceneManager : MonoBehaviour
 			enemies.Add (__child.GetComponent<Enemy>());
 		LoadTiles ();
 	}
+
 	private void LoadTiles()
 	{
 		GameObject __tileFloor;
@@ -219,6 +315,7 @@ public class GameSceneManager : MonoBehaviour
 			return;
 		__enemyHit.ChangeEnemyOrientation (p_orientation);
 		playerMovimentCount++;
+		soundManager.PlayHelloSFX ();
 	}
 	public void PlayerExcuseMeAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)
 	{
@@ -236,6 +333,7 @@ public class GameSceneManager : MonoBehaviour
 		{
 			__enemyHit.SetEnemyDestination (p_orientation);
 			playerMovimentCount++;
+			soundManager.PlayExcuseMeSFX ();
 		}
 		
 	}

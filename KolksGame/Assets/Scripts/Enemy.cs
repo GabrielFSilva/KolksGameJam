@@ -55,6 +55,8 @@ public class Enemy : MonoBehaviour
 		_moveStartPosition = transform.localPosition;
 		_moveEndPosition = transform.localPosition + new Vector3 (Mathf.Cos ((int)p_playerOrientation * 90f * Mathf.Deg2Rad),
 			Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
+		
+		StartCoroutine (MovimentSFXDelay ());
 	}
 	public void StartYawn()
 	{
@@ -62,12 +64,20 @@ public class Enemy : MonoBehaviour
 			return;
 		StartCoroutine (Yawn ());
 	}
+	IEnumerator MovimentSFXDelay()
+	{
+		yield return new WaitForSeconds (enemyYawnDelay/enemySpeed);
+		SoundManager.GetInstance ().PlayMovimentSFX ();
+	}
 	IEnumerator Yawn()
 	{
 		yawned = true;
 		yield return new WaitForSeconds (enemyYawnDelay);
+
 		animator.SetBool ("Yawning",true);
 		gameSceneManager.PlayerYawnAction (gridPosition,false);
+		yield return new WaitForSeconds (0.3f);
+		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
 	}
 	public void StopYawnChain()
 	{
@@ -93,5 +103,6 @@ public class Enemy : MonoBehaviour
 
 		enemyOrientation = (Tile.PlayerOrientation)__orientation;
 		animator.SetInteger ("Orientation", __orientation);
+		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 }

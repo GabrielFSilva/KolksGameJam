@@ -9,6 +9,7 @@ public class JamLogoSceneManager : MonoBehaviour
 
 	void Start () 
 	{
+		SoundManager.GetInstance ().PlayBGM ();
 		StartCoroutine (Fade (true));
 	}
 	IEnumerator Fade(bool p_fadeIn)

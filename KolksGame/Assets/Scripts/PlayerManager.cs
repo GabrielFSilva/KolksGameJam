@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
 	public Tile.PlayerOrientation playerOrientation = Tile.PlayerOrientation.RIGHT;
 	public KeyCode playerDirection = KeyCode.Q;
 
+	public bool yawned = false;
 	public float playerSpeed;
 	public float moveTimerThreshold;
 	public float talkTimerCooldown;
@@ -22,6 +23,7 @@ public class PlayerManager : MonoBehaviour
 	public float moveTweenCount = 0f;
 	public bool isTalking = false;
 	public float talkTweenCount = 0f;
+
 	void Start () 
 	{
 		animator.SetPlayerOrientation ((int)playerOrientation);
@@ -37,6 +39,8 @@ public class PlayerManager : MonoBehaviour
 
 	void Update () 
 	{
+		if (yawned)
+			return;
 		if (isMoving) 
 		{
 			UpdatePlayerPosition ();
@@ -76,17 +80,17 @@ public class PlayerManager : MonoBehaviour
 			} 
 			else if (Input.GetKeyDown(KeyCode.Q))
 			{
-				gameSceneManager.HelloButtonClicked ();
+				gameSceneManager.HelloButtonClicked (false);
 				return;
 			} 
 			else if (Input.GetKeyDown(KeyCode.E))
 			{
-				gameSceneManager.ExcuseMeButtonClicked ();
+				gameSceneManager.ExcuseMeButtonClicked (false);
 				return;
 			} 
 			else if (Input.GetKey (KeyCode.Space))
 			{
-				gameSceneManager.YawnButtonClicked ();
+				gameSceneManager.YawnButtonClicked (false);
 				return;
 			}
 			UpdateSpriteOriantation ();
@@ -129,6 +133,7 @@ public class PlayerManager : MonoBehaviour
 				Mathf.Sin ((int)playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
 
 			gameSceneManager.playerMovimentCount++;
+			SoundManager.GetInstance ().PlayMovimentSFX ();
 		}
 	}
 

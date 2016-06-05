@@ -140,8 +140,6 @@ public class GameSceneManager : MonoBehaviour
 	}
 	public void PlayerYawnAction(Vector2 p_position)
 	{
-		if (playerMovimentCount >= currentLevel.movesAvailable)
-			return;
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{

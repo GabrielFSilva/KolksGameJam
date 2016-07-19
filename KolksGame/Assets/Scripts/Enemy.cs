@@ -14,10 +14,10 @@ public class Enemy : MonoBehaviour
 	public Tile.PlayerOrientation enemyOrientation;
 
 	//Enemy Timers and Speeds
-	public float enemyTalkDelay = 0.35f;
-	public float enemyMoveDelay = 0.7f;
-	public float enemyYawnDelay = 0.7f;
-	public float enemySpeed;
+	private float _enemyTalkDelay = 0.35f;
+	private float _enemyMoveDelay = 0.4f;
+	private float _enemyYawnDelay = 0.6f;
+	private float _enemySpeed = 1.5f;
 
 	//Moviment
 	private Vector2 _moveStartPosition;
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
 	}
 	private void UpdateEnemyPosition()
 	{
-		_moveTweenCount += Time.deltaTime * enemySpeed;
+		_moveTweenCount += Time.deltaTime * _enemySpeed;
 		transform.localPosition = Vector3.Lerp (_moveStartPosition, _moveEndPosition, _moveTweenCount);
 		if (_moveTweenCount >= 1f) 
 			_isMoving = false;
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
 		gridPosition.y -= Mathf.RoundToInt (Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad));
 
 		_isMoving = true;
-		_moveTweenCount = enemyMoveDelay * -1f;
+		_moveTweenCount = _enemyMoveDelay * -1f;
 		_moveStartPosition = transform.localPosition;
 		_moveEndPosition = transform.localPosition + new Vector3 (Mathf.Cos ((int)p_playerOrientation * 90f * Mathf.Deg2Rad),
 			Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
@@ -66,16 +66,16 @@ public class Enemy : MonoBehaviour
 	}
 	IEnumerator MovimentSFXDelay()
 	{
-		yield return new WaitForSeconds (enemyYawnDelay/enemySpeed);
+		yield return new WaitForSeconds (_enemyYawnDelay/_enemySpeed);
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 	IEnumerator Yawn()
 	{
 		yawned = true;
-		yield return new WaitForSeconds (enemyYawnDelay);
+		yield return new WaitForSeconds (_enemyYawnDelay);
 
 		animator.SetBool ("Yawning",true);
-		gameSceneManager.PlayerYawnAction (gridPosition,false);
+		gameSceneManager.PlayerYawnAction (gridPosition,enemyOrientation,false);
 		yield return new WaitForSeconds (0.3f);
 		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
 	}
@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
 
 	IEnumerator ChangeOrientation(Tile.PlayerOrientation p_playerOrientation)
 	{
-		yield return new WaitForSeconds (enemyTalkDelay);
+		yield return new WaitForSeconds (_enemyTalkDelay);
 		int __orientation = (int)p_playerOrientation + 2;
 		if (__orientation >= 4)
 			__orientation -= 4;

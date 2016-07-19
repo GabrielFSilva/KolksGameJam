@@ -4,10 +4,17 @@ using System.Collections;
 
 public class TitleScreenManager : MonoBehaviour 
 {
-	void Update () 
+	void Start()
 	{
+		SoundManager.GetInstance ().PlayBGM ();
+	}
+	public void PlayButtonClicked()
+	{
+		//if (!PlayerPrefs.HasKey ("UnlockedLevel"))
+		PlayerPrefs.SetInt ("UnlockedLevel", 15);
+		
+		SoundManager.GetInstance ().PlayClickSFX ();
 		GameSceneManager.currentLevelIndex = 0;
-		if (Input.anyKeyDown && Time.timeSinceLevelLoad >= 1f)
-			SceneManager.LoadScene ("GameScene");
+		SceneManager.LoadScene ("LevelSelectScene");
 	}
 }

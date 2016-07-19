@@ -10,177 +10,149 @@ public class GameSceneManager : MonoBehaviour
 	public List<GameObject> levels;
 	public LevelInfo testLevel;
 	public LevelInfo currentLevel;
-	public static int currentLevelIndex = 3;
-
+	public static int currentLevelIndex = 0;
 	//Entities
 	public PlayerManager player;
 	public int playerMovimentCount;
 	public int enemyYawnCount;
 	public List<Enemy> enemies;
 
-	//Grid Stuff
-	public Transform tilesContainer;
-	public GameObject tilePrefab;
-	public List<GridRow> grid;
-	public List<Sprite> tileFloorSprites;
-	public List<Sprite> tileContentSprites;
-	public int gridWidth;
-	public int gridHeight;
+	public LevelLoader		levelLoader;
+	public GridManager 		gridManager;
+	public InputManager 	inputManager;
+	public UIManager 		uiManager;
 
-	//UI
-	public GameObject endLevelPanel;
-	public Text	movimentCountLabel;
 	public Text	yawnedCountLabel;
-	public Button helloButton;
-	public Button excuseMeButton;
-	public Button nextButton;
-	public Image muteButtonImage;
-	public Text	helloHint;
-	public Text	excuseMeHint;
-	public RectTransform fillBar;
-	public RectTransform fillBarFull;
-	public RectTransform fillBarEmpty;
-
-	public RectTransform starBar;
-	public RectTransform starBarFull;
-	public RectTransform starBarEmpty;
-	public Image star0;
-	public Image star1;
-	public Image star2;
-	public Sprite starOn;
-	public Sprite starOff;
-
-	public Sprite soundOnSprite;
-	public Sprite soundOffSprite;
+	public Text	currentLevelLabel;
 
 	public SoundManager soundManager;
 	void Start () 
 	{
-		endLevelPanel.SetActive (false);
-		nextButton.gameObject.SetActive (false);
+		gridManager.gameManager = this;
+		if (currentLevelIndex == 14) 
+		{
+			Camera.main.transform.localPosition = new Vector3(7f,0f,-10f);
+			Camera.main.orthographicSize = 9;
+		}
+		levelLoader.gridManager = gridManager;
+		levelLoader.LoadLevel (currentLevelIndex + 1);
 		LoadLevel ();
 
-		gridHeight = grid.Count;
-		gridWidth = grid [0].columns.Count;
 		playerMovimentCount = 0;
 		player.gameSceneManager = this;
 
 		foreach (Enemy __enemy in enemies) 
 		{
-			__enemy.transform.localPosition = new Vector3 ((__enemy.gridPosition.x * 2f) - gridWidth + 1f,
-				(__enemy.gridPosition.y * -2f) + grid.Count - 1f);
+			__enemy.transform.localPosition = new Vector3 ((__enemy.gridPosition.x * 2f) - gridManager.gridWidth + 1f,
+				(__enemy.gridPosition.y * -2f) + gridManager.grid.Count - 1f);
 			__enemy.gameSceneManager = this;
 		}
-		player.transform.localPosition = new Vector3 ((player.gridPosition.x * 2f) - gridWidth + 1f,
-			(player.gridPosition.y * -2f) + grid.Count - 1f);
+		player.transform.localPosition = new Vector3 ((player.gridPosition.x * 2f) - gridManager.gridWidth + 1f,
+			(player.gridPosition.y * -2f) + gridManager.grid.Count - 1f);
 
-		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO) 
-		{
-			helloButton.gameObject.SetActive (false);
-			helloHint.gameObject.SetActive (false);
-		}
-		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE) 
-		{
-			excuseMeButton.gameObject.SetActive (false);
-			excuseMeHint.gameObject.SetActive (false);
-		}
+		inputManager.player = player;
+		inputManager.onScreenClicked += InputManager_onScreenClicked;
+		uiManager.actionButtonsManager.EnableActionButtons (currentLevel.actions);
 		soundManager = SoundManager.GetInstance ();
 		soundManager.PlayBGM ();
-		UpdateMuteButtonSprite ();
+	}
+
+	void InputManager_onScreenClicked (Tile.PlayerOrientation p_orientation)
+	{
+		if (p_orientation == player.playerOrientation)
+			player.SetPlayerDestination ();
+		else
+			player.ChangeOrientation (p_orientation);
 	}
 	void Update()
 	{
-		movimentCountLabel.text = playerMovimentCount.ToString () + "/" + currentLevel.movesAvailable.ToString();
 		enemyYawnCount = 0;
 		foreach (Enemy __enemy in enemies)
 			if (__enemy.yawned)
 				enemyYawnCount++;
 		yawnedCountLabel.text = enemyYawnCount.ToString () + "/" + enemies.Count.ToString();
-		fillBar.anchoredPosition = Vector2.Lerp (fillBarEmpty.anchoredPosition, fillBarFull.anchoredPosition,
-			1f - ((float)playerMovimentCount/(float)currentLevel.movesAvailable));
+		currentLevelLabel.text = "Level " + (currentLevelIndex+1).ToString() + " / " + levels.Count.ToString();
+
+		uiManager.energyBarManager.UpdateEnergyBar(currentLevel.movesAvailable,playerMovimentCount);
+		if (playerMovimentCount - currentLevel.movesAvailable == 0) 
+			uiManager.actionButtonsManager.SetYawnButtonGlow ();
 	}
 	IEnumerator EndLevel()
 	{
-		yield return new WaitForSeconds (2f);
+		if (currentLevelIndex == 14)
+			yield return new WaitForSeconds (6f);
+		else
+			yield return new WaitForSeconds (4.5f);
 		soundManager.PlayEndOfLevelSFX ();
-		endLevelPanel.SetActive (true);
+		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
 
 		float __t = -0.25f;
-		float __limit = 1f;
-		__limit = 0.2f + (enemyYawnCount / enemies.Count) * 0.8f;
+		float __limit = 0f;
+		if (enemyYawnCount < enemies.Count)
+			__limit = 0.25f;
+		else 
+		{
+			PlayerPrefsManager.SetLevelStars (currentLevelIndex, 0);
+			if (currentLevel.movesAvailable - playerMovimentCount == 0) 
+			{
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 1);
+				__limit = 0.5f;
+			}
+			else if (currentLevel.movesAvailable - playerMovimentCount == 1) 
+			{
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 2);
+				__limit = 0.75f;
+			}
+			else if (currentLevel.movesAvailable - playerMovimentCount > 1) 
+			{
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 3);
+				__limit = 1f;
+			}
+			if (currentLevelIndex == 0) 
+			{
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 3);
+				__limit = 1f;
+			}
+		}
+		if (__limit >= 0.5f)
+			PlayerPrefsManager.SetUnlockedLevel(currentLevelIndex + 2);
 		while (__t < __limit) 
 		{
-			__t += Time.deltaTime * 0.3f;
-			starBar.anchoredPosition = Vector2.Lerp (starBarEmpty.anchoredPosition, starBarFull.anchoredPosition,
-				Mathf.Clamp(__t,0f,__limit));
-			UpdateStarSprites (__t);
+			__t += Time.deltaTime * 0.6f;
+			uiManager.endLevelPanelManager.UpdateStarBarPosition (__t, __limit);
+			uiManager.endLevelPanelManager.UpdateStarSprites (__t);
 			yield return null;
 		}
+		if (__t < 0.5f)
+			soundManager.PlayDefeatSFX ();
 		yield return new WaitForSeconds (0.25f);
-		if (__t >= 0.5f)
-			nextButton.gameObject.SetActive (true);
+		uiManager.endLevelPanelManager.EnableEndLevelButtons (__t);
+			
 	}
-	private void UpdateStarSprites(float p_value)
-	{
-		if (p_value >= 0.5f && star0.sprite == starOff) 
-		{
-			star0.sprite = starOn;
-			soundManager.PlayEndOfLevelSFX ();
-		}
-		if (p_value >= 0.75f && star1.sprite == starOff)
-		{
-			star1.sprite = starOn;
-			soundManager.PlayEndOfLevelSFX ();
-		}
-		if (p_value >= 0.98f && star2.sprite == starOff)
-		{
-			star2.sprite = starOn;
-			soundManager.PlayEndOfLevelSFX ();
-		}
-	}
-	private void UpdateMuteButtonSprite()
-	{
-		if (AudioListener.volume == 0f)
-			muteButtonImage.sprite = soundOffSprite;
-		else
-			muteButtonImage.sprite = soundOnSprite;
-	}
-	public void RestartLevelButtonClicked()
-	{
-		soundManager.PlayClickSFX ();
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	}
-	public void HomeButtonClicked()
-	{
-		soundManager.PlayClickSFX ();
-		SceneManager.LoadScene("TitleScreen");
-	}
+
+
 	public void NextButtonClicked()
 	{
 		soundManager.PlayClickSFX ();
 		currentLevelIndex++; 
-		if (currentLevelIndex == 11)
-			SceneManager.LoadScene("TitleScreen");
+		if (currentLevelIndex == levels.Count)
+			SceneManager.LoadScene("VictoryScreen");
 		else
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
-	public void MuteButtonClicked()
-	{
-		soundManager.PlayClickSFX ();
-		Debug.Log ("HomeButton Clicked");
-		AudioListener.volume = 1f - AudioListener.volume;
-		UpdateMuteButtonSprite ();
-	}
+
 	public void YawnButtonClicked(bool p_isFromButton)
 	{
-		if (p_isFromButton)
+		if (p_isFromButton && !player.yawned)
 			soundManager.PlayClickSFX ();
 		if (player.isTalking || player.isMoving || player.yawned)
 			return;
+		
 		player.yawned = true;
 		player.animator.StartYawn ();
-		PlayerYawnAction (player.gridPosition,true);
+		PlayerYawnAction (player.gridPosition,player.playerOrientation,true);
 		player.StartAction ();
+		uiManager.actionButtonsManager.DisableYawnButtonTransition ();
 		soundManager.PlayPlayerYawnSFX ();
 		StartCoroutine (EndLevel());
 	}
@@ -220,50 +192,16 @@ public class GameSceneManager : MonoBehaviour
 		}
 		currentLevel.name = "Level";
 		player = currentLevel.player;
-		grid = new List<GridRow> ();
+		gridManager.grid = new List<GridRow> ();
 		enemies = new List<Enemy> ();
 		foreach (Transform __child in currentLevel.grid.transform)
-			grid.Add (__child.GetComponent<GridRow>());
+			gridManager.grid.Add (__child.GetComponent<GridRow>());
 		foreach (Transform __child in currentLevel.enemiesContainer.transform)
 			enemies.Add (__child.GetComponent<Enemy>());
-		LoadTiles ();
+		gridManager.LoadTiles ();
 	}
 
-	private void LoadTiles()
-	{
-		GameObject __tileFloor;
-		GameObject __tileContent;
-		foreach (GridRow __row in grid) 
-		{
-			for (int i = 0; i < __row.columns.Count; i++) 
-			{
-				//Load Floor
-				__tileFloor = (GameObject)Instantiate (tilePrefab);
-				__tileFloor.name = "TileFloor";
-				__tileFloor.transform.parent = tilesContainer;
-				__tileFloor.transform.localPosition = new Vector3 ((i * 2f) - __row.columns.Count + 1f,
-					(grid.IndexOf (__row) * -2f) + grid.Count - 1f);
-				SpriteRenderer __sr = __tileFloor.GetComponent<SpriteRenderer> ();
-				if ((i + grid.IndexOf (__row)) % 2 == 0)
-					__sr.sprite = tileFloorSprites [0];
-				else
-					__sr.sprite = tileFloorSprites [1];
 
-				//Load File Content
-				if (__row.columns [i].content != Tile.TileContent.NOTHING) 
-				{
-					__tileContent = (GameObject)Instantiate (tilePrefab);
-					__tileContent.name = __row.columns [i].content.ToString();
-					__tileContent.transform.parent = __tileFloor.transform;
-					__tileContent.transform.localPosition = Vector3.zero;
-					__tileContent.GetComponent<SpriteRenderer> ().sprite = tileContentSprites [(int)__row.columns [i].content - 1];
-					__tileContent.GetComponent<SpriteRenderer> ().sortingOrder = 1;
-					__tileContent.transform.localRotation = Quaternion.Euler (
-						new Vector3 (0f, 0f, (int)__row.columns [i].orientation * 90f));
-				}
-			}
-		}
-	}
 	public Enemy TryToHitEnemy(Vector2 p_position, Tile.PlayerOrientation p_orientation, bool p_continueUntilEnd)
 	{
 		int __posX = Mathf.RoundToInt (p_position.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
@@ -271,9 +209,11 @@ public class GameSceneManager : MonoBehaviour
 
 		while(__posX > -1)
 		{
-			if (!TileIsWithinGrid(__posX,__posY))
+			if (!gridManager.TileIsWithinGrid(__posX,__posY))
 				return null;
-			if (!TilePassYawn (__posX, __posY))
+			if (!gridManager.TilePassYawn(__posX, __posY))
+				return null;
+			if (gridManager.TileHasPlayer(__posX, __posY))
 				return null;
 			
 			foreach (Enemy __enemy in enemies)
@@ -288,7 +228,7 @@ public class GameSceneManager : MonoBehaviour
 		}
 		return null;
 	}
-	public void PlayerYawnAction(Vector2 p_position, bool p_calledByPlayer)
+	public void PlayerYawnAction(Vector2 p_position,Tile.PlayerOrientation p_orientation, bool p_calledByPlayer)
 	{
 		if (p_calledByPlayer) 
 			foreach (Enemy __enemy in enemies)
@@ -299,7 +239,13 @@ public class GameSceneManager : MonoBehaviour
 			__enemyHit = TryToHitEnemy (p_position,(Tile.PlayerOrientation)i, true);
 			if (__enemyHit == null) 
 				continue;
-			int __orientation = (int)__enemyHit.enemyOrientation + 2;
+			int __orientation = i + 2;
+			if (__orientation >= 4)
+				__orientation -= 4;
+			if (__orientation == (int)p_orientation) 
+				continue;
+				
+			__orientation = (int)__enemyHit.enemyOrientation + 2;
 			if (__orientation >= 4)
 				__orientation -= 4;
 			if (__orientation == i)
@@ -311,8 +257,11 @@ public class GameSceneManager : MonoBehaviour
 		if (playerMovimentCount >= currentLevel.movesAvailable)
 			return;
 		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, true);
-		if (__enemyHit == null)
+		if (__enemyHit == null) 
+		{
+			soundManager.PlayErrorSFX ();
 			return;
+		}
 		__enemyHit.ChangeEnemyOrientation (p_orientation);
 		playerMovimentCount++;
 		soundManager.PlayHelloSFX ();
@@ -322,14 +271,25 @@ public class GameSceneManager : MonoBehaviour
 		if (playerMovimentCount >= currentLevel.movesAvailable)
 			return;
 		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, false);
-		if (__enemyHit == null)
+		if (__enemyHit == null) 
+		{
+			soundManager.PlayErrorSFX ();
 			return;
-
+		}
 		int __posX = Mathf.RoundToInt (__enemyHit.gridPosition.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
 		int __posY = Mathf.RoundToInt (__enemyHit.gridPosition.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
-		if (!TileIsWithinGrid(__posX,__posY))
+		if (!gridManager.TileIsWithinGrid (__posX, __posY)) 
+		{
+			soundManager.PlayErrorSFX ();
 			return;
-		if (TileWalkable (__posX,__posY))
+		}
+		if (gridManager.TileHasEnemy (__posX, __posY)) 
+		{
+			soundManager.PlayErrorSFX ();
+			return;
+		}
+
+		if (gridManager.TileWalkable (__posX,__posY))
 		{
 			__enemyHit.SetEnemyDestination (p_orientation);
 			playerMovimentCount++;
@@ -346,38 +306,15 @@ public class GameSceneManager : MonoBehaviour
 		if (playerMovimentCount >= currentLevel.movesAvailable)
 			return false;
 		//Map Limit Block
-		if (!TileIsWithinGrid(__posX,__posY))
+		if (!gridManager.TileIsWithinGrid(__posX,__posY))
 			return false;
 		//Tile Block
-		if (!TileWalkable(__posX, __posY))
+		if (!gridManager.TileWalkable(__posX, __posY))
 			return false;
 		//EnemyBlock
 		foreach (Enemy __enemy in enemies)
 			if (Mathf.RoundToInt (__enemy.gridPosition.x) == __posX && Mathf.RoundToInt (__enemy.gridPosition.y) == __posY)
 				return false;
-		return true;
-			
-	}
-	private bool TileIsWithinGrid(int p_posX, int p_posY)
-	{
-		if (p_posX < 0 || p_posX > gridWidth - 1 || p_posY < 0 || p_posY > gridHeight - 1)
-			return false;
-		return true;
-	}
-	private bool TilePassYawn(int p_posX, int p_posY)
-	{
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
-			return false;
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.WALKABLE_BLOCK_YAWN)
-			return false;
-		return true;
-	}
-	private bool TileWalkable(int p_posX, int p_posY)
-	{
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
-			return false;
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_PASS_YAWN)
-			return false;
 		return true;
 	}
 }

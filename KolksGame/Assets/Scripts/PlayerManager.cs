@@ -12,8 +12,8 @@ public class PlayerManager : MonoBehaviour
 	public KeyCode playerDirection = KeyCode.Q;
 
 	public bool yawned = false;
-	public float playerSpeed;
-	public float moveTimerThreshold;
+	private float _playerSpeed = 1.8f;
+	private float _moveTimerThreshold = 0.25f;
 	public float talkTimerCooldown;
 	public float moveKeyPressedTimer = 0f;
 	public Vector2 gridPosition;
@@ -63,19 +63,40 @@ public class PlayerManager : MonoBehaviour
 				playerDirection = KeyCode.W;
 				playerOrientation = Tile.PlayerOrientation.UP;
 			} 
+			else if (Input.GetKey (KeyCode.UpArrow)) 
+			{
+				playerDirection = KeyCode.UpArrow;
+				playerOrientation = Tile.PlayerOrientation.UP;
+			} 
+			 
 			else if (Input.GetKey (KeyCode.A)) 
 			{
 				playerDirection = KeyCode.A;
 				playerOrientation = Tile.PlayerOrientation.LEFT;
 			} 
+			else if (Input.GetKey (KeyCode.LeftArrow)) 
+			{
+				playerDirection = KeyCode.LeftArrow;
+				playerOrientation = Tile.PlayerOrientation.LEFT;
+			}
 			else if (Input.GetKey (KeyCode.S)) 
 			{
 				playerDirection = KeyCode.S;
 				playerOrientation = Tile.PlayerOrientation.DOWN;
 			} 
+			else if (Input.GetKey (KeyCode.DownArrow)) 
+			{
+				playerDirection = KeyCode.DownArrow;
+				playerOrientation = Tile.PlayerOrientation.DOWN;
+			}
 			else if (Input.GetKey (KeyCode.D)) 
 			{
 				playerDirection = KeyCode.D;
+				playerOrientation = Tile.PlayerOrientation.RIGHT;
+			} 
+			else if (Input.GetKey (KeyCode.RightArrow)) 
+			{
+				playerDirection = KeyCode.RightArrow;
 				playerOrientation = Tile.PlayerOrientation.RIGHT;
 			} 
 			else if (Input.GetKeyDown(KeyCode.Q))
@@ -99,7 +120,7 @@ public class PlayerManager : MonoBehaviour
 		{
 			if (!animator.yawning)
 				moveKeyPressedTimer += Time.deltaTime;
-			if (moveKeyPressedTimer >= moveTimerThreshold) 
+			if (moveKeyPressedTimer >= _moveTimerThreshold) 
 				SetPlayerDestination ();
 		}
 	}
@@ -108,9 +129,16 @@ public class PlayerManager : MonoBehaviour
 		isTalking = true;
 		talkTweenCount = 0f;
 	}
+	public void ChangeOrientation(Tile.PlayerOrientation p_oritentation)
+	{
+		if (yawned || isMoving || isTalking) 
+			return;
+		playerOrientation = p_oritentation;
+		UpdateSpriteOriantation ();
+	}
 	private void UpdatePlayerPosition()
 	{
-		moveTweenCount += Time.deltaTime * playerSpeed;
+		moveTweenCount += Time.deltaTime * _playerSpeed;
 		transform.localPosition = Vector3.Lerp (moveStartPosition, moveEndPosition, moveTweenCount);
 		if (moveTweenCount >= 1f) 
 		{
@@ -120,8 +148,10 @@ public class PlayerManager : MonoBehaviour
 				isMoving = false;
 		}
 	}
-	private void SetPlayerDestination()
+	public void SetPlayerDestination()
 	{
+		if (yawned || isMoving || isTalking) 
+			return;
 		if (gameSceneManager.GetPathCollision(gridPosition, playerOrientation))
 		{
 			isMoving = true;

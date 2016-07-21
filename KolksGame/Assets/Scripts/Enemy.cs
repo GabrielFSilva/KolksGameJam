@@ -87,7 +87,11 @@ public class Enemy : MonoBehaviour
 	public void EndYawn()
 	{
 		animator.SetBool ("Yawning", false);
-
+	}
+	public void ChangeOrientationInstantly(Tile.PlayerOrientation p_orientation)
+	{
+		enemyOrientation = p_orientation;
+		animator.SetInteger ("Orientation", (int)p_orientation);
 	}
 	public void ChangeEnemyOrientation(Tile.PlayerOrientation p_playerOrientation)
 	{

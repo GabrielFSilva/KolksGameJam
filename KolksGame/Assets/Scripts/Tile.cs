@@ -1,11 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-
-public class GridRow : MonoBehaviour 
-{
-	public List<Tile> columns;
-}
 
 [System.Serializable]
 public class Tile
@@ -48,6 +42,12 @@ public class Tile
 		NOT_WALKABLE_BLOCK_YAWN
 	}
 
+	public Tile()
+	{
+		content = TileContent.NOTHING;
+		orientation = TileOrientation.DOWN;
+		constraints = TileConstraints.WALKABLE_PASS_YAWN;
+	}
 	public TileContent content;
 	public TileOrientation orientation;
 	public TileConstraints constraints;

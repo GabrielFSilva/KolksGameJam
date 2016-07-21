@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
 	public event Action<Tile.PlayerOrientation>	onScreenClicked;
 	public BoxCollider2D	inputCollider;
 
-	public PlayerManager	player;
+	public Player	player;
 
 	public void Clicked()
 	{

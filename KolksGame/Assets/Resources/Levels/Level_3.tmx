@@ -129,9 +129,13 @@
   </data>
  </layer>
  <objectgroup name="LevelInfo">
-  <object id="1" name="MovesAvailable" x="0" y="0" width="32" height="32">
+  <object id="1" name="LevelInfo" x="0" y="0" width="32" height="32">
    <properties>
-    <property name="Moves" type="int" value="9"/>
+    <property name="2Star" type="int" value="1"/>
+    <property name="3Star" type="int" value="0"/>
+    <property name="Energy" type="int" value="9"/>
+    <property name="ExcuseMe" type="bool" value="false"/>
+    <property name="Hello" type="bool" value="false"/>
    </properties>
   </object>
  </objectgroup>

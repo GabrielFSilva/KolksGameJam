@@ -17,14 +17,14 @@ public class UIActionButtonsManager : MonoBehaviour
 	{
 	
 	}
-	public void EnableActionButtons(LevelInfo.ActionsAvailable p_actions)
+	public void EnableActionButtons(GameSceneManager.ActionsAvailable p_actions)
 	{
-		if (p_actions < LevelInfo.ActionsAvailable.YAWN_HELLO) 
+		if (p_actions < GameSceneManager.ActionsAvailable.YAWN_HELLO) 
 		{
 			helloButton.gameObject.SetActive (false);
 			helloHint.gameObject.SetActive (false);
 		}
-		if (p_actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE) 
+		if (p_actions < GameSceneManager.ActionsAvailable.YAWN_HELLO_EXCUSE) 
 		{
 			excuseMeButton.gameObject.SetActive (false);
 			excuseMeHint.gameObject.SetActive (false);

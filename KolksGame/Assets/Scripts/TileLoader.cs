@@ -5,9 +5,12 @@ using System.Collections.Generic;
 public class TileLoader : MonoBehaviour 
 {
 	public Transform tilesContainer;
+	public Transform sceneryContainer;
 	public GameObject tilePrefab;
 	public List<Sprite> tileFloorSprites;
 	public List<Sprite> tileContentSprites;
+
+	public List<Tile.TileConstraints> constraintsReferences;
 
 	public void LoadTiles(int p_width,int p_height, List<int> p_data)
 	{
@@ -32,11 +35,11 @@ public class TileLoader : MonoBehaviour
 		GameObject __tileContent;
 		for (int i = 0; i < p_data.Count; i ++)
 		{
-			if (p_data [i] >= 0) 
+			if (p_data [i] > 0) 
 			{
 				__tileContent = (GameObject)Instantiate (tilePrefab);
 				__tileContent.name = "Content";
-				__tileContent.transform.parent = tilesContainer;
+				__tileContent.transform.parent = sceneryContainer;
 				__tileContent.transform.localPosition = new Vector3 ((i % p_width * 2f) - p_width + 1f, 
 					(i / p_width * -2f) + (p_width) - 1f);
 				__tileContent.GetComponent<SpriteRenderer> ().sprite = tileContentSprites [p_data [i] - 1];

@@ -7,32 +7,39 @@ public class GridManager : MonoBehaviour
 	public GameSceneManager gameManager;
 	public TileLoader		tileLoader;
 
-	public List<GridRow> 	grid;
+	public List<Tile>	 	tiles;
 	public List<int> 		gridInfo;
 	public List<int> 		sceneryInfo;
 
-	public int gridWidth;
-	public int gridHeight;
+	public static int gridWidth = 0;
+	public static int gridHeight = 0;
 
-	public void LoadTiles(int p_width,int p_height, List<int> p_data)
+	public void SetGridDimensions(int p_width,int p_height)
 	{
 		gridHeight = p_height;
 		gridWidth = p_width;
+	}
+	public void LoadTiles(List<int> p_data)
+	{
 		gridInfo = new List<int> ();
 		foreach (int __int in p_data)
 			gridInfo.Add (__int - 1);
 		tileLoader.LoadTiles (gridWidth, gridHeight, gridInfo);
 	}
-	public void LoadScenery(int p_width,int p_height, List<int> p_data)
+	public void LoadScenery(List<int> p_data)
 	{
 		sceneryInfo = new List<int> ();
 		foreach (int __int in p_data)
 			sceneryInfo.Add (__int - 65);
 		tileLoader.LoadScenery (gridWidth, gridHeight, sceneryInfo);
-	}
-	public void LoadTiles()
-	{
-		//tileLoader.LoadTiles (grid);
+
+		tiles = new List<Tile> ();
+		for (int i = 0; i < gridInfo.Count; i++) 
+		{
+			tiles.Add (new Tile ());
+			if (sceneryInfo [i] > 0)
+				tiles [i].constraints = tileLoader.constraintsReferences [sceneryInfo [i]];
+		}
 	}
 	public bool TileIsWithinGrid(int p_posX, int p_posY)
 	{
@@ -55,18 +62,22 @@ public class GridManager : MonoBehaviour
 	}
 	public bool TilePassYawn(int p_posX, int p_posY)
 	{
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
+		if (tiles[GetTileIndex(p_posX, p_posY)].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
 			return false;
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.WALKABLE_BLOCK_YAWN)
+		if (tiles[GetTileIndex(p_posX, p_posY)].constraints == Tile.TileConstraints.WALKABLE_BLOCK_YAWN)
 			return false;
 		return true;
 	}
 	public bool TileWalkable(int p_posX, int p_posY)
 	{
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
+		if (tiles[GetTileIndex(p_posX, p_posY)].constraints == Tile.TileConstraints.NOT_WALKABLE_BLOCK_YAWN)
 			return false;
-		if (grid [p_posY].columns [p_posX].constraints == Tile.TileConstraints.NOT_WALKABLE_PASS_YAWN)
+		if (tiles[GetTileIndex(p_posX, p_posY)].constraints == Tile.TileConstraints.NOT_WALKABLE_PASS_YAWN)
 			return false;
 		return true;
+	}
+	public int GetTileIndex(int p_posX, int p_posY)
+	{
+		return p_posX + p_posY * gridWidth;
 	}
 }

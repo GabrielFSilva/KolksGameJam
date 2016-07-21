@@ -6,19 +6,32 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
-	//Level Control
-	public List<GameObject> levels;
-	public LevelInfo testLevel;
-	public LevelInfo currentLevel;
-	public static int currentLevelIndex = 0;
-	//Entities
-	public PlayerManager player;
-	public int playerMovimentCount;
-	public int enemyYawnCount;
-	public List<Enemy> enemies;
+	public enum ActionsAvailable
+	{
+		YAWN,
+		YAWN_HELLO,
+		YAWN_HELLO_EXCUSE,
+	}
+	//Testing stuff
+	public bool				isOnTestMode;
+	public string 			levelToTest;
 
+	//Level Control
+	public static int 		currentLevelIndex = 1;
+	public int 				star3Value;
+	public int 				star2Value;
+
+	//Entities
+	public int 				movesAvailable;
+	public int 				playerMovimentCount;
+	public int 				enemyYawnCount;
+	public Player 			player;
+	public List<Enemy> 		enemies;
+
+	//Control Scripts
 	public LevelLoader		levelLoader;
 	public GridManager 		gridManager;
+	public EntitiesManager	entitiesManager;
 	public InputManager 	inputManager;
 	public UIManager 		uiManager;
 
@@ -26,33 +39,59 @@ public class GameSceneManager : MonoBehaviour
 	public Text	currentLevelLabel;
 
 	public SoundManager soundManager;
+	public ActionsAvailable	actions;
+
 	void Start () 
 	{
 		gridManager.gameManager = this;
+		entitiesManager.gameManager = this;
+		entitiesManager.OnEnemiesLoaded += delegate(List<Enemy> p_enemies) {
+			enemies = p_enemies;
+			enemies.ForEach(__enemy => __enemy.gameSceneManager = this);
+		};
+		entitiesManager.OnPlayerLoaded += delegate(Player p_player) {
+			player = p_player;
+			player.gameSceneManager = this;
+		};
+
 		if (currentLevelIndex == 14) 
 		{
 			Camera.main.transform.localPosition = new Vector3(7f,0f,-10f);
 			Camera.main.orthographicSize = 9;
 		}
-		levelLoader.gridManager = gridManager;
-		levelLoader.LoadLevel (currentLevelIndex + 1);
-		LoadLevel ();
-
+		levelLoader.OnSetGridDimensions += gridManager.SetGridDimensions;
+		levelLoader.OnSendLayerData += delegate(int p_layerID, List<int> p_data) {
+			if (p_layerID == 0)
+				gridManager.LoadTiles(p_data);
+			else if (p_layerID == 1)
+				gridManager.LoadScenery(p_data);
+			else if (p_layerID == 2)
+				entitiesManager.LoadEntities(p_data);
+			else if (p_layerID == 3)
+				entitiesManager.LoadIA(p_data);
+		};
+		levelLoader.OnSetEnergy += delegate(int p_energy) {
+			movesAvailable = p_energy;
+		};
+		levelLoader.OnSetLevelActions += delegate(bool p_hello, bool p_excuseMe) {
+			if (!p_hello)
+				actions = ActionsAvailable.YAWN;
+			else if (!p_excuseMe)
+				actions = ActionsAvailable.YAWN_HELLO;
+			else
+				actions = ActionsAvailable.YAWN_HELLO_EXCUSE;
+			uiManager.actionButtonsManager.EnableActionButtons (actions);
+		};
+		levelLoader.OnSetStarValues += delegate(int p_star3, int p_star2) {
+			star3Value = p_star3;
+			star2Value = p_star2;
+		};
+		levelLoader.LoadLevel (currentLevelIndex + 1, levelToTest, isOnTestMode);
 		playerMovimentCount = 0;
-		player.gameSceneManager = this;
-
-		foreach (Enemy __enemy in enemies) 
-		{
-			__enemy.transform.localPosition = new Vector3 ((__enemy.gridPosition.x * 2f) - gridManager.gridWidth + 1f,
-				(__enemy.gridPosition.y * -2f) + gridManager.grid.Count - 1f);
-			__enemy.gameSceneManager = this;
-		}
-		player.transform.localPosition = new Vector3 ((player.gridPosition.x * 2f) - gridManager.gridWidth + 1f,
-			(player.gridPosition.y * -2f) + gridManager.grid.Count - 1f);
 
 		inputManager.player = player;
 		inputManager.onScreenClicked += InputManager_onScreenClicked;
-		uiManager.actionButtonsManager.EnableActionButtons (currentLevel.actions);
+
 		soundManager = SoundManager.GetInstance ();
 		soundManager.PlayBGM ();
 	}
@@ -71,10 +110,10 @@ public class GameSceneManager : MonoBehaviour
 			if (__enemy.yawned)
 				enemyYawnCount++;
 		yawnedCountLabel.text = enemyYawnCount.ToString () + "/" + enemies.Count.ToString();
-		currentLevelLabel.text = "Level " + (currentLevelIndex+1).ToString() + " / " + levels.Count.ToString();
+		currentLevelLabel.text = "Level " + (currentLevelIndex+1).ToString() + " / 50";
 
-		uiManager.energyBarManager.UpdateEnergyBar(currentLevel.movesAvailable,playerMovimentCount);
-		if (playerMovimentCount - currentLevel.movesAvailable == 0) 
+		uiManager.energyBarManager.UpdateEnergyBar(movesAvailable,playerMovimentCount);
+		if (playerMovimentCount - movesAvailable == 0) 
 			uiManager.actionButtonsManager.SetYawnButtonGlow ();
 	}
 	IEnumerator EndLevel()
@@ -93,20 +132,21 @@ public class GameSceneManager : MonoBehaviour
 		else 
 		{
 			PlayerPrefsManager.SetLevelStars (currentLevelIndex, 0);
-			if (currentLevel.movesAvailable - playerMovimentCount == 0) 
+
+			if (movesAvailable - playerMovimentCount >= star3Value) 
 			{
-				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 1);
-				__limit = 0.5f;
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 3);
+				__limit = 1f;
 			}
-			else if (currentLevel.movesAvailable - playerMovimentCount == 1) 
+			else if (movesAvailable - playerMovimentCount >= star2Value) 
 			{
 				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 2);
 				__limit = 0.75f;
 			}
-			else if (currentLevel.movesAvailable - playerMovimentCount > 1) 
+			else
 			{
-				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 3);
-				__limit = 1f;
+				PlayerPrefsManager.SetLevelStars (currentLevelIndex, 1);
+				__limit = 0.5f;
 			}
 			if (currentLevelIndex == 0) 
 			{
@@ -127,15 +167,16 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayDefeatSFX ();
 		yield return new WaitForSeconds (0.25f);
 		uiManager.endLevelPanelManager.EnableEndLevelButtons (__t);
-			
 	}
-
 
 	public void NextButtonClicked()
 	{
 		soundManager.PlayClickSFX ();
-		currentLevelIndex++; 
-		if (currentLevelIndex == levels.Count)
+
+		if (!isOnTestMode)
+			currentLevelIndex++; 
+		
+		if (currentLevelIndex == 9)
 			SceneManager.LoadScene("VictoryScreen");
 		else
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -162,7 +203,7 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayClickSFX ();
 		if (player.isTalking || player.isMoving || player.yawned)
 			return;
-		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO)
+		if (actions < ActionsAvailable.YAWN_HELLO)
 			return;
 		
 		PlayerHelloAction (player.gridPosition, player.playerOrientation);
@@ -174,33 +215,12 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayClickSFX ();
 		if (player.isTalking || player.isMoving || player.yawned)
 			return;
-		if (currentLevel.actions < LevelInfo.ActionsAvailable.YAWN_HELLO_EXCUSE)
+		if (actions < ActionsAvailable.YAWN_HELLO_EXCUSE)
 			return;
 		
 		PlayerExcuseMeAction (player.gridPosition,player.playerOrientation);
 		player.StartAction ();
 	}
-	private void LoadLevel()
-	{
-		if (testLevel != null)
-			currentLevel = testLevel;
-		else 
-		{
-			currentLevel = ((GameObject)Instantiate (levels [currentLevelIndex])).GetComponent<LevelInfo> ();
-			currentLevel.transform.parent = transform;
-			currentLevel.transform.localPosition = Vector3.zero;
-		}
-		currentLevel.name = "Level";
-		player = currentLevel.player;
-		gridManager.grid = new List<GridRow> ();
-		enemies = new List<Enemy> ();
-		foreach (Transform __child in currentLevel.grid.transform)
-			gridManager.grid.Add (__child.GetComponent<GridRow>());
-		foreach (Transform __child in currentLevel.enemiesContainer.transform)
-			enemies.Add (__child.GetComponent<Enemy>());
-		gridManager.LoadTiles ();
-	}
-
 
 	public Enemy TryToHitEnemy(Vector2 p_position, Tile.PlayerOrientation p_orientation, bool p_continueUntilEnd)
 	{
@@ -254,7 +274,7 @@ public class GameSceneManager : MonoBehaviour
 	}
 	public void PlayerHelloAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)
 	{
-		if (playerMovimentCount >= currentLevel.movesAvailable)
+		if (playerMovimentCount >= movesAvailable)
 			return;
 		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, true);
 		if (__enemyHit == null) 
@@ -268,7 +288,7 @@ public class GameSceneManager : MonoBehaviour
 	}
 	public void PlayerExcuseMeAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)
 	{
-		if (playerMovimentCount >= currentLevel.movesAvailable)
+		if (playerMovimentCount >= movesAvailable)
 			return;
 		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, false);
 		if (__enemyHit == null) 
@@ -303,7 +323,7 @@ public class GameSceneManager : MonoBehaviour
 		int __posY = Mathf.RoundToInt (p_position.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
 
 		//Moviment Cap Reached
-		if (playerMovimentCount >= currentLevel.movesAvailable)
+		if (playerMovimentCount >= movesAvailable)
 			return false;
 		//Map Limit Block
 		if (!gridManager.TileIsWithinGrid(__posX,__posY))

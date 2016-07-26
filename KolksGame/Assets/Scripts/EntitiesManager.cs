@@ -21,12 +21,12 @@ public class EntitiesManager : MonoBehaviour
 		foreach (int __int in p_data)
 			entitiesData.Add (__int - 129);
 
-		foreach (int __int in entitiesData) 
+		for(int i = 0; i < entitiesData.Count; i++)
 		{
-			if (__int == 0)
-				playerManager.LoadPlayer (entitiesData.IndexOf (__int));
-			else if (__int == 1) 
-				enemiesManager.LoadEnemy(EnemiesManager.EnemyTypes.STANDARD, entitiesData.IndexOf(__int));
+			if (entitiesData[i] == 0)
+				playerManager.LoadPlayer (i);
+			else if (entitiesData[i] == 1) 
+				enemiesManager.LoadEnemy(EnemiesManager.EnemyTypes.STANDARD, i);
 		}
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);
@@ -37,12 +37,12 @@ public class EntitiesManager : MonoBehaviour
 		foreach (int __int in p_data)
 			iaData.Add (__int - 193);
 		
-		foreach (int __int in iaData) 
+		for(int i = 0; i < iaData.Count; i++)
 		{
-			if (__int >= 0 && __int < 4) 
+			if (iaData[i] >= 0 && iaData[i] < 4) 
 			{
-				playerManager.TryChangePlayerOrientation (iaData.IndexOf (__int), (Tile.PlayerOrientation)__int);
-				enemiesManager.TryChangeEnemiesOrientation (iaData.IndexOf (__int), (Tile.PlayerOrientation)__int);
+				playerManager.TryChangePlayerOrientation (i, (Tile.PlayerOrientation)iaData[i]);
+				enemiesManager.TryChangeEnemiesOrientation (i, (Tile.PlayerOrientation)iaData[i]);
 			}
 		}
 	}

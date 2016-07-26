@@ -9,7 +9,7 @@ public class EnemiesManager : MonoBehaviour
 		STANDARD,
 		SLIDDER
 	}
-	public List<Enemy> 			enemies { get; private set; }
+	public List<Enemy> enemies;
 	public List<GameObject> 	enemiesPrefabs;
 	public Transform			enemiesContainer;
 
@@ -20,7 +20,7 @@ public class EnemiesManager : MonoBehaviour
 		
 		int __width = GridManager.gridWidth;
 		int __x = Mathf.RoundToInt(p_posIndex % __width);
-		int __y = Mathf.RoundToInt(p_posIndex / __width);
+		int __y = p_posIndex / __width;
 
 		GameObject __enemy = (GameObject)Instantiate (enemiesPrefabs [(int)p_type]);
 		__enemy.name = "Enemy";

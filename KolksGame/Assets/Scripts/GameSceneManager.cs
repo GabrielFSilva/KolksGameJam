@@ -51,7 +51,7 @@ public class GameSceneManager : MonoBehaviour
 		};
 		entitiesManager.OnPlayerLoaded += delegate(Player p_player) {
 			player = p_player;
-			player.gameSceneManager = this;
+			p_player.gameSceneManager = this;
 		};
 
 		if (currentLevelIndex == 14) 

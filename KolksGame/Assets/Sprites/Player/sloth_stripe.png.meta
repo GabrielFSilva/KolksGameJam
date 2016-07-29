@@ -172,7 +172,7 @@ TextureImporter:
         - {x: 72, y: 32}
         - {x: 68, y: 62}
     outline: []
-  spritePackingTag: characters
+  spritePackingTag: transp
   userData: 
   assetBundleName: 
   assetBundleVariant: 

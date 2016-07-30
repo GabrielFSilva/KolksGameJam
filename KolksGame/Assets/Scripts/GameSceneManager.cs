@@ -51,7 +51,8 @@ public class GameSceneManager : MonoBehaviour
 		};
 		entitiesManager.OnPlayerLoaded += delegate(Player p_player) {
 			player = p_player;
-			p_player.gameSceneManager = this;
+			player.gameSceneManager = this;
+			player.OnPlayerMovementEnd += Player_OnPlayerMovementEnd;
 		};
 
 		if (currentLevelIndex == 14) 
@@ -59,6 +60,8 @@ public class GameSceneManager : MonoBehaviour
 			Camera.main.transform.localPosition = new Vector3(7f,0f,-10f);
 			Camera.main.orthographicSize = 9;
 		}
+
+	
 		levelLoader.OnSetGridDimensions += gridManager.SetGridDimensions;
 		levelLoader.OnSendLayerData += delegate(int p_layerID, List<int> p_data) {
 			if (p_layerID == 0)
@@ -90,13 +93,23 @@ public class GameSceneManager : MonoBehaviour
 		playerMovimentCount = 0;
 
 		inputManager.player = player;
-		inputManager.onScreenClicked += InputManager_onScreenClicked;
+		inputManager.OnScreenClicked += InputManager_OnScreenClicked;
 
 		soundManager = SoundManager.GetInstance ();
 		soundManager.PlayBGM ();
 	}
-
-	void InputManager_onScreenClicked (Tile.PlayerOrientation p_orientation)
+	void Player_OnPlayerMovementEnd ()
+	{
+		Enemy __enemyHit;
+		for (int i = 0; i < 4; i++) 
+		{
+			__enemyHit = TryToHitEnemy (player.gridPosition,(Tile.PlayerOrientation)i, true);
+			if (__enemyHit == null) 
+				continue;
+			__enemyHit.SawPlayer (player.playerOrientation);
+		}
+	}
+	void InputManager_OnScreenClicked (Tile.PlayerOrientation p_orientation)
 	{
 		if (p_orientation == player.playerOrientation)
 			player.SetPlayerDestination ();
@@ -282,7 +295,7 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayErrorSFX ();
 			return;
 		}
-		__enemyHit.ChangeEnemyOrientation (p_orientation);
+		__enemyHit.HitByHelloAction (p_orientation);
 		playerMovimentCount++;
 		soundManager.PlayHelloSFX ();
 	}
@@ -311,7 +324,7 @@ public class GameSceneManager : MonoBehaviour
 
 		if (gridManager.TileWalkable (__posX,__posY))
 		{
-			__enemyHit.SetEnemyDestination (p_orientation);
+			__enemyHit.HitByExcuseMeAction (p_orientation);
 			playerMovimentCount++;
 			soundManager.PlayExcuseMeSFX ();
 		}

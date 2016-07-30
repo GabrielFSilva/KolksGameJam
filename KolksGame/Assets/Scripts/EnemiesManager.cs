@@ -4,16 +4,12 @@ using System.Collections.Generic;
 
 public class EnemiesManager : MonoBehaviour 
 {
-	public enum EnemyTypes
-	{
-		STANDARD,
-		SLIDDER
-	}
+
 	public List<Enemy> enemies;
 	public List<GameObject> 	enemiesPrefabs;
 	public Transform			enemiesContainer;
 
-	public void LoadEnemy(EnemyTypes p_type, int p_posIndex)
+	public void LoadEnemy(Enemy.EnemyType p_type, int p_posIndex)
 	{
 		if (enemies == null)
 			enemies = new List<Enemy> ();

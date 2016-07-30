@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Player : MonoBehaviour 
 {
+	public event Action OnPlayerMovementEnd;
+
 	public GameSceneManager	gameSceneManager;
 	public SpriteRenderer playerSprite;
 	public PlayerSpriteAnimator animator;
@@ -142,6 +145,9 @@ public class Player : MonoBehaviour
 		transform.localPosition = Vector3.Lerp (moveStartPosition, moveEndPosition, moveTweenCount);
 		if (moveTweenCount >= 1f) 
 		{
+			if (OnPlayerMovementEnd != null)
+				OnPlayerMovementEnd ();
+			
 			if (Input.GetKey (playerDirection))
 				SetPlayerDestination ();
 			else
@@ -161,7 +167,7 @@ public class Player : MonoBehaviour
 			moveStartPosition = transform.localPosition;
 			moveEndPosition = transform.localPosition + new Vector3 (Mathf.Cos ((int)playerOrientation * 90f * Mathf.Deg2Rad),
 				Mathf.Sin ((int)playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
-
+			
 			gameSceneManager.playerMovimentCount++;
 			SoundManager.GetInstance ().PlayMovimentSFX ();
 		}

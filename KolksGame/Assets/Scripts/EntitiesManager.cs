@@ -26,7 +26,11 @@ public class EntitiesManager : MonoBehaviour
 			if (entitiesData[i] == 0)
 				playerManager.LoadPlayer (i);
 			else if (entitiesData[i] == 1) 
-				enemiesManager.LoadEnemy(EnemiesManager.EnemyTypes.STANDARD, i);
+				enemiesManager.LoadEnemy(Enemy.EnemyType.STANDARD, i);
+			else if (entitiesData[i] == 2) 
+				enemiesManager.LoadEnemy(Enemy.EnemyType.COCKY, i);
+			else if (entitiesData[i] == 3) 
+				enemiesManager.LoadEnemy(Enemy.EnemyType.SHY, i);
 		}
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);

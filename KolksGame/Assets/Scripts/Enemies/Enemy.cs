@@ -4,26 +4,42 @@ using System.Collections;
 public class Enemy : MonoBehaviour 
 {
 	public GameSceneManager	gameSceneManager;
-	public SpriteRenderer enemySprite;
-	public Animator animator;
-	public Rigidbody2D	rigidBody2D;
+	public SpriteRenderer 	enemySprite;
+	public Animator 		animator;
+	public bool 			yawned;
 
-	public bool yawned = false;
 	//Grid Info
-	public Vector2 gridPosition;
-	public Tile.PlayerOrientation enemyOrientation;
+	public Vector2 					gridPosition;
+	public Tile.PlayerOrientation 	enemyOrientation;
 
 	//Enemy Timers and Speeds
-	private float _enemyTalkDelay = 0.35f;
-	private float _enemyMoveDelay = 0.4f;
-	private float _enemyYawnDelay = 0.6f;
-	private float _enemySpeed = 1.5f;
+	protected float 	_enemyTalkDelay = 0.35f;
+	protected float 	_enemyMoveDelay = 0.4f;
+	protected float 	_enemyYawnDelay = 0.6f;
+	protected float 	_enemySpeed = 1.5f;
 
-	//Moviment
-	private Vector2 _moveStartPosition;
-	private Vector2 _moveEndPosition;
-	private bool _isMoving = false;
-	private float _moveTweenCount = 0f;
+	//Movement
+	protected Vector2 	_moveStartPos;
+	protected Vector2 	_moveEndPos;
+	protected bool 		_isMoving = false;
+	protected float 	_moveTweenCount = 0f;
+
+	//EnemyType
+	public enum EnemyType
+	{
+		STANDARD,
+		COCKY,
+		SHY
+	}
+	public EnemyType enemyType;
+	public enum ActionEffectType
+	{
+		NONE,
+		STANDARD,
+		GLIDE
+	}
+	public ActionEffectType helloEffect;
+	public ActionEffectType excuseMeEffect;
 
 	void Start () 
 	{
@@ -41,7 +57,7 @@ public class Enemy : MonoBehaviour
 	private void UpdateEnemyPosition()
 	{
 		_moveTweenCount += Time.deltaTime * _enemySpeed;
-		transform.localPosition = Vector3.Lerp (_moveStartPosition, _moveEndPosition, _moveTweenCount);
+		transform.localPosition = Vector3.Lerp (_moveStartPos, _moveEndPos, _moveTweenCount);
 		if (_moveTweenCount >= 1f) 
 			_isMoving = false;
 	}
@@ -52,8 +68,8 @@ public class Enemy : MonoBehaviour
 
 		_isMoving = true;
 		_moveTweenCount = _enemyMoveDelay * -1f;
-		_moveStartPosition = transform.localPosition;
-		_moveEndPosition = transform.localPosition + new Vector3 (Mathf.Cos ((int)p_playerOrientation * 90f * Mathf.Deg2Rad),
+		_moveStartPos = transform.localPosition;
+		_moveEndPos = transform.localPosition + new Vector3 (Mathf.Cos ((int)p_playerOrientation * 90f * Mathf.Deg2Rad),
 			Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
 		
 		StartCoroutine (MovimentSFXDelay ());
@@ -93,11 +109,25 @@ public class Enemy : MonoBehaviour
 		enemyOrientation = p_orientation;
 		animator.SetInteger ("Orientation", (int)p_orientation);
 	}
-	public void ChangeEnemyOrientation(Tile.PlayerOrientation p_playerOrientation)
+	protected void ChangeEnemyOrientation(Tile.PlayerOrientation p_playerOrientation)
 	{
 		StartCoroutine(ChangeOrientation (p_playerOrientation));
 	}
-
+	public void HitByHelloAction(Tile.PlayerOrientation p_playerOrientation)
+	{
+		if (helloEffect == ActionEffectType.STANDARD)
+			ChangeEnemyOrientation (p_playerOrientation);
+	}
+	public void HitByExcuseMeAction(Tile.PlayerOrientation p_playerOrientation)
+	{
+		if (excuseMeEffect == ActionEffectType.STANDARD)
+			SetEnemyDestination (p_playerOrientation);
+	}
+	public void SawPlayer(Tile.PlayerOrientation p_playerOrientation)
+	{
+		if (enemyType == EnemyType.SHY)
+			ChangeOrientationInstantly (p_playerOrientation);
+	}
 	IEnumerator ChangeOrientation(Tile.PlayerOrientation p_playerOrientation)
 	{
 		yield return new WaitForSeconds (_enemyTalkDelay);

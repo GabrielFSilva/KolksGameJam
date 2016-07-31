@@ -106,7 +106,10 @@ public class GameSceneManager : MonoBehaviour
 			__enemyHit = TryToHitEnemy (player.gridPosition,(Tile.PlayerOrientation)i, true);
 			if (__enemyHit == null) 
 				continue;
-			__enemyHit.SawPlayer (player.playerOrientation);
+			
+			if (IsOpposeOrientation(__enemyHit.enemyOrientation, (Tile.PlayerOrientation)i))
+				__enemyHit.SawPlayer (player.playerOrientation);
+
 		}
 	}
 	void InputManager_OnScreenClicked (Tile.PlayerOrientation p_orientation)
@@ -128,6 +131,15 @@ public class GameSceneManager : MonoBehaviour
 		uiManager.energyBarManager.UpdateEnergyBar(movesAvailable,playerMovimentCount);
 		if (playerMovimentCount - movesAvailable == 0) 
 			uiManager.actionButtonsManager.SetYawnButtonGlow ();
+	}
+	private bool IsOpposeOrientation(Tile.PlayerOrientation p_ori1, Tile.PlayerOrientation p_ori2)
+	{
+		int __orientation = (int) p_ori1 + 2;
+		if (__orientation >= 4)
+			__orientation -= 4;
+		if (__orientation == (int)p_ori2)
+			return true;
+		return false;
 	}
 	IEnumerator EndLevel()
 	{

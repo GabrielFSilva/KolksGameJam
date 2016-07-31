@@ -311,12 +311,8 @@ public class GameSceneManager : MonoBehaviour
 		}
 		int __posX = Mathf.RoundToInt (__enemyHit.gridPosition.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
 		int __posY = Mathf.RoundToInt (__enemyHit.gridPosition.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
-		if (!gridManager.TileIsWithinGrid (__posX, __posY)) 
-		{
-			soundManager.PlayErrorSFX ();
-			return;
-		}
-		if (gridManager.TileHasEnemy (__posX, __posY)) 
+
+		if (!CanWalkToTile(__posX,__posY))
 		{
 			soundManager.PlayErrorSFX ();
 			return;
@@ -329,6 +325,16 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayExcuseMeSFX ();
 		}
 		
+	}
+	public bool CanWalkToTile(int p_posX, int p_posY)
+	{
+		if (!gridManager.TileIsWithinGrid (p_posX, p_posY))
+			return false;
+		if (gridManager.TileHasEnemy (p_posX, p_posY)) 
+			return false;
+		if (!gridManager.TileWalkable (p_posX, p_posY))
+			return false;
+		return true;
 	}
 	public bool GetPathCollision(Vector2 p_position, Tile.PlayerOrientation p_orientation)
 	{

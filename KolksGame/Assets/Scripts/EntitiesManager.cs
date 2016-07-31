@@ -31,6 +31,8 @@ public class EntitiesManager : MonoBehaviour
 				enemiesManager.LoadEnemy(Enemy.EnemyType.COCKY, i);
 			else if (entitiesData[i] == 3) 
 				enemiesManager.LoadEnemy(Enemy.EnemyType.SHY, i);
+			else if (entitiesData[i] == 4) 
+				enemiesManager.LoadEnemy(Enemy.EnemyType.POLITE, i);
 		}
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);

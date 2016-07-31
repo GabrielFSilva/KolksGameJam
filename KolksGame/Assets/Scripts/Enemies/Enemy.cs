@@ -19,17 +19,20 @@ public class Enemy : MonoBehaviour
 	protected float 	_enemySpeed = 1.5f;
 
 	//Movement
-	protected Vector2 	_moveStartPos;
-	protected Vector2 	_moveEndPos;
-	protected bool 		_isMoving = false;
-	protected float 	_moveTweenCount = 0f;
+	protected Tile.PlayerOrientation 	_moveOrientation;
+	protected Vector2 					_moveStartPos;
+	protected Vector2 					_moveEndPos;
+	protected bool 						_isMoving = false;
+	protected bool 						_isGliding = false;
+	protected float 					_moveTweenCount = 0f;
 
 	//EnemyType
 	public enum EnemyType
 	{
 		STANDARD,
 		COCKY,
-		SHY
+		SHY,
+		POLITE
 	}
 	public EnemyType enemyType;
 	public enum ActionEffectType
@@ -45,6 +48,8 @@ public class Enemy : MonoBehaviour
 	{
 		animator.SetInteger ("Orientation",(int)enemyOrientation);
 		yawned = false;
+		_isMoving = false;
+		_isGliding = false;
 	}
 	void Update()
 	{
@@ -59,7 +64,24 @@ public class Enemy : MonoBehaviour
 		_moveTweenCount += Time.deltaTime * _enemySpeed;
 		transform.localPosition = Vector3.Lerp (_moveStartPos, _moveEndPos, _moveTweenCount);
 		if (_moveTweenCount >= 1f) 
-			_isMoving = false;
+		{
+			if (enemyType == EnemyType.POLITE) 
+			{
+				_isGliding = true;
+				int __posX = Mathf.RoundToInt (gridPosition.x + Mathf.Cos ((int)_moveOrientation * 90f * Mathf.Deg2Rad));
+				int __posY = Mathf.RoundToInt (gridPosition.y - Mathf.Sin ((int)_moveOrientation * 90f * Mathf.Deg2Rad));
+
+				if (gameSceneManager.CanWalkToTile (__posX, __posY))
+					SetEnemyDestination (_moveOrientation);
+				else 
+				{
+					_isMoving = false;
+					_isGliding = false;
+				}
+			}
+			else
+				_isMoving = false;
+		}
 	}
 	public void SetEnemyDestination(Tile.PlayerOrientation p_playerOrientation)
 	{
@@ -67,22 +89,28 @@ public class Enemy : MonoBehaviour
 		gridPosition.y -= Mathf.RoundToInt (Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad));
 
 		_isMoving = true;
+		_moveOrientation = p_playerOrientation;
 		_moveTweenCount = _enemyMoveDelay * -1f;
+		if (_isGliding)
+			_moveTweenCount = 0f;
 		_moveStartPos = transform.localPosition;
 		_moveEndPos = transform.localPosition + new Vector3 (Mathf.Cos ((int)p_playerOrientation * 90f * Mathf.Deg2Rad),
 			Mathf.Sin ((int)p_playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
-		
-		StartCoroutine (MovimentSFXDelay ());
+
+		if (_isGliding)
+			StartCoroutine (MovimentSFXDelay (0f));
+		else
+			StartCoroutine (MovimentSFXDelay (_enemyYawnDelay/_enemySpeed));
 	}
 	public void StartYawn()
 	{
-		if (yawned)
-			return;
+		if (yawned) return;
 		StartCoroutine (Yawn ());
 	}
-	IEnumerator MovimentSFXDelay()
+	IEnumerator MovimentSFXDelay(float p_delay)
 	{
-		yield return new WaitForSeconds (_enemyYawnDelay/_enemySpeed);
+		if (p_delay > 0f)
+			yield return new WaitForSeconds (p_delay);
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 	IEnumerator Yawn()
@@ -120,8 +148,11 @@ public class Enemy : MonoBehaviour
 	}
 	public void HitByExcuseMeAction(Tile.PlayerOrientation p_playerOrientation)
 	{
-		if (excuseMeEffect == ActionEffectType.STANDARD)
+		if (excuseMeEffect != ActionEffectType.NONE) 
+		{
+			Debug.Log ("Here");
 			SetEnemyDestination (p_playerOrientation);
+		}
 	}
 	public void SawPlayer(Tile.PlayerOrientation p_playerOrientation)
 	{

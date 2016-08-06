@@ -10,31 +10,26 @@ public class UIActionButtonsManager : MonoBehaviour
 
 	public Animator yawnButtonAnimator;
 
-	public Text	helloHint;
-	public Text	excuseMeHint;
+	public RectTransform	yawnButtonRectTransform;
+	public RectTransform	yawnSize1;
+	public RectTransform	yawnSize2;
 
-	void Start () 
-	{
-	
-	}
 	public void EnableActionButtons(GameSceneManager.ActionsAvailable p_actions)
 	{
-		if (p_actions < GameSceneManager.ActionsAvailable.YAWN_HELLO) 
-		{
-			helloButton.gameObject.SetActive (false);
-			helloHint.gameObject.SetActive (false);
-		}
-		if (p_actions < GameSceneManager.ActionsAvailable.YAWN_HELLO_EXCUSE) 
+		if (p_actions == GameSceneManager.ActionsAvailable.YAWN_HELLO) 
 		{
 			excuseMeButton.gameObject.SetActive (false);
-			excuseMeHint.gameObject.SetActive (false);
+			yawnButtonRectTransform.anchoredPosition = yawnSize1.anchoredPosition;
+			yawnButtonRectTransform.sizeDelta = yawnSize2.sizeDelta;
 		}
-		if (Application.platform == RuntimePlatform.Android) 
+		else if (p_actions == GameSceneManager.ActionsAvailable.YAWN) 
 		{
-			excuseMeHint.gameObject.SetActive (false);
-			helloHint.gameObject.SetActive (false);
-			yawnButton.transform.GetChild (0).GetComponent<Text> ().text = "YAAAWN";
+			helloButton.gameObject.SetActive (false);
+			excuseMeButton.gameObject.SetActive (false);
+			yawnButtonRectTransform.anchoredPosition = yawnSize2.anchoredPosition;
+			yawnButtonRectTransform.sizeDelta = yawnSize2.sizeDelta;
 		}
+		
 	}
 	public void SetYawnButtonGlow()
 	{

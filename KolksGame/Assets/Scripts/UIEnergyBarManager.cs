@@ -4,23 +4,30 @@ using System.Collections;
 
 public class UIEnergyBarManager : MonoBehaviour 
 {
-	
-	public RectTransform fillBar;
-	public RectTransform fillBarFull;
-	public RectTransform fillBarEmpty;
+	public RectTransform energyBar;
+	public RectTransform energyBarFull;
+	public RectTransform energyBarEmpty;
 
-	public Text	energyLabel;
+	public Text	energyCurrentLabel;
+	public Text	energyMaxLabel;
 
 	public void UpdateEnergyBar(int p_movesAvailable, int p_playerMovCount)
 	{
-		if (p_movesAvailable == 0)
-			fillBar.anchoredPosition = fillBarEmpty.anchoredPosition;
-		else
-			fillBar.anchoredPosition = Vector2.Lerp (fillBarEmpty.anchoredPosition, 
-				fillBarFull.anchoredPosition,
-				1f - ((float)p_playerMovCount/(float)p_movesAvailable));
+		float __t = 1f - ((float)p_playerMovCount / (float)p_movesAvailable);
+		if (p_movesAvailable == 0) 
+		{
+			energyBar.anchoredPosition = energyBarEmpty.anchoredPosition;
+			energyBar.sizeDelta = energyBarEmpty.sizeDelta;
+		}
+		else 
+		{
+			energyBar.anchoredPosition = Vector2.Lerp (energyBarEmpty.anchoredPosition, 
+				energyBarFull.anchoredPosition, __t);
+			energyBar.sizeDelta = Vector2.Lerp (energyBarEmpty.sizeDelta, 
+				energyBarFull.sizeDelta, __t);
+		}
 		
-		energyLabel.text = (p_movesAvailable-p_playerMovCount).ToString () 
-			+ "/" + p_movesAvailable.ToString();
+		energyCurrentLabel.text = (p_movesAvailable-p_playerMovCount).ToString ();
+		energyMaxLabel.text = p_movesAvailable.ToString ();
 	}
 }

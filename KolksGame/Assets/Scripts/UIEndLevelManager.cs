@@ -4,18 +4,17 @@ using System.Collections;
 
 public class UIEndLevelManager : MonoBehaviour 
 {
+	public GameObject buttonsPanel;
 	public GameObject endLevelPanel;
 
 	public RectTransform starBar;
 	public RectTransform starBarFull;
 	public RectTransform starBarEmpty;
 
-	public Image star0;
 	public Image star1;
 	public Image star2;
-
-	public Sprite starOn;
-	public Sprite starOff;
+	public Image star3;
+	public Color starOnColor;
 
 	public Button nextButton;
 	public Button replay2Button;
@@ -23,6 +22,9 @@ public class UIEndLevelManager : MonoBehaviour
 	public SoundManager soundManager;
 	void Start()
 	{
+		star1.color = Color.white;
+		star2.color = Color.white;
+		star3.color = Color.white;
 		UpdateStarBarPosition (0f, 0f);
 		EnableEndLevelPanel (false);
 		nextButton.gameObject.SetActive (false);
@@ -32,6 +34,7 @@ public class UIEndLevelManager : MonoBehaviour
 	public void EnableEndLevelPanel(bool p_enable)
 	{
 		endLevelPanel.gameObject.SetActive (p_enable);
+		buttonsPanel.gameObject.SetActive (!p_enable);
 	}
 	public void EnableEndLevelButtons(float p_value)
 	{
@@ -44,22 +47,24 @@ public class UIEndLevelManager : MonoBehaviour
 	{
 		starBar.anchoredPosition = Vector2.Lerp (starBarEmpty.anchoredPosition, starBarFull.anchoredPosition,
 			Mathf.Clamp(p_value,0f,p_limit));
+		starBar.sizeDelta =  Vector2.Lerp (starBarEmpty.sizeDelta, starBarFull.sizeDelta,
+		Mathf.Clamp(p_value,0f,p_limit));
 	}
 	public void UpdateStarSprites(float p_value)
 	{
-		if (p_value >= 0.5f && star0.sprite == starOff) 
+		if (p_value >= 0.5f && star1.color == Color.white) 
 		{
-			star0.sprite = starOn;
+			star1.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
-		if (p_value >= 0.75f && star1.sprite == starOff)
+		if (p_value >= 0.75f && star2.color == Color.white)
 		{
-			star1.sprite = starOn;
+			star2.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
-		if (p_value >= 0.98f && star2.sprite == starOff)
+		if (p_value >= 0.99f && star3.color == Color.white)
 		{
-			star2.sprite = starOn;
+			star3.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 	}

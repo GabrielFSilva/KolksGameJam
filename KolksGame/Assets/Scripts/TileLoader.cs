@@ -12,7 +12,7 @@ public class TileLoader : MonoBehaviour
 
 	public List<Tile.TileConstraints> constraintsReferences;
 
-	public void LoadTiles(int p_width,int p_height, List<int> p_data)
+	public void LoadTiles(TupleInt p_gridSize, List<int> p_data)
 	{
 		GameObject __tileFloor;
 		for (int i = 0; i < p_data.Count; i ++)
@@ -20,8 +20,8 @@ public class TileLoader : MonoBehaviour
 			__tileFloor = (GameObject)Instantiate (tilePrefab);
 			__tileFloor.name = "TileFloor";
 			__tileFloor.transform.parent = tilesContainer;
-			__tileFloor.transform.localPosition = new Vector3 ((i % p_width * 2f) - p_width + 1f, 
-				(i / p_width * -2f) + (p_width) - 1f);
+			__tileFloor.transform.localPosition = new Vector3 ((i % p_gridSize.Item1 * 2f) - p_gridSize.Item1 + 1f, 
+				(i / p_gridSize.Item1 * -2f) + (p_gridSize.Item1) - 1f);
 
 			SpriteRenderer __sr = __tileFloor.GetComponent<SpriteRenderer> ();
 			if (p_data[i] == 0)
@@ -30,7 +30,7 @@ public class TileLoader : MonoBehaviour
 				__sr.sprite = tileFloorSprites [1];
 		}
 	}
-	public void LoadScenery(int p_width,int p_height, List<int> p_data)
+	public void LoadScenery(TupleInt p_gridSize, List<int> p_data)
 	{
 		GameObject __tileContent;
 		for (int i = 0; i < p_data.Count; i ++)
@@ -40,8 +40,9 @@ public class TileLoader : MonoBehaviour
 				__tileContent = (GameObject)Instantiate (tilePrefab);
 				__tileContent.name = "Content";
 				__tileContent.transform.parent = sceneryContainer;
-				__tileContent.transform.localPosition = new Vector3 ((i % p_width * 2f) - p_width + 1f, 
-					(i / p_width * -2f) + (p_width) - 1f);
+				__tileContent.transform.localPosition = new Vector3 (
+					(i % p_gridSize.Item1 * 2f) - p_gridSize.Item1 + 1f, 
+					(i / p_gridSize.Item1 * -2f) + (p_gridSize.Item1) - 1f);
 				__tileContent.GetComponent<SpriteRenderer> ().sprite = tileContentSprites [p_data [i] - 1];
 				__tileContent.GetComponent<SpriteRenderer> ().sortingOrder = 1;
 			}

@@ -26,13 +26,13 @@ public class EntitiesManager : MonoBehaviour
 			if (entitiesData[i] == 0)
 				playerManager.LoadPlayer (i);
 			else if (entitiesData[i] == 1) 
-				enemiesManager.LoadEnemy(Enemy.EnemyType.STANDARD, i);
+				enemiesManager.LoadEnemy(EnemyType.STANDARD, i);
 			else if (entitiesData[i] == 2) 
-				enemiesManager.LoadEnemy(Enemy.EnemyType.COCKY, i);
+				enemiesManager.LoadEnemy(EnemyType.COCKY, i);
 			else if (entitiesData[i] == 3) 
-				enemiesManager.LoadEnemy(Enemy.EnemyType.SHY, i);
+				enemiesManager.LoadEnemy(EnemyType.SHY, i);
 			else if (entitiesData[i] == 4) 
-				enemiesManager.LoadEnemy(Enemy.EnemyType.POLITE, i);
+				enemiesManager.LoadEnemy(EnemyType.POLITE, i);
 		}
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);
@@ -47,8 +47,8 @@ public class EntitiesManager : MonoBehaviour
 		{
 			if (iaData[i] >= 0 && iaData[i] < 4) 
 			{
-				playerManager.TryChangePlayerOrientation (i, (Tile.PlayerOrientation)iaData[i]);
-				enemiesManager.TryChangeEnemiesOrientation (i, (Tile.PlayerOrientation)iaData[i]);
+				playerManager.TryChangePlayerOrientation (i, (Orientation)iaData[i]);
+				enemiesManager.TryChangeEnemiesOrientation (i, (Orientation)iaData[i]);
 			}
 		}
 	}

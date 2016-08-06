@@ -4,7 +4,7 @@ using System;
 
 public class InputManager : MonoBehaviour 
 {
-	public event Action<Tile.PlayerOrientation>	OnScreenClicked;
+	public event Action<Orientation>	OnScreenClicked;
 	public BoxCollider2D	inputCollider;
 
 	public Player	player;
@@ -17,13 +17,13 @@ public class InputManager : MonoBehaviour
 		if (OnScreenClicked != null) 
 		{
 			if (__angle > -45f && __angle <= 45f)
-				OnScreenClicked (Tile.PlayerOrientation.RIGHT);
+				OnScreenClicked (Orientation.RIGHT);
 			else if (__angle > 45f && __angle <= 135f)
-				OnScreenClicked (Tile.PlayerOrientation.UP);
+				OnScreenClicked (Orientation.UP);
 			else if (__angle > 135f || __angle <= -135f)
-				OnScreenClicked (Tile.PlayerOrientation.LEFT);
+				OnScreenClicked (Orientation.LEFT);
 			else if (__angle > -135f && __angle <= -45f)
-				OnScreenClicked (Tile.PlayerOrientation.DOWN);
+				OnScreenClicked (Orientation.DOWN);
 		}
 	}
 	private float AngleBetweenVector2(Vector2 p_vec1, Vector2 p_vec2)

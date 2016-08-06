@@ -20,13 +20,7 @@ public class Tile
 		FILESHELF,
 		LEAVES
 	}
-	public enum PlayerOrientation
-	{
-		RIGHT,
-		UP,
-		LEFT,
-		DOWN
-	}
+
 	public enum TileOrientation
 	{
 		DOWN,

@@ -103,16 +103,16 @@ public class GameSceneManager : MonoBehaviour
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
-			__enemyHit = TryToHitEnemy (player.gridPosition,(Tile.PlayerOrientation)i, true);
+			__enemyHit = TryToHitEnemy (player.gridPos,(Orientation)i, true);
 			if (__enemyHit == null) 
 				continue;
 			
-			if (IsOpposeOrientation(__enemyHit.enemyOrientation, (Tile.PlayerOrientation)i))
+			if (Util.IsOpposeOrientation(__enemyHit.enemyOrientation, (Orientation)i))
 				__enemyHit.SawPlayer (player.playerOrientation);
 
 		}
 	}
-	void InputManager_OnScreenClicked (Tile.PlayerOrientation p_orientation)
+	void InputManager_OnScreenClicked (Orientation p_orientation)
 	{
 		if (p_orientation == player.playerOrientation)
 			player.SetPlayerDestination ();
@@ -132,21 +132,10 @@ public class GameSceneManager : MonoBehaviour
 		if (playerMovimentCount - movesAvailable == 0) 
 			uiManager.actionButtonsManager.SetYawnButtonGlow ();
 	}
-	private bool IsOpposeOrientation(Tile.PlayerOrientation p_ori1, Tile.PlayerOrientation p_ori2)
-	{
-		int __orientation = (int) p_ori1 + 2;
-		if (__orientation >= 4)
-			__orientation -= 4;
-		if (__orientation == (int)p_ori2)
-			return true;
-		return false;
-	}
+
 	IEnumerator EndLevel()
 	{
-		if (currentLevelIndex == 14)
-			yield return new WaitForSeconds (6f);
-		else
-			yield return new WaitForSeconds (4.5f);
+		yield return new WaitForSeconds (3.5f);
 		soundManager.PlayEndOfLevelSFX ();
 		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
 
@@ -216,7 +205,7 @@ public class GameSceneManager : MonoBehaviour
 		
 		player.yawned = true;
 		player.animator.StartYawn ();
-		PlayerYawnAction (player.gridPosition,player.playerOrientation,true);
+		PlayerYawnAction (player.gridPos,player.playerOrientation,true);
 		player.StartAction ();
 		uiManager.actionButtonsManager.DisableYawnButtonTransition ();
 		soundManager.PlayPlayerYawnSFX ();
@@ -231,7 +220,7 @@ public class GameSceneManager : MonoBehaviour
 		if (actions < ActionsAvailable.YAWN_HELLO)
 			return;
 		
-		PlayerHelloAction (player.gridPosition, player.playerOrientation);
+		PlayerHelloAction (player.gridPos, player.playerOrientation);
 		player.StartAction ();
 	}
 	public void ExcuseMeButtonClicked(bool p_isFromButton)
@@ -243,37 +232,34 @@ public class GameSceneManager : MonoBehaviour
 		if (actions < ActionsAvailable.YAWN_HELLO_EXCUSE)
 			return;
 		
-		PlayerExcuseMeAction (player.gridPosition,player.playerOrientation);
+		PlayerExcuseMeAction (player.gridPos,player.playerOrientation);
 		player.StartAction ();
 	}
 
-	public Enemy TryToHitEnemy(Vector2 p_position, Tile.PlayerOrientation p_orientation, bool p_continueUntilEnd)
+	public Enemy TryToHitEnemy(TupleInt p_position, Orientation p_orientation, bool p_continueUntilEnd)
 	{
-		int __posX = Mathf.RoundToInt (p_position.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
-		int __posY = Mathf.RoundToInt (p_position.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
-
-		while(__posX > -1)
+		TupleInt __pos = TupleInt.AddTuples (p_position, p_orientation);
+		while(__pos.Item1 > -1)
 		{
-			if (!gridManager.TileIsWithinGrid(__posX,__posY))
+			if (!gridManager.TileIsWithinGrid(__pos))
 				return null;
-			if (!gridManager.TilePassYawn(__posX, __posY))
+			if (!gridManager.TilePassYawn(__pos))
 				return null;
-			if (gridManager.TileHasPlayer(__posX, __posY))
+			if (gridManager.TileHasPlayer(__pos))
 				return null;
 			
 			foreach (Enemy __enemy in enemies)
-				if (Mathf.RoundToInt (__enemy.gridPosition.x) == __posX && Mathf.RoundToInt (__enemy.gridPosition.y) == __posY) 
+				if (Mathf.RoundToInt (__enemy.gridPos.Item1) == __pos.Item1 && Mathf.RoundToInt (__enemy.gridPos.Item2) == __pos.Item2) 
 					return __enemy;
 
-			__posX += Mathf.RoundToInt (Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
-			__posY -= Mathf.RoundToInt (Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
+			__pos.AddOrientation(p_orientation);
 			if (!p_continueUntilEnd)
 				return null;
 
 		}
 		return null;
 	}
-	public void PlayerYawnAction(Vector2 p_position,Tile.PlayerOrientation p_orientation, bool p_calledByPlayer)
+	public void PlayerYawnAction(TupleInt p_position,Orientation p_orientation, bool p_calledByPlayer)
 	{
 		if (p_calledByPlayer) 
 			foreach (Enemy __enemy in enemies)
@@ -281,9 +267,10 @@ public class GameSceneManager : MonoBehaviour
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
-			__enemyHit = TryToHitEnemy (p_position,(Tile.PlayerOrientation)i, true);
-			if (__enemyHit == null) 
+			__enemyHit = TryToHitEnemy (p_position,(Orientation)i, true);
+			if (__enemyHit == null)
 				continue;
+
 			int __orientation = i + 2;
 			if (__orientation >= 4)
 				__orientation -= 4;
@@ -297,7 +284,7 @@ public class GameSceneManager : MonoBehaviour
 				__enemyHit.StartYawn ();
 		}
 	}
-	public void PlayerHelloAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)
+	public void PlayerHelloAction(TupleInt p_position, Orientation p_orientation)
 	{
 		if (playerMovimentCount >= movesAvailable)
 			return;
@@ -311,7 +298,7 @@ public class GameSceneManager : MonoBehaviour
 		playerMovimentCount++;
 		soundManager.PlayHelloSFX ();
 	}
-	public void PlayerExcuseMeAction(Vector2 p_position, Tile.PlayerOrientation p_orientation)
+	public void PlayerExcuseMeAction(TupleInt p_position, Orientation p_orientation)
 	{
 		if (playerMovimentCount >= movesAvailable)
 			return;
@@ -321,16 +308,15 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayErrorSFX ();
 			return;
 		}
-		int __posX = Mathf.RoundToInt (__enemyHit.gridPosition.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
-		int __posY = Mathf.RoundToInt (__enemyHit.gridPosition.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
-
-		if (!CanWalkToTile(__posX,__posY))
+		TupleInt __pos = TupleInt.AddTuples(__enemyHit.gridPos, p_orientation);
+		if (!CanWalkToTile(__pos))
+			
 		{
 			soundManager.PlayErrorSFX ();
 			return;
 		}
 
-		if (gridManager.TileWalkable (__posX,__posY))
+		if (gridManager.TileWalkable (__pos))
 		{
 			__enemyHit.HitByExcuseMeAction (p_orientation);
 			playerMovimentCount++;
@@ -338,33 +324,31 @@ public class GameSceneManager : MonoBehaviour
 		}
 		
 	}
-	public bool CanWalkToTile(int p_posX, int p_posY)
+	public bool CanWalkToTile(TupleInt p_pos)
 	{
-		if (!gridManager.TileIsWithinGrid (p_posX, p_posY))
+		if (!gridManager.TileIsWithinGrid (p_pos))
 			return false;
-		if (gridManager.TileHasEnemy (p_posX, p_posY)) 
+		if (gridManager.TileHasEnemy (p_pos)) 
 			return false;
-		if (!gridManager.TileWalkable (p_posX, p_posY))
+		if (!gridManager.TileWalkable (p_pos))
 			return false;
 		return true;
 	}
-	public bool GetPathCollision(Vector2 p_position, Tile.PlayerOrientation p_orientation)
+	public bool GetPathCollision(TupleInt p_position, Orientation p_orientation)
 	{
-		int __posX = Mathf.RoundToInt (p_position.x + Mathf.Cos ((int)p_orientation * 90f * Mathf.Deg2Rad));
-		int __posY = Mathf.RoundToInt (p_position.y - Mathf.Sin ((int)p_orientation * 90f * Mathf.Deg2Rad));
-
+		TupleInt __pos = TupleInt.AddTuples (p_position, p_orientation);
 		//Moviment Cap Reached
 		if (playerMovimentCount >= movesAvailable)
 			return false;
 		//Map Limit Block
-		if (!gridManager.TileIsWithinGrid(__posX,__posY))
+		if (!gridManager.TileIsWithinGrid(__pos))
 			return false;
 		//Tile Block
-		if (!gridManager.TileWalkable(__posX, __posY))
+		if (!gridManager.TileWalkable(__pos))
 			return false;
 		//EnemyBlock
 		foreach (Enemy __enemy in enemies)
-			if (Mathf.RoundToInt (__enemy.gridPosition.x) == __posX && Mathf.RoundToInt (__enemy.gridPosition.y) == __posY)
+			if (__enemy.gridPos == __pos)
 				return false;
 		return true;
 	}

@@ -11,15 +11,16 @@ public class Player : MonoBehaviour
 	public PlayerSpriteAnimator animator;
 	public Rigidbody2D	rigidBody2D;
 
-	public Tile.PlayerOrientation playerOrientation = Tile.PlayerOrientation.RIGHT;
+	public Orientation playerOrientation = Orientation.RIGHT;
 	public KeyCode playerDirection = KeyCode.Q;
 
 	public bool yawned = false;
-	private float _playerSpeed = 1.8f;
+	private float _playerSpeed = 2.8f;
 	private float _moveTimerThreshold = 0.25f;
 	public float talkTimerCooldown;
 	public float moveKeyPressedTimer = 0f;
-	public Vector2 gridPosition;
+	//public Vector2 gridPosition;
+	public TupleInt gridPos;
 	public Vector2 moveStartPosition;
 	public Vector2 moveEndPosition;
 	public bool isMoving = false;
@@ -30,11 +31,11 @@ public class Player : MonoBehaviour
 	void Start () 
 	{
 		animator.SetPlayerOrientation ((int)playerOrientation);
-		if (playerOrientation == Tile.PlayerOrientation.UP)
+		if (playerOrientation == Orientation.UP)
 			playerDirection = KeyCode.W;
-		else if (playerOrientation == Tile.PlayerOrientation.RIGHT)
+		else if (playerOrientation == Orientation.RIGHT)
 			playerDirection = KeyCode.D;
-		else if (playerOrientation == Tile.PlayerOrientation.DOWN)
+		else if (playerOrientation == Orientation.DOWN)
 			playerDirection = KeyCode.S;
 		else
 			playerDirection = KeyCode.A;
@@ -54,7 +55,6 @@ public class Player : MonoBehaviour
 			talkTweenCount += Time.deltaTime;
 			if (talkTweenCount >= talkTimerCooldown)
 				isTalking = false;
-
 			return;
 		}
 			
@@ -64,43 +64,42 @@ public class Player : MonoBehaviour
 			if (Input.GetKey (KeyCode.W)) 
 			{
 				playerDirection = KeyCode.W;
-				playerOrientation = Tile.PlayerOrientation.UP;
+				playerOrientation = Orientation.UP;
 			} 
 			else if (Input.GetKey (KeyCode.UpArrow)) 
 			{
 				playerDirection = KeyCode.UpArrow;
-				playerOrientation = Tile.PlayerOrientation.UP;
+				playerOrientation = Orientation.UP;
 			} 
-			 
 			else if (Input.GetKey (KeyCode.A)) 
 			{
 				playerDirection = KeyCode.A;
-				playerOrientation = Tile.PlayerOrientation.LEFT;
+				playerOrientation = Orientation.LEFT;
 			} 
 			else if (Input.GetKey (KeyCode.LeftArrow)) 
 			{
 				playerDirection = KeyCode.LeftArrow;
-				playerOrientation = Tile.PlayerOrientation.LEFT;
+				playerOrientation = Orientation.LEFT;
 			}
 			else if (Input.GetKey (KeyCode.S)) 
 			{
 				playerDirection = KeyCode.S;
-				playerOrientation = Tile.PlayerOrientation.DOWN;
+				playerOrientation = Orientation.DOWN;
 			} 
 			else if (Input.GetKey (KeyCode.DownArrow)) 
 			{
 				playerDirection = KeyCode.DownArrow;
-				playerOrientation = Tile.PlayerOrientation.DOWN;
+				playerOrientation = Orientation.DOWN;
 			}
 			else if (Input.GetKey (KeyCode.D)) 
 			{
 				playerDirection = KeyCode.D;
-				playerOrientation = Tile.PlayerOrientation.RIGHT;
+				playerOrientation = Orientation.RIGHT;
 			} 
 			else if (Input.GetKey (KeyCode.RightArrow)) 
 			{
 				playerDirection = KeyCode.RightArrow;
-				playerOrientation = Tile.PlayerOrientation.RIGHT;
+				playerOrientation = Orientation.RIGHT;
 			} 
 			else if (Input.GetKeyDown(KeyCode.Q))
 			{
@@ -132,7 +131,7 @@ public class Player : MonoBehaviour
 		isTalking = true;
 		talkTweenCount = 0f;
 	}
-	public void ChangeOrientation(Tile.PlayerOrientation p_oritentation)
+	public void ChangeOrientation(Orientation p_oritentation)
 	{
 		if (yawned || isMoving || isTalking) 
 			return;
@@ -158,12 +157,11 @@ public class Player : MonoBehaviour
 	{
 		if (yawned || isMoving || isTalking) 
 			return;
-		if (gameSceneManager.GetPathCollision(gridPosition, playerOrientation))
+		if (gameSceneManager.GetPathCollision(gridPos, playerOrientation))
 		{
 			isMoving = true;
 			moveTweenCount = 0f;
-			gridPosition = gridPosition + new Vector2 (Mathf.Cos ((int)playerOrientation * 90f * Mathf.Deg2Rad),
-				-1f * Mathf.Sin ((int)playerOrientation * 90f * Mathf.Deg2Rad));
+			gridPos.AddOrientation(playerOrientation);
 			moveStartPosition = transform.localPosition;
 			moveEndPosition = transform.localPosition + new Vector3 (Mathf.Cos ((int)playerOrientation * 90f * Mathf.Deg2Rad),
 				Mathf.Sin ((int)playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;

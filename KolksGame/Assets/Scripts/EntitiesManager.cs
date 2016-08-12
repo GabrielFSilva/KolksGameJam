@@ -11,6 +11,7 @@ public class EntitiesManager : MonoBehaviour
 	public GameSceneManager 	gameManager;
 	public PlayerManager		playerManager;
 	public EnemiesManager		enemiesManager;
+	public CoinsManager			coinsManager;
  
 	public List<int> entitiesData;
 	public List<int> iaData;
@@ -23,19 +24,42 @@ public class EntitiesManager : MonoBehaviour
 
 		for(int i = 0; i < entitiesData.Count; i++)
 		{
-			if (entitiesData[i] == 0)
+			if (entitiesData [i] == 0)
 				playerManager.LoadPlayer (i);
-			else if (entitiesData[i] == 1) 
-				enemiesManager.LoadEnemy(EnemyType.STANDARD, i);
-			else if (entitiesData[i] == 2) 
-				enemiesManager.LoadEnemy(EnemyType.COCKY, i);
-			else if (entitiesData[i] == 3) 
-				enemiesManager.LoadEnemy(EnemyType.SHY, i);
-			else if (entitiesData[i] == 4) 
-				enemiesManager.LoadEnemy(EnemyType.POLITE, i);
+			else if (entitiesData [i] == 1)
+				enemiesManager.LoadEnemy (EnemyType.STANDARD, i);
+			else if (entitiesData [i] == 2)
+				enemiesManager.LoadEnemy (EnemyType.COCKY, i);
+			else if (entitiesData [i] == 3)
+				enemiesManager.LoadEnemy (EnemyType.SHY, i);
+			else if (entitiesData [i] == 4)
+				enemiesManager.LoadEnemy (EnemyType.POLITE, i);
+			else if (entitiesData [i] == 8)
+				coinsManager.LoadCoin (i);
+			else if (entitiesData [i] == 9) 
+			{
+				enemiesManager.LoadEnemy (EnemyType.STANDARD, i);
+				coinsManager.LoadCoin (i);
+			}
+			else if (entitiesData [i] == 10) 
+			{
+				enemiesManager.LoadEnemy (EnemyType.COCKY, i);
+				coinsManager.LoadCoin (i);
+			}
+			else if (entitiesData [i] == 11) 
+			{
+				enemiesManager.LoadEnemy (EnemyType.SHY, i);
+				coinsManager.LoadCoin (i);
+			}
+			else if (entitiesData [i] == 12) 
+			{
+				enemiesManager.LoadEnemy (EnemyType.POLITE, i);
+				coinsManager.LoadCoin (i);
+			}
 		}
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);
+		coinsManager.CallUpdateCoinsLabel ();
 	}
 	public void LoadIA(List<int> p_data)
 	{

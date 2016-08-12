@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 	public UIActionButtonsManager		actionButtonsManager;
 	public UIExtraButtonsManager		extraButtonsManager;
 	public UIEnergyBarManager			energyBarManager;
+	public UICoinLabelManager			coinLabelManager;
 
 	void Start()
 	{

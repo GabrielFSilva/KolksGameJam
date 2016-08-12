@@ -14,17 +14,19 @@ public class UIEndLevelManager : MonoBehaviour
 	public Image star1;
 	public Image star2;
 	public Image star3;
+	public Color starOffColor;
 	public Color starOnColor;
 
 	public Button nextButton;
 	public Button replay2Button;
+	public RectTransform replayButtonCenterRef;
 
 	public SoundManager soundManager;
 	void Start()
 	{
-		star1.color = Color.white;
-		star2.color = Color.white;
-		star3.color = Color.white;
+		star1.color = starOffColor;
+		star2.color = starOffColor;
+		star3.color = starOffColor;
 		UpdateStarBarPosition (0f, 0f);
 		EnableEndLevelPanel (false);
 		nextButton.gameObject.SetActive (false);
@@ -38,10 +40,16 @@ public class UIEndLevelManager : MonoBehaviour
 	}
 	public void EnableEndLevelButtons(float p_value)
 	{
-		if (p_value >= 0.5f)
+		if (p_value >= 0.5f) 
+		{
 			nextButton.gameObject.SetActive (true);
-		else
 			replay2Button.gameObject.SetActive (true);
+		} 
+		else 
+		{
+			replay2Button.gameObject.SetActive (true);
+			replay2Button.GetComponent<RectTransform> ().anchoredPosition = replayButtonCenterRef.anchoredPosition;
+		}
 	}
 	public void UpdateStarBarPosition(float p_value, float p_limit)
 	{
@@ -52,17 +60,17 @@ public class UIEndLevelManager : MonoBehaviour
 	}
 	public void UpdateStarSprites(float p_value)
 	{
-		if (p_value >= 0.5f && star1.color == Color.white) 
+		if (p_value >= 0.5f && star1.color == starOffColor) 
 		{
 			star1.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
-		if (p_value >= 0.75f && star2.color == Color.white)
+		if (p_value >= 0.75f && star2.color == starOffColor)
 		{
 			star2.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
-		if (p_value >= 0.99f && star3.color == Color.white)
+		if (p_value >= 0.99f && star3.color == starOffColor)
 		{
 			star3.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();

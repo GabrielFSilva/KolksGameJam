@@ -134,8 +134,8 @@
     <property name="2Star" type="int" value="1"/>
     <property name="3Star" type="int" value="2"/>
     <property name="Energy" type="int" value="11"/>
-    <property name="ExcuseMe" type="bool" value="true"/>
-    <property name="Hello" type="bool" value="true"/>
+    <property name="ExcuseMe" type="bool" value="false"/>
+    <property name="Hello" type="bool" value="false"/>
    </properties>
   </object>
  </objectgroup>

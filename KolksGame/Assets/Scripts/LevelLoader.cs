@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.IO;
 
@@ -18,13 +19,18 @@ public class LevelLoader : MonoBehaviour
 	public XmlNodeList layers;
 	public XmlNodeList levelInfo;
 
+
 	public void LoadLevel(int p_level, string p_levelToLoadName, bool p_isOnTestMode)
 	{
-		string __xmlInfo;
+		string __xmlInfo = "";
+
 		if (p_isOnTestMode)
-			__xmlInfo =  File.ReadAllText(Application.dataPath + "/Resources/Levels/" + p_levelToLoadName +".tmx");
+			//__xmlInfo = File.ReadAllText (Application.dataPath + "/Resources/Levels/" + p_levelToLoadName + ".tmx");
+			__xmlInfo = Resources.Load<TextAsset>("Levels/" + p_levelToLoadName).text;
 		else
-			__xmlInfo =  File.ReadAllText(Application.dataPath + "/Resources/Levels/Level_" + p_level.ToString() + ".tmx");
+			//__xmlInfo = File.ReadAllText (Application.dataPath + "/Resources/Levels/Level_" + p_level.ToString () + ".tmx");
+			__xmlInfo = Resources.Load<TextAsset>("Levels/Level_" + p_level.ToString ()).text;
+
 		if (__xmlInfo.Length == 0)
 		{
 			Debug.LogWarning("Level Not Found");

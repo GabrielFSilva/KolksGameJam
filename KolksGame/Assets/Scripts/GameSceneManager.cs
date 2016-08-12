@@ -6,40 +6,45 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
+	public static int 		currentLevelIndex = 1;
 	public enum ActionsAvailable
 	{
 		YAWN,
 		YAWN_HELLO,
 		YAWN_HELLO_EXCUSE,
 	}
+
 	//Testing stuff
+	[Header("Testing")]
 	public bool				isOnTestMode;
 	public string 			levelToTest;
 
 	//Level Control
-	public static int 		currentLevelIndex = 1;
+	[Header("LevelInfo")]
 	public int 				star3Value;
 	public int 				star2Value;
-
-	//Entities
 	public int 				movesAvailable;
 	public int 				playerMovimentCount;
 	public int 				enemyYawnCount;
-	public Player 			player;
-	public List<Enemy> 		enemies;
+	public ActionsAvailable	actions;
 
 	//Control Scripts
+	[Header("Managers")]
 	public LevelLoader		levelLoader;
 	public GridManager 		gridManager;
 	public EntitiesManager	entitiesManager;
 	public InputManager 	inputManager;
 	public UIManager 		uiManager;
+	public SoundManager 	soundManager;
 
+	//Entities
+	[Header("Entities")]
+	public Player 			player;
+	public List<Enemy> 		enemies;
+
+	[Header("Extra")]
 	public Text	yawnedCountLabel;
 	public Text	currentLevelLabel;
-
-	public SoundManager soundManager;
-	public ActionsAvailable	actions;
 
 	void Start () 
 	{
@@ -54,7 +59,9 @@ public class GameSceneManager : MonoBehaviour
 			player.gameSceneManager = this;
 			player.OnPlayerMovementEnd += Player_OnPlayerMovementEnd;
 		};
-
+		entitiesManager.coinsManager.OnUpdateCoinsCollected += delegate(int p_collectedCoins, int p_coinsOnStage) {
+			uiManager.coinLabelManager.UpdateCoinLabel(p_collectedCoins, p_coinsOnStage);
+		};
 		if (currentLevelIndex == 14) 
 		{
 			Camera.main.transform.localPosition = new Vector3(7f,0f,-10f);
@@ -100,6 +107,7 @@ public class GameSceneManager : MonoBehaviour
 	}
 	void Player_OnPlayerMovementEnd ()
 	{
+		entitiesManager.coinsManager.CheckPlayerGotCoin (player.gridPos);
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
@@ -177,8 +185,13 @@ public class GameSceneManager : MonoBehaviour
 			uiManager.endLevelPanelManager.UpdateStarSprites (__t);
 			yield return null;
 		}
+		//Failed Stage
 		if (__t < 0.5f)
 			soundManager.PlayDefeatSFX ();
+		//Completed Stage
+		else
+			entitiesManager.coinsManager.SaveCollectedCoins ();
+		
 		yield return new WaitForSeconds (0.25f);
 		uiManager.endLevelPanelManager.EnableEndLevelButtons (__t);
 	}
@@ -310,7 +323,6 @@ public class GameSceneManager : MonoBehaviour
 		}
 		TupleInt __pos = TupleInt.AddTuples(__enemyHit.gridPos, p_orientation);
 		if (!CanWalkToTile(__pos))
-			
 		{
 			soundManager.PlayErrorSFX ();
 			return;
@@ -348,7 +360,7 @@ public class GameSceneManager : MonoBehaviour
 			return false;
 		//EnemyBlock
 		foreach (Enemy __enemy in enemies)
-			if (__enemy.gridPos == __pos)
+			if (__enemy.gridPos.Equals(__pos))
 				return false;
 		return true;
 	}

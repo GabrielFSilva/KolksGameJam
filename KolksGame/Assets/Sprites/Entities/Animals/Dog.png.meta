@@ -1,0 +1,176 @@
+fileFormatVersion: 2
+guid: f452f105c51fcac4099a2534d4066b58
+timeCreated: 1471065854
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Dog_Front_Idle
+    21300002: Dog_Front_Yawn
+    21300004: Dog_Side_Idle
+    21300006: Dog_Side_Yawn
+    21300008: Dog_Back_Idle
+    21300010: Dog_Back_Yawn
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 64
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Dog_Front_Idle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60, y: 61}
+        - {x: -67, y: 40}
+        - {x: -67, y: -63}
+        - {x: 68, y: -63}
+        - {x: 68, y: 58}
+        - {x: 59, y: 61}
+    - name: Dog_Front_Yawn
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -60, y: 70}
+        - {x: -65, y: 60}
+        - {x: -65, y: -52}
+        - {x: -63, y: -63}
+        - {x: 59, y: -63}
+        - {x: 67, y: -61}
+        - {x: 70, y: -49}
+        - {x: 70, y: 61}
+        - {x: 67, y: 70}
+    - name: Dog_Side_Idle
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -62, y: 61}
+        - {x: -73, y: 1}
+        - {x: -73, y: -54}
+        - {x: -67, y: -62}
+        - {x: 66, y: -62}
+        - {x: 67, y: -60}
+        - {x: 67, y: 41}
+        - {x: 62, y: 61}
+    - name: Dog_Side_Yawn
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 62, y: 70}
+        - {x: -62, y: 70}
+        - {x: -72, y: 4}
+        - {x: -72, y: -51}
+        - {x: -59, y: -62}
+        - {x: 61, y: -62}
+        - {x: 65, y: -61}
+        - {x: 68, y: -50}
+        - {x: 68, y: 51}
+    - name: Dog_Back_Idle
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 55, y: 62}
+        - {x: -55, y: 62}
+        - {x: -62, y: 53}
+        - {x: -62, y: -52}
+        - {x: -61, y: -55}
+        - {x: -54, y: -62}
+        - {x: 55, y: -62}
+        - {x: 62, y: -54}
+        - {x: 62, y: 55}
+    - name: Dog_Back_Yawn
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 0
+        width: 204
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -62, y: 70}
+        - {x: -62, y: -63}
+        - {x: 59, y: -63}
+        - {x: 62, y: -62}
+        - {x: 62, y: 63}
+        - {x: 58, y: 70}
+    outline: []
+  spritePackingTag: Transparent
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

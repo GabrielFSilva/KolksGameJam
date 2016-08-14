@@ -48,7 +48,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="69"/>
+   <tile gid="75"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="69"/>
@@ -131,7 +131,7 @@
  <objectgroup name="LevelInfo">
   <object id="1" name="LevelInfo" x="0" y="0" width="32" height="32">
    <properties>
-    <property name="2Star" type="int" value="0"/>
+    <property name="2Star" type="int" value="1"/>
     <property name="3Star" type="int" value="2"/>
     <property name="Energy" type="int" value="8"/>
     <property name="ExcuseMe" type="bool" value="false"/>

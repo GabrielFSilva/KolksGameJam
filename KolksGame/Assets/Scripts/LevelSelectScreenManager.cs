@@ -15,6 +15,7 @@ public class LevelSelectScreenManager : MonoBehaviour
 		int __stars = 0;
 		foreach (Button __button in levelButtons) 
 		{
+			__button.gameObject.name = "Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Button";
 			if (levelButtons.IndexOf (__button) + 1 > unlockedLevel) 
 			{
 				__button.transition = Selectable.Transition.None;

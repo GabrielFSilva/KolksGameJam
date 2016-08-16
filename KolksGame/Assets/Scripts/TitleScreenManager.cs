@@ -11,7 +11,7 @@ public class TitleScreenManager : MonoBehaviour
 	public void PlayButtonClicked()
 	{
 		//if (!PlayerPrefs.HasKey ("UnlockedLevel"))
-		PlayerPrefs.SetInt ("UnlockedLevel", 15);
+		PlayerPrefs.SetInt ("UnlockedLevel", 40);
 		
 		SoundManager.GetInstance ().PlayClickSFX ();
 		GameSceneManager.currentLevelIndex = 0;

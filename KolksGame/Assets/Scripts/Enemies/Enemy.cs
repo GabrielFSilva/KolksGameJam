@@ -4,9 +4,13 @@ using System.Collections;
 public class Enemy : MonoBehaviour 
 {
 	public GameSceneManager	gameSceneManager;
+	public bool 			yawned;
+
+	//Graphics
 	public SpriteRenderer 	enemySprite;
 	public Animator 		animator;
-	public bool 			yawned;
+	public SpriteRenderer	yawnedIcon;
+	public SpriteRenderer   yawnFailIcon;
 
 	//Grid Info
 	public TupleInt 		gridPos;
@@ -26,13 +30,12 @@ public class Enemy : MonoBehaviour
 	protected bool 			_isGliding = false;
 	protected float 		_moveTweenCount = 0f;
 
-
 	public EnemyType enemyType;
 
 	public ActionEffectType helloEffect;
 	public ActionEffectType excuseMeEffect;
 
-	void Start () 
+	public void EnemySetUp () 
 	{
 		animator.SetInteger ("Orientation",(int)enemyOrientation);
 		yawned = false;
@@ -104,6 +107,7 @@ public class Enemy : MonoBehaviour
 		yield return new WaitForSeconds (_enemyYawnDelay);
 
 		animator.SetBool ("Yawning",true);
+		EnableIcons (true);
 		gameSceneManager.PlayerYawnAction (gridPos,enemyOrientation,false);
 		yield return new WaitForSeconds (0.3f);
 		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
@@ -152,4 +156,28 @@ public class Enemy : MonoBehaviour
 		animator.SetInteger ("Orientation", __orientation);
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
+	//Enables the Yawn icons within the enemy
+	private void EnableIcons(bool p_yawned, float p_delay = 1.5f)
+	{
+		StartCoroutine (ShowIcons (p_yawned, p_delay));
+	}
+	//Called by EnemiesManager at EndOfLevel
+	public void ShowFailedIcon()
+	{
+		if (!yawned)
+			EnableIcons (false);
+	}
+	//Thread to delay and show icons
+	IEnumerator ShowIcons(bool p_yawned, float p_delay)
+	{
+		yield return new WaitForSeconds (p_delay);
+		yawnedIcon.gameObject.SetActive (p_yawned);
+		yawnFailIcon.gameObject.SetActive (!p_yawned);
+		yawnedIcon.sortingOrder = enemySprite.sortingOrder + 10;
+		yawnFailIcon.sortingOrder = enemySprite.sortingOrder + 10;
+		if (p_yawned)
+			SoundManager.GetInstance ().PlayEndOfLevelSFX ();
+	}
+
+
 }

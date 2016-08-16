@@ -137,7 +137,7 @@ public class GameSceneManager : MonoBehaviour
 		currentLevelLabel.text = "Level " + (currentLevelIndex+1).ToString() + " / 50";
 
 		uiManager.energyBarManager.UpdateEnergyBar(movesAvailable,playerMovimentCount);
-		if (playerMovimentCount - movesAvailable == 0) 
+		if (playerMovimentCount - movesAvailable == 0 && !player.yawned) 
 			uiManager.actionButtonsManager.SetYawnButtonGlow ();
 	}
 
@@ -146,7 +146,7 @@ public class GameSceneManager : MonoBehaviour
 		yield return new WaitForSeconds (3.5f);
 		soundManager.PlayEndOfLevelSFX ();
 		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
-
+		entitiesManager.enemiesManager.ShowFailedEnemies ();
 		float __t = -0.25f;
 		float __limit = 0f;
 		if (enemyYawnCount < enemies.Count)

@@ -33,8 +33,11 @@ public class UIActionButtonsManager : MonoBehaviour
 	}
 	public void SetYawnButtonGlow()
 	{
-		yawnButtonAnimator.SetBool ("Blinking", true);
-		DisableYawnButtonTransition ();
+		if (!yawnButtonAnimator.GetBool("Blinking")) 
+		{
+			yawnButtonAnimator.SetBool ("Blinking", true);
+			DisableYawnButtonTransition ();
+		}
 	}
 	public void DisableYawnButtonTransition()
 	{

@@ -35,4 +35,9 @@ public class EnemiesManager : MonoBehaviour
 				__en.ChangeOrientationInstantly (p_orientation);
 		}
 	}
+	public void ShowFailedEnemies()
+	{
+		foreach (Enemy __enemy in enemies)
+			__enemy.ShowFailedIcon ();
+	}
 }

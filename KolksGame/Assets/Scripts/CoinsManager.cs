@@ -64,6 +64,8 @@ public class CoinsManager : MonoBehaviour
 		CallUpdateCoinsLabel ();
 		//Add coin to the remove list
 		_coinsToRemove.Add (p_coin);
+		//SFX
+		SoundManager.GetInstance ().PlayEndOfLevelSFX ();
 	}
 
 	public void CallUpdateCoinsLabel()

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class CoinsManager : MonoBehaviour 
 {
-	public event Action<int, int> OnUpdateCoinsCollected;
+	public event Action<int, int> 	OnUpdateCoinsCollected;
+	public event Action<Coin>		OnCollectCoin;
 
 	public List<Coin>	coins;
 	[SerializeField]
@@ -60,8 +61,9 @@ public class CoinsManager : MonoBehaviour
 	{
 		//Set coin collected
 		coinsCollected++;
-		p_coin.gameObject.SetActive (false);
 		CallUpdateCoinsLabel ();
+		OnCollectCoin (p_coin);
+		p_coin.gameObject.SetActive (false);
 		//Add coin to the remove list
 		_coinsToRemove.Add (p_coin);
 		//SFX

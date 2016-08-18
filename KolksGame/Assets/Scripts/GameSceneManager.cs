@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
-	public static int 		currentLevelIndex = 1;
+	public static int 		currentLevelIndex = 14;
 	public enum ActionsAvailable
 	{
 		YAWN,
@@ -62,12 +62,9 @@ public class GameSceneManager : MonoBehaviour
 		entitiesManager.coinsManager.OnUpdateCoinsCollected += delegate(int p_collectedCoins, int p_coinsOnStage) {
 			uiManager.coinLabelManager.UpdateCoinLabel(p_collectedCoins, p_coinsOnStage);
 		};
-		if (currentLevelIndex == 14) 
-		{
-			Camera.main.transform.localPosition = new Vector3(7f,0f,-10f);
-			Camera.main.orthographicSize = 9;
-		}
-
+		entitiesManager.coinsManager.OnCollectCoin += delegate(Coin p_coin) {
+			uiManager.coinLabelManager.CreateUICoin(p_coin);
+		};
 	
 		levelLoader.OnSetGridDimensions += gridManager.SetGridDimensions;
 		levelLoader.OnSendLayerData += delegate(int p_layerID, List<int> p_data) {

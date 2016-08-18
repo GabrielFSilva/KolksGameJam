@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 	//Enables the Yawn icons within the enemy
-	private void EnableIcons(bool p_yawned, float p_delay = 1.5f)
+	private void EnableIcons(bool p_yawned, float p_delay = 0.8f)
 	{
 		StartCoroutine (ShowIcons (p_yawned, p_delay));
 	}
@@ -165,7 +165,7 @@ public class Enemy : MonoBehaviour
 	public void ShowFailedIcon()
 	{
 		if (!yawned)
-			EnableIcons (false);
+			EnableIcons (false, 0.25f);
 	}
 	//Thread to delay and show icons
 	IEnumerator ShowIcons(bool p_yawned, float p_delay)
@@ -175,8 +175,8 @@ public class Enemy : MonoBehaviour
 		yawnFailIcon.gameObject.SetActive (!p_yawned);
 		yawnedIcon.sortingOrder = enemySprite.sortingOrder + 10;
 		yawnFailIcon.sortingOrder = enemySprite.sortingOrder + 10;
-		if (p_yawned)
-			SoundManager.GetInstance ().PlayEndOfLevelSFX ();
+		//if (p_yawned)
+		//	SoundManager.GetInstance ().PlayEndOfLevelSFX ();
 	}
 
 

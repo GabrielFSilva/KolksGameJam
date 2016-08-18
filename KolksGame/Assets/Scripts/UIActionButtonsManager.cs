@@ -4,11 +4,10 @@ using System.Collections;
 
 public class UIActionButtonsManager : MonoBehaviour 
 {
-	public Button yawnButton;
-	public Button helloButton;
-	public Button excuseMeButton;
-
 	public Animator yawnButtonAnimator;
+	public RectTransform 	yawnButton;
+	public RectTransform 	helloButton;
+	public RectTransform 	excuseMeButton;
 
 	public RectTransform	yawnButtonRectTransform;
 	public RectTransform	yawnSize1;
@@ -20,7 +19,8 @@ public class UIActionButtonsManager : MonoBehaviour
 		{
 			excuseMeButton.gameObject.SetActive (false);
 			yawnButtonRectTransform.anchoredPosition = yawnSize1.anchoredPosition;
-			yawnButtonRectTransform.sizeDelta = yawnSize2.sizeDelta;
+			yawnButtonRectTransform.sizeDelta = yawnSize1.sizeDelta;
+			helloButton.anchoredPosition = excuseMeButton.anchoredPosition;
 		}
 		else if (p_actions == GameSceneManager.ActionsAvailable.YAWN) 
 		{
@@ -41,6 +41,6 @@ public class UIActionButtonsManager : MonoBehaviour
 	}
 	public void DisableYawnButtonTransition()
 	{
-		yawnButton.transition = Selectable.Transition.None;
+		yawnButton.GetComponent<Button>().transition = Selectable.Transition.None;
 	}
 }

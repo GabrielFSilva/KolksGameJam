@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b5079cdca933ed4fa350c105be03853
-timeCreated: 1472790413
+timeCreated: 1473035604
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -24,6 +24,8 @@ TextureImporter:
     21300034: ui_game_17
     21300036: ui_game_18
     21300038: ui_game_19
+    21300040: ui_game_20
+    21300042: ui_game_21
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -403,6 +405,39 @@ TextureImporter:
         - {x: 16.5, y: -17.5}
         - {x: 22.5, y: -12.5}
         - {x: 22.5, y: 17.5}
+    - name: ui_game_20
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 157
+        width: 206
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -103, y: 43}
+        - {x: -103, y: -43}
+        - {x: 103, y: -43}
+        - {x: 103, y: 43}
+    - name: ui_game_21
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 95
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 25, y: 25, z: 25, w: 25}
+      outline:
+      - - {x: -23, y: 26}
+        - {x: -26, y: 23}
+        - {x: -26, y: -22}
+        - {x: -25, y: -26}
+        - {x: 26, y: -26}
+        - {x: 26, y: 22}
+        - {x: 23, y: 26}
     outline: []
   spritePackingTag: transp
   userData: 

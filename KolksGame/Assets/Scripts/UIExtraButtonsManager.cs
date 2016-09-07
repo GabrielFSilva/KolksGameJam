@@ -34,7 +34,7 @@ public class UIExtraButtonsManager : MonoBehaviour
 	public void HomeButtonClicked()
 	{
 		soundManager.PlayClickSFX ();
-		SceneManager.LoadScene("TitleScreen");
+		SceneManager.LoadScene("LevelSelectScene");
 	}
 	public void MuteButtonClicked()
 	{

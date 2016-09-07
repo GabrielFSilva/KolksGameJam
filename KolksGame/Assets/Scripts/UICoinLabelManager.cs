@@ -30,9 +30,6 @@ public class UICoinLabelManager : MonoBehaviour
 
 		//Lerp SetUp
 		__go.GetComponent<UICoinIcon>().endPos = coinsIconRect.anchoredPosition;
-		__go.GetComponent<UICoinIcon>().OnMovementEnd += delegate(UICoinIcon p_uiCoin) {
-			SoundManager.GetInstance().PlayEndOfLevelSFX();
-		};
 	}
 
 }

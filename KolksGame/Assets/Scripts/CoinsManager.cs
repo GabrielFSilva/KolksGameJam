@@ -47,13 +47,17 @@ public class CoinsManager : MonoBehaviour
 		coins.Add (__coin.GetComponent<Coin> ());
 		coins[coins.Count - 1].gridPos = new TupleInt(__pos.Item1, __pos.Item2);
 		coins [coins.Count - 1].index = _coinIndexCount;
+
+		__coin.GetComponent<SpriteRenderer>().sortingOrder = 
+			Mathf.RoundToInt (((__pos.Item2 * -2f) + (GridManager.gridSize.Item2 - 1f)) * -10f) - 3;
+
 	}
 
 	public void CheckPlayerGotCoin(TupleInt p_playerPos)
 	{
 		//Check For collisions with player
 		foreach (Coin __coin in coins)
-			if (__coin.gridPos.Equals (p_playerPos))
+			if (__coin.gameObject.activeSelf && __coin.gridPos.Equals (p_playerPos))
 				CollectCoin (__coin);
 	}
 

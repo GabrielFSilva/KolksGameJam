@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
 			playerDirection = KeyCode.S;
 		else
 			playerDirection = KeyCode.A;
+
+		UpdateSortingOrder ();
 	}
 
 	void Update () 
@@ -48,6 +50,7 @@ public class Player : MonoBehaviour
 		if (isMoving) 
 		{
 			UpdatePlayerPosition ();
+			UpdateSortingOrder ();
 			return;
 		}
 		if (isTalking) 
@@ -137,6 +140,10 @@ public class Player : MonoBehaviour
 			return;
 		playerOrientation = p_oritentation;
 		UpdateSpriteOriantation ();
+	}
+	private void UpdateSortingOrder()
+	{
+		playerSprite.sortingOrder = Mathf.RoundToInt (transform.localPosition.y * -10f) - 1;
 	}
 	private void UpdatePlayerPosition()
 	{

@@ -8,6 +8,6 @@ public class EnemyShy : Enemy
 		EnemySetUp ();
 		enemyType = EnemyType.SHY;
 		helloEffect = ActionEffectType.NONE;
-		excuseMeEffect = ActionEffectType.STANDARD;
+		excuseMeEffect = ActionEffectType.NONE;
 	}
 }

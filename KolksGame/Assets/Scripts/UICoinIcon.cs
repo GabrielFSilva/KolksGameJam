@@ -5,8 +5,6 @@ using System;
 
 public class UICoinIcon : MonoBehaviour 
 {
-	public event Action<UICoinIcon>	OnMovementEnd;
-
 	public RectTransform	coinTransform;
 	public Animator 		coinAnimator;
 
@@ -27,7 +25,6 @@ public class UICoinIcon : MonoBehaviour
 		coinTransform.anchoredPosition = Vector3.Lerp (startPos, endPos, timerCount);
 		if (timerCount >= 1.6f) 
 		{
-			OnMovementEnd (this);
 			gameObject.SetActive (false);
 			Destroy(gameObject);
 		}

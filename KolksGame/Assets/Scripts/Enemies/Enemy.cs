@@ -41,14 +41,20 @@ public class Enemy : MonoBehaviour
 		yawned = false;
 		_isMoving = false;
 		_isGliding = false;
+		UpdateSortingOrder ();
 	}
 	void Update()
 	{
 		if (_isMoving) 
 		{
 			UpdateEnemyPosition ();
+			UpdateSortingOrder ();
 			return;
 		}
+	}
+	private void UpdateSortingOrder()
+	{
+		enemySprite.sortingOrder = Mathf.RoundToInt (transform.localPosition.y * -10f) - 2;
 	}
 	private void UpdateEnemyPosition()
 	{
@@ -108,7 +114,7 @@ public class Enemy : MonoBehaviour
 
 		animator.SetBool ("Yawning",true);
 		EnableIcons (true);
-		gameSceneManager.PlayerYawnAction (gridPos,enemyOrientation,false);
+		gameSceneManager.PlayerYawnAction (gridPos,enemyOrientation,gameObject);
 		yield return new WaitForSeconds (0.3f);
 		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
 	}

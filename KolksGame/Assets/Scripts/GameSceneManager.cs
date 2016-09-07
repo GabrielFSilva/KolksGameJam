@@ -200,8 +200,8 @@ public class GameSceneManager : MonoBehaviour
 		if (!isOnTestMode)
 			currentLevelIndex++; 
 		
-		if (currentLevelIndex == 9)
-			SceneManager.LoadScene("VictoryScreen");
+		if (currentLevelIndex == 40)
+			SceneManager.LoadScene("LevelSelectScene");
 		else
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
@@ -215,7 +215,7 @@ public class GameSceneManager : MonoBehaviour
 		
 		player.yawned = true;
 		player.animator.StartYawn ();
-		PlayerYawnAction (player.gridPos,player.playerOrientation,true);
+		PlayerYawnAction (player.gridPos,player.playerOrientation,player.gameObject);
 		player.StartAction ();
 		uiManager.actionButtonsManager.DisableYawnButtonTransition ();
 		soundManager.PlayPlayerYawnSFX ();
@@ -269,29 +269,39 @@ public class GameSceneManager : MonoBehaviour
 		}
 		return null;
 	}
-	public void PlayerYawnAction(TupleInt p_position,Orientation p_orientation, bool p_calledByPlayer)
+	public void PlayerYawnAction(TupleInt p_position,Orientation p_orientation, GameObject p_caller)
 	{
-		if (p_calledByPlayer) 
+		//Stop all yawns (none should be any active)
+		if (p_caller.tag == "Player") 
 			foreach (Enemy __enemy in enemies)
 				__enemy.StopYawnChain ();
+
+		//Check all four directions
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
+			//Try to hit the enemy
 			__enemyHit = TryToHitEnemy (p_position,(Orientation)i, true);
 			if (__enemyHit == null)
 				continue;
 
+			//If the hit is looking at the back of the yawner
 			int __orientation = i + 2;
 			if (__orientation >= 4)
 				__orientation -= 4;
 			if (__orientation == (int)p_orientation) 
 				continue;
 				
+
 			__orientation = (int)__enemyHit.enemyOrientation + 2;
 			if (__orientation >= 4)
 				__orientation -= 4;
-			if (__orientation == i)
+			if (__orientation == i) 
+			{
 				__enemyHit.StartYawn ();
+				uiManager.yawnLineFeedbackManager.CreateYawnLine (p_caller.transform.position,
+					__enemyHit.transform.position);
+			}
 		}
 	}
 	public void PlayerHelloAction(TupleInt p_position, Orientation p_orientation)

@@ -10,7 +10,8 @@ public class TileLoader : MonoBehaviour
 	public List<Sprite> tileFloorSprites;
 	public List<Sprite> tileContentSprites;
 
-	public List<Tile.TileConstraints> constraintsReferences;
+	public List<Tile.TileConstraints> 	constraintsReferences;
+	public List<SpriteRenderer> 		floorTiles;
 
 	public void LoadTiles(TupleInt p_gridSize, List<int> p_data)
 	{
@@ -24,6 +25,7 @@ public class TileLoader : MonoBehaviour
 				(i / p_gridSize.Item1 * -2f) + (p_gridSize.Item1) - 1f);
 
 			SpriteRenderer __sr = __tileFloor.GetComponent<SpriteRenderer> ();
+			floorTiles.Add (__sr);
 			__sr.sortingOrder = -90;
 			if (p_data[i] == 0)
 				__sr.sprite = tileFloorSprites [0];

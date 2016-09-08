@@ -30,6 +30,12 @@ public class UIYawnLineFeedbackManager : MonoBehaviour
 
 	public void CreateYawnLine(Vector3 p_pos1, Vector3 p_pos2)
 	{
+		StartCoroutine (SpawnLine (p_pos1, p_pos2));
+
+	}
+	IEnumerator SpawnLine(Vector3 p_pos1, Vector3 p_pos2)
+	{
+		yield return new WaitForSeconds (0.6f);
 		//Create the line in the mid point
 		Vector3 __midPoint = (p_pos1 + p_pos2) / 2f;
 		GameObject __go = (GameObject)GameObject.Instantiate (yawnLinePrefab);
@@ -46,6 +52,5 @@ public class UIYawnLineFeedbackManager : MonoBehaviour
 			__go.transform.localScale = new Vector3 (2.2f * Mathf.Abs (p_pos1.y - p_pos2.y), 2f, 1f);
 			__go.transform.localRotation = Quaternion.Euler (0f, 0f, 90f);
 		}
-
 	}
 }

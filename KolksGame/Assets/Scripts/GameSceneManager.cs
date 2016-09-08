@@ -108,7 +108,7 @@ public class GameSceneManager : MonoBehaviour
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
-			__enemyHit = TryToHitEnemy (player.gridPos,(Orientation)i, true);
+			__enemyHit = TryToHitEnemy (player.gameObject ,player.gridPos,(Orientation)i, true);
 			if (__enemyHit == null) 
 				continue;
 			
@@ -246,15 +246,19 @@ public class GameSceneManager : MonoBehaviour
 		player.StartAction ();
 	}
 
-	public Enemy TryToHitEnemy(TupleInt p_position, Orientation p_orientation, bool p_continueUntilEnd)
+	public Enemy TryToHitEnemy(GameObject p_caller, TupleInt p_position, Orientation p_orientation, bool p_continueUntilEnd)
 	{
 		TupleInt __pos = TupleInt.AddTuples (p_position, p_orientation);
 		while(__pos.Item1 > -1)
 		{
 			if (!gridManager.TileIsWithinGrid(__pos))
 				return null;
-			if (!gridManager.TilePassYawn(__pos))
+			if (!gridManager.TilePassYawn (__pos)) 
+			{
+				uiManager.yawnLineFeedbackManager.CreateYawnLine (p_caller.transform.position,
+					gridManager.GetTileTransform(__pos).position);
 				return null;
+			}
 			if (gridManager.TileHasPlayer(__pos))
 				return null;
 			
@@ -281,7 +285,7 @@ public class GameSceneManager : MonoBehaviour
 		for (int i = 0; i < 4; i++) 
 		{
 			//Try to hit the enemy
-			__enemyHit = TryToHitEnemy (p_position,(Orientation)i, true);
+			__enemyHit = TryToHitEnemy (p_caller ,p_position,(Orientation)i, true);
 			if (__enemyHit == null)
 				continue;
 
@@ -308,7 +312,7 @@ public class GameSceneManager : MonoBehaviour
 	{
 		if (playerMovimentCount >= movesAvailable)
 			return;
-		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, true);
+		Enemy __enemyHit = TryToHitEnemy(player.gameObject ,p_position, p_orientation, true);
 		if (__enemyHit == null) 
 		{
 			soundManager.PlayErrorSFX ();
@@ -322,7 +326,7 @@ public class GameSceneManager : MonoBehaviour
 	{
 		if (playerMovimentCount >= movesAvailable)
 			return;
-		Enemy __enemyHit = TryToHitEnemy(p_position, p_orientation, false);
+		Enemy __enemyHit = TryToHitEnemy(player.gameObject, p_position, p_orientation, false);
 		if (__enemyHit == null) 
 		{
 			soundManager.PlayErrorSFX ();

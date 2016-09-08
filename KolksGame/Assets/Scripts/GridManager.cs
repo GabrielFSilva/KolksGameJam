@@ -78,4 +78,8 @@ public class GridManager : MonoBehaviour
 			return false;
 		return true;
 	}
+	public Transform GetTileTransform(TupleInt p_pos)
+	{
+		return tileLoader.floorTiles [p_pos.ToIndex (gridSize)].transform;
+	}
 }

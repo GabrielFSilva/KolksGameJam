@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
 	//Enemy Timers and Speeds
 	protected float 	_enemyTalkDelay = 0.35f;
 	protected float 	_enemyMoveDelay = 0.4f;
-	protected float 	_enemyYawnDelay = 0.6f;
+	protected float 	_enemyYawnDelay = 1.2f;
 	protected float 	_enemySpeed = 2.8f;
 
 	//Movement

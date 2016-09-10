@@ -256,7 +256,7 @@ public class GameSceneManager : MonoBehaviour
 			if (!gridManager.TilePassYawn (__pos)) 
 			{
 				uiManager.yawnLineFeedbackManager.CreateYawnLine (p_caller.transform.position,
-					gridManager.GetTileTransform(__pos).position);
+					gridManager.GetTileTransform(__pos).position, false);
 				return null;
 			}
 			if (gridManager.TileHasPlayer(__pos))
@@ -304,7 +304,7 @@ public class GameSceneManager : MonoBehaviour
 			{
 				__enemyHit.StartYawn ();
 				uiManager.yawnLineFeedbackManager.CreateYawnLine (p_caller.transform.position,
-					__enemyHit.transform.position);
+					__enemyHit.transform.position, true);
 			}
 		}
 	}

@@ -35,6 +35,13 @@ public class EnemiesManager : MonoBehaviour
 				__en.ChangeOrientationInstantly (p_orientation);
 		}
 	}
+    public bool HasYawningEnemy()
+    {
+        foreach (Enemy __enemy in enemies)
+            if (__enemy.yawning)
+                return true;
+        return false;
+    }
 	public void ShowFailedEnemies()
 	{
 		foreach (Enemy __enemy in enemies)

@@ -5,9 +5,9 @@ public class Enemy : MonoBehaviour
 {
 	public GameSceneManager	gameSceneManager;
 	public bool 			yawned;
-
-	//Graphics
-	public SpriteRenderer 	enemySprite;
+    public bool             yawning;
+    //Graphics
+    public SpriteRenderer 	enemySprite;
 	public Animator 		animator;
 	public SpriteRenderer	yawnedIcon;
 	public SpriteRenderer   yawnFailIcon;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
 	//Enemy Timers and Speeds
 	protected float 	_enemyTalkDelay = 0.35f;
 	protected float 	_enemyMoveDelay = 0.4f;
-	protected float 	_enemyYawnDelay = 1.2f;
+	protected float 	_enemyYawnDelay = 1.7f;
 	protected float 	_enemySpeed = 2.8f;
 
 	//Movement
@@ -39,7 +39,8 @@ public class Enemy : MonoBehaviour
 	{
 		animator.SetInteger ("Orientation",(int)enemyOrientation);
 		yawned = false;
-		_isMoving = false;
+        yawning = false;
+        _isMoving = false;
 		_isGliding = false;
 		UpdateSortingOrder ();
 	}
@@ -109,6 +110,7 @@ public class Enemy : MonoBehaviour
 	}
 	IEnumerator Yawn()
 	{
+        yawning = true;
 		yawned = true;
 		yield return new WaitForSeconds (_enemyYawnDelay);
 
@@ -117,6 +119,7 @@ public class Enemy : MonoBehaviour
 		gameSceneManager.PlayerYawnAction (gridPos,enemyOrientation,gameObject);
 		yield return new WaitForSeconds (0.3f);
 		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
+        yawning = false;
 	}
 	public void StopYawnChain()
 	{

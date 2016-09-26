@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b5079cdca933ed4fa350c105be03853
-timeCreated: 1473035604
+timeCreated: 1474781904
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -26,6 +26,7 @@ TextureImporter:
     21300038: ui_game_19
     21300040: ui_game_20
     21300042: ui_game_21
+    21300044: ui_game_22
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -438,6 +439,23 @@ TextureImporter:
         - {x: 26, y: -26}
         - {x: 26, y: 22}
         - {x: 23, y: 26}
+    - name: ui_game_22
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 48
+        width: 95
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 47, y: 0, z: 47, w: 45}
+      outline:
+      - - {x: -32.5, y: 23}
+        - {x: -47.5, y: 6}
+        - {x: -47.5, y: -23}
+        - {x: 47.5, y: -23}
+        - {x: 47.5, y: 7}
+        - {x: 27.5, y: 23}
     outline: []
   spritePackingTag: transp
   userData: 

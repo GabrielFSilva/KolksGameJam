@@ -4,7 +4,8 @@ using System.Collections;
 
 public class UIEndLevelManager : MonoBehaviour 
 {
-	public GameObject buttonsPanel;
+    public Animator starAnimator;
+    public GameObject buttonsPanel;
 	public GameObject endLevelPanel;
 
 	public RectTransform starBar;
@@ -62,17 +63,20 @@ public class UIEndLevelManager : MonoBehaviour
 	{
 		if (p_value >= 0.5f && star1.color == starOffColor) 
 		{
-			star1.color = starOnColor;
+            starAnimator.SetBool("oneStar", true);
+            star1.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 		if (p_value >= 0.75f && star2.color == starOffColor)
 		{
-			star2.color = starOnColor;
+            starAnimator.SetBool("twoStars", true);
+            star2.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 		if (p_value >= 0.99f && star3.color == starOffColor)
 		{
-			star3.color = starOnColor;
+            starAnimator.SetBool("threeStars", true);
+            star3.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 	}

@@ -13,27 +13,43 @@ public class UIYawnLineFeedbackManager : MonoBehaviour
 	public float yawnLineDelay;
 	public float lineDuration;
 
+    public int lineRendererOrder = 200;
+
 	void Update () 
 	{
+        bool __hasPositiveLine = false;
+        if (yawnLines.Count == 0)
+            return;
 		_linesToRemove = new List<SpriteRenderer> ();
 		//Reduce alpha for each line
-		foreach (SpriteRenderer __sr in yawnLines) 
-		{
-			__sr.color = new Color ( 1f, __sr.color.g,  __sr.color.b, __sr.color.a - (Time.deltaTime / lineDuration));
-			if (__sr.color.a <= 0.05f)
-				_linesToRemove.Add (__sr);
+        for (int i = 0; i < yawnLines.Count; i++)
+        {
+            yawnLines[i].color = new Color ( 1f, yawnLines[i].color.g, 
+                yawnLines[i].color.b, yawnLines[i].color.a - (Time.deltaTime / lineDuration));
+			if (yawnLines[i].color.a <= 0.05f)
+				_linesToRemove.Add (yawnLines[i]);
+            if (yawnLines[i].color.r >= 0.9f && yawnLines[i].color.g >= 0.9f)
+                __hasPositiveLine = true;
 		}
-		//destroy invisible lines
-		foreach (SpriteRenderer __sr in _linesToRemove) 
-		{
-			yawnLines.Remove (__sr);
-			Destroy (__sr.gameObject);
+        //Remove red lines if no white ones exist
+        if (!__hasPositiveLine)
+            foreach (SpriteRenderer __sr in yawnLines)
+                if (__sr.color.r >= 0.9f && __sr.color.g <= 0.1f && !_linesToRemove.Contains(__sr))
+                    _linesToRemove.Add(__sr);
+        //destroy invisible lines
+        for (int i = 0; i < _linesToRemove.Count; i++)
+        {
+			yawnLines.Remove (_linesToRemove[i]);
+			Destroy (_linesToRemove[i].gameObject);
 		}
+        for (int i = 0; i < yawnLines.Count; i++)
+            yawnLines[i].sortingOrder = lineRendererOrder;
 	}
 
 	public void CreateYawnLine(Vector3 p_pos1, Vector3 p_pos2, bool p_isPositive)
 	{
-		StartCoroutine (SpawnLine (p_pos1, p_pos2, p_isPositive));
+        if (p_isPositive)
+		    StartCoroutine (SpawnLine (p_pos1, p_pos2, p_isPositive));
 	}
 	IEnumerator SpawnLine(Vector3 p_pos1, Vector3 p_pos2, bool p_isPositive)
 	{

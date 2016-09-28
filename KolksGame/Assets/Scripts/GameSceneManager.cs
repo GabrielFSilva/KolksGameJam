@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
-	public static int 		currentLevelIndex = 14;
+	public static int 		currentLevelIndex = 0;
 	public enum ActionsAvailable
 	{
 		YAWN,
@@ -35,6 +35,7 @@ public class GameSceneManager : MonoBehaviour
 	public EntitiesManager	entitiesManager;
 	public InputManager 	inputManager;
 	public UIManager 		uiManager;
+    public TutorialManager  tutorialManager;
 	public SoundManager 	soundManager;
 
 	//Entities
@@ -46,9 +47,14 @@ public class GameSceneManager : MonoBehaviour
 	public Text	yawnedCountLabel;
 	public Text	currentLevelLabel;
 
+    void Awake()
+    {
+        if (isOnTestMode)
+            currentLevelIndex = int.Parse(levelToTest.Remove(0, 6)) - 1;
+    }
 	void Start () 
 	{
-		gridManager.gameManager = this;
+        gridManager.gameManager = this;
 		entitiesManager.gameManager = this;
 		entitiesManager.OnEnemiesLoaded += delegate(List<Enemy> p_enemies) {
 			enemies = p_enemies;
@@ -93,15 +99,19 @@ public class GameSceneManager : MonoBehaviour
 			star3Value = p_star3;
 			star2Value = p_star2;
 		};
-		levelLoader.LoadLevel (currentLevelIndex + 1, levelToTest, isOnTestMode);
-		playerMovimentCount = 0;
-
+        
+        levelLoader.LoadLevel (currentLevelIndex + 1, levelToTest, isOnTestMode);
+        
 		inputManager.player = player;
 		inputManager.OnScreenClicked += InputManager_OnScreenClicked;
 
+        tutorialManager.SceneLoaded(currentLevelIndex + 1);
+
 		soundManager = SoundManager.GetInstance ();
 		soundManager.PlayBGM ();
-	}
+
+        playerMovimentCount = 0;
+    }
 	void Player_OnPlayerMovementEnd ()
 	{
 		entitiesManager.coinsManager.CheckPlayerGotCoin (player.gridPos);
@@ -119,6 +129,8 @@ public class GameSceneManager : MonoBehaviour
 	}
 	void InputManager_OnScreenClicked (Orientation p_orientation)
 	{
+        if (p_orientation == Orientation.LEFT)
+            tutorialManager.OnLeftSwipeDone(currentLevelIndex + 1);
 		if (p_orientation == player.playerOrientation)
 			player.SetPlayerDestination ();
 		else
@@ -148,6 +160,7 @@ public class GameSceneManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         soundManager.PlayEndOfLevelSFX ();
 		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
+        tutorialManager.LevelEnded(currentLevelIndex + 1);
 		entitiesManager.enemiesManager.ShowFailedEnemies ();
 		float __t = -0.25f;
 		float __limit = 0f;

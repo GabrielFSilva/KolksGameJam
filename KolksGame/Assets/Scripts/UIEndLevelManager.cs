@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class UIEndLevelManager : MonoBehaviour 
 {
-    public Animator starAnimator;
     public GameObject buttonsPanel;
 	public GameObject endLevelPanel;
 
-	public RectTransform starBar;
+    public List<Animator> starAnimators;
+
+    public RectTransform starBar;
 	public RectTransform starBarFull;
 	public RectTransform starBarEmpty;
 
@@ -63,19 +64,19 @@ public class UIEndLevelManager : MonoBehaviour
 	{
 		if (p_value >= 0.5f && star1.color == starOffColor) 
 		{
-            starAnimator.SetBool("oneStar", true);
+            starAnimators[0].SetTrigger("Play");
             star1.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 		if (p_value >= 0.75f && star2.color == starOffColor)
 		{
-            starAnimator.SetBool("twoStars", true);
+            starAnimators[1].SetTrigger("Play");
             star2.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}
 		if (p_value >= 0.99f && star3.color == starOffColor)
 		{
-            starAnimator.SetBool("threeStars", true);
+            starAnimators[2].SetTrigger("Play");
             star3.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
 		}

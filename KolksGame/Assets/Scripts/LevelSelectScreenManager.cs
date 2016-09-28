@@ -9,10 +9,13 @@ public class LevelSelectScreenManager : MonoBehaviour
 	public List<Button> levelButtons;
 	public int unlockedLevel;
 
+    public UITopBarReferences topBarReferences;
+
 	void Start()
 	{
 		unlockedLevel = PlayerPrefs.GetInt ("UnlockedLevel");
 		int __stars = 0;
+        int __totalStarCount = 0;
 		foreach (Button __button in levelButtons) 
 		{
 			__button.gameObject.name = "Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Button";
@@ -34,7 +37,8 @@ public class LevelSelectScreenManager : MonoBehaviour
 				if (PlayerPrefs.HasKey ("Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Stars")) 
 				{
 					__stars = PlayerPrefs.GetInt ("Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Stars");
-					if (__stars == 1) 
+                    __totalStarCount += __stars;
+                    if (__stars == 1) 
 					{
 						__button.transform.GetChild (0).gameObject.SetActive (false);
 						__button.transform.GetChild (2).gameObject.SetActive (false);
@@ -62,7 +66,8 @@ public class LevelSelectScreenManager : MonoBehaviour
 				}
 			}
 		}
-		
+        topBarReferences.UpdateStarCountLabel(__totalStarCount);
+        topBarReferences.UpdateCoinCountLabel(PrefsUtil.GetAllCollectedCoins());
 	}
 	public void HomeButtonClicked()
 	{

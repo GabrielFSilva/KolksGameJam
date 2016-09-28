@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 	public KeyCode playerDirection = KeyCode.Q;
 
 	public bool yawned = false;
-	private float _playerSpeed = 2.8f;
+	private float _playerSpeed = 3.3f;
 	private float _moveTimerThreshold = 0.25f;
 	public float talkTimerCooldown;
 	public float moveKeyPressedTimer = 0f;

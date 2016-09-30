@@ -12,8 +12,9 @@ public class UIEndLevelManager : MonoBehaviour
     public RectTransform starBar;
 	public RectTransform starBarFull;
 	public RectTransform starBarEmpty;
+    public RectTransform success;
 
-	public Image star1;
+    public Image star1;
 	public Image star2;
 	public Image star3;
 	public Color starOffColor;
@@ -33,7 +34,8 @@ public class UIEndLevelManager : MonoBehaviour
 		EnableEndLevelPanel (false);
 		nextButton.gameObject.SetActive (false);
 		replay2Button.gameObject.SetActive (false);
-		soundManager = SoundManager.GetInstance ();
+        success.gameObject.SetActive(false);
+        soundManager = SoundManager.GetInstance ();
 	}
 	public void EnableEndLevelPanel(bool p_enable)
 	{
@@ -46,8 +48,9 @@ public class UIEndLevelManager : MonoBehaviour
 		{
 			nextButton.gameObject.SetActive (true);
 			replay2Button.gameObject.SetActive (true);
-		} 
-		else 
+            success.gameObject.SetActive(true);
+        }
+        else 
 		{
 			replay2Button.gameObject.SetActive (true);
 			replay2Button.GetComponent<RectTransform> ().anchoredPosition = replayButtonCenterRef.anchoredPosition;
@@ -67,8 +70,8 @@ public class UIEndLevelManager : MonoBehaviour
             starAnimators[0].SetTrigger("Play");
             star1.color = starOnColor;
 			soundManager.PlayEndOfLevelSFX ();
-		}
-		if (p_value >= 0.75f && star2.color == starOffColor)
+        }
+        if (p_value >= 0.75f && star2.color == starOffColor)
 		{
             starAnimators[1].SetTrigger("Play");
             star2.color = starOnColor;

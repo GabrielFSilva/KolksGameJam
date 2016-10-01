@@ -105,7 +105,7 @@ public class GameSceneManager : MonoBehaviour
 		inputManager.player = player;
 		inputManager.OnScreenClicked += InputManager_OnScreenClicked;
 
-        tutorialManager.SceneLoaded(currentLevelIndex + 1);
+        tutorialManager.SceneLoaded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 
 		soundManager = SoundManager.GetInstance ();
 		soundManager.PlayBGM ();
@@ -160,7 +160,7 @@ public class GameSceneManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         soundManager.PlayEndOfLevelSFX ();
 		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
-        tutorialManager.LevelEnded(currentLevelIndex + 1);
+        tutorialManager.LevelEnded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 		entitiesManager.enemiesManager.ShowFailedEnemies ();
 		float __t = -0.25f;
 		float __limit = 0f;

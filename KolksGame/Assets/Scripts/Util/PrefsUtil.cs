@@ -10,7 +10,7 @@ public class PrefsUtil
     public static int GetAllCollectedCoins()
     {
         int __coinCount = 0;
-        int __levelCount = 1;
+        //int __levelCount = 1;
         int __coinIndex = 0;
         //loop for each level
         for(int i = 1; i < 60; i++)

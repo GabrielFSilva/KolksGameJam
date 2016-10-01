@@ -9,21 +9,21 @@ public class TutorialManager : MonoBehaviour
     public List<GameObject> tutorialPrefabs;
     public GameObject       tutorialCanvas;
     public GameObject       tutorial;
-    
-    public void SceneLoaded (int p_levelIndex)
+
+    public void SceneLoaded (int p_levelIndex, int p_coinCount)
     {
         if (p_levelIndex == 1)
             LoadTutorial(0);
         else if (p_levelIndex == 2)
             LoadTutorial(1);
-        else if (p_levelIndex == 5)
+        else if (p_levelIndex == 5 && p_coinCount == 2)
             LoadTutorial(2);
         else if (p_levelIndex == 9)
             LoadTutorial(4);
     }
-    public void LevelEnded(int p_levelIndex)
+    public void LevelEnded(int p_levelIndex, int p_coinCount)
     {
-        if (p_levelIndex == 5)
+        if (p_levelIndex == 5 && p_coinCount == 1)
             LoadTutorial(3);
     }
 	

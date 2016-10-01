@@ -85,4 +85,13 @@ public class CoinsManager : MonoBehaviour
 			PrefsUtil.SetCoinCollected (GameSceneManager.currentLevelIndex, __coin.index);
 		_coinsToRemove.Clear ();
 	}
+
+    public List<Coin> GetActiveCoins()
+    {
+        List<Coin> __coins = new List<Coin>();
+        for (int i = 0; i < coins.Count; i++)
+            if (coins[i].gameObject.activeSelf)
+                __coins.Add(coins[i]);
+        return __coins;
+    }
 }

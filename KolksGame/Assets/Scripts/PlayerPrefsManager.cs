@@ -15,6 +15,12 @@ public class PlayerPrefsManager : MonoBehaviour
 
 		PlayerPrefs.SetInt ("Level_" + (p_currentLevelIndex + 1).ToString () + "_Stars",p_stars);
 	}
+    public static int GetLevelStart(int p_currentLevelIndex)
+    {
+        if (PlayerPrefs.HasKey("Level_" + (p_currentLevelIndex + 1).ToString() + "_Stars"))
+            return PlayerPrefs.GetInt("Level_" + (p_currentLevelIndex + 1).ToString() + "_Stars");
+        return 0;
+    }
 	public static void SetUnlockedLevel(int p_level)
 	{
 		int __currentLevel = 0;

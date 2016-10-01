@@ -159,6 +159,7 @@ public class GameSceneManager : MonoBehaviour
         }
         yield return new WaitForSeconds(0.5f);
         soundManager.PlayEndOfLevelSFX ();
+        uiManager.endLevelPanelManager.EnableStars(PlayerPrefsManager.GetLevelStart(currentLevelIndex));
 		uiManager.endLevelPanelManager.EnableEndLevelPanel (true);
         tutorialManager.LevelEnded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 		entitiesManager.enemiesManager.ShowFailedEnemies ();

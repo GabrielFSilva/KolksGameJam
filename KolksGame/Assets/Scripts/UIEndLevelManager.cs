@@ -25,6 +25,7 @@ public class UIEndLevelManager : MonoBehaviour
 	public RectTransform replayButtonCenterRef;
 
 	public SoundManager soundManager;
+
 	void Start()
 	{
 		star1.color = starOffColor;
@@ -63,6 +64,15 @@ public class UIEndLevelManager : MonoBehaviour
 		starBar.sizeDelta =  Vector2.Lerp (starBarEmpty.sizeDelta, starBarFull.sizeDelta,
 		Mathf.Clamp(p_value,0f,p_limit));
 	}
+    public void EnableStars(int p_stars)
+    {
+        if (p_stars > 0)
+            star1.color = starOnColor;
+        if (p_stars > 1)
+            star2.color = starOnColor;
+        if (p_stars > 2)
+            star3.color = starOnColor;
+    }
 	public void UpdateStarSprites(float p_value)
 	{
 		if (p_value >= 0.5f && star1.color == starOffColor) 

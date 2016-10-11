@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 	public UIExtraButtonsManager		extraButtonsManager;
 	public UIEnergyBarManager			energyBarManager;
 	public UICoinLabelManager			coinLabelManager;
-	public UIYawnLineFeedbackManager	yawnLineFeedbackManager;
+	public UIYawnLineManager	yawnLineFeedbackManager;
 
 	public Text		levelNameLabel;
 

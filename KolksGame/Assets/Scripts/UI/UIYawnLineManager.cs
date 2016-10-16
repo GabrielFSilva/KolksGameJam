@@ -32,8 +32,6 @@ public class UIYawnLineManager : MonoBehaviour
 
         if (!p_isPositive)
             __line.GetComponent<SpriteRenderer>().color = Color.red;
-
-        
     }
 
     private void RemoveYawnLine(YawnLine p_line)

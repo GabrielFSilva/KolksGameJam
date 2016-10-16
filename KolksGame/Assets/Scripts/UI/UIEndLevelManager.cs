@@ -25,6 +25,7 @@ public class UIEndLevelManager : MonoBehaviour
 	public RectTransform replayButtonCenterRef;
 
 	public SoundManager soundManager;
+    public int activeStarsCount = 0;
 
 	void Start()
 	{
@@ -73,25 +74,45 @@ public class UIEndLevelManager : MonoBehaviour
         if (p_stars > 2)
             star3.color = starOnColor;
     }
+    private void PlayStarAnimation(int p_starIndex, bool p_firstTime)
+    {
+        starAnimators[p_starIndex].SetTrigger(p_firstTime ? "Play" : "PlayAgain");
+        soundManager.PlayEndOfLevelSFX(p_firstTime ? 1f : 0.75f);
+    }
 	public void UpdateStarSprites(float p_value)
 	{
-		if (p_value >= 0.5f && star1.color == starOffColor) 
+		if (p_value >= 0.5f && activeStarsCount < 1) 
 		{
-            starAnimators[0].SetTrigger("Play");
-            star1.color = starOnColor;
-			soundManager.PlayEndOfLevelSFX ();
+            activeStarsCount = 1;
+            if (star1.color == starOffColor)
+            {
+                PlayStarAnimation(0, true);
+                star1.color = starOnColor;
+            }
+            else
+                PlayStarAnimation(0, false);
         }
-        if (p_value >= 0.75f && star2.color == starOffColor)
+        if (p_value >= 0.75f && activeStarsCount < 2)
 		{
-            starAnimators[1].SetTrigger("Play");
-            star2.color = starOnColor;
-			soundManager.PlayEndOfLevelSFX ();
-		}
-		if (p_value >= 0.99f && star3.color == starOffColor)
+            activeStarsCount = 2;
+            if (star2.color == starOffColor)
+            {
+                PlayStarAnimation(1, true);
+                star2.color = starOnColor;
+            }
+            else
+                PlayStarAnimation(1, false);
+        }
+		if (p_value >= 0.99f && activeStarsCount < 3)
 		{
-            starAnimators[2].SetTrigger("Play");
-            star3.color = starOnColor;
-			soundManager.PlayEndOfLevelSFX ();
-		}
+            activeStarsCount = 3;
+            if (star3.color == starOffColor)
+            {
+                PlayStarAnimation(2, true);
+                star3.color = starOnColor;
+            }
+            else
+                PlayStarAnimation(2, false);
+        }
 	}
 }

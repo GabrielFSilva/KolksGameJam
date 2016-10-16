@@ -7,10 +7,9 @@ public class Enemy : MonoBehaviour
 	public bool 			yawned;
     public bool             yawning;
     //Graphics
-    public SpriteRenderer 	enemySprite;
-	public Animator 		animator;
-	public SpriteRenderer	yawnedIcon;
-	public SpriteRenderer   yawnFailIcon;
+    public SpriteRenderer 	    enemySprite;
+	public Animator 		    animator;
+    public EnemyMarksController marksController;
 
 	//Grid Info
 	public TupleInt 		gridPos;
@@ -143,11 +142,15 @@ public class Enemy : MonoBehaviour
 	{
 		if (helloEffect == ActionEffectType.STANDARD)
 			ChangeEnemyOrientation (p_playerOrientation);
-	}
+        else if (helloEffect == ActionEffectType.NONE && enemyType == EnemyType.COCKY)
+            marksController.PlayActionDenied();
+    }
 	public void HitByExcuseMeAction(Orientation p_playerOrientation)
 	{
-		if (excuseMeEffect != ActionEffectType.NONE) 
-			SetEnemyDestination (p_playerOrientation);
+        if (excuseMeEffect != ActionEffectType.NONE)
+            SetEnemyDestination(p_playerOrientation);
+        else if (excuseMeEffect == ActionEffectType.NONE && enemyType == EnemyType.COCKY)
+            marksController.PlayActionDenied();
 	}
 	public void SawPlayer(Orientation p_playerOrientation)
 	{
@@ -168,7 +171,7 @@ public class Enemy : MonoBehaviour
 	//Enables the Yawn icons within the enemy
 	private void EnableIcons(bool p_yawned, float p_delay = 0.8f)
 	{
-		StartCoroutine (ShowIcons (p_yawned, p_delay));
+        marksController.ShowYawnIcon(p_yawned, p_delay, enemySprite.sortingOrder);
 	}
 	//Called by EnemiesManager at EndOfLevel
 	public void ShowFailedIcon()
@@ -176,17 +179,4 @@ public class Enemy : MonoBehaviour
 		if (!yawned)
 			EnableIcons (false, 0.25f);
 	}
-	//Thread to delay and show icons
-	IEnumerator ShowIcons(bool p_yawned, float p_delay)
-	{
-		yield return new WaitForSeconds (p_delay);
-		yawnedIcon.gameObject.SetActive (p_yawned);
-		yawnFailIcon.gameObject.SetActive (!p_yawned);
-		yawnedIcon.sortingOrder = enemySprite.sortingOrder + 10;
-		yawnFailIcon.sortingOrder = enemySprite.sortingOrder + 10;
-		//if (p_yawned)
-		//	SoundManager.GetInstance ().PlayEndOfLevelSFX ();
-	}
-
-
 }

@@ -69,63 +69,64 @@ public class SoundManager : MonoBehaviour
 		bgmAudioSource.volume = 0.4f;
 		bgmAudioSource.Play ();
 	}
-	public void PlayMovimentSFX()
+	public void PlayMovimentSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 1f;
 		sfxAudioSources [sfxCounter].clip = movimentClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayHelloSFX()
+	public void PlayHelloSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 1f;
 		sfxAudioSources [sfxCounter].clip = helloClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayExcuseMeSFX()
+	public void PlayExcuseMeSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 1f;
 		sfxAudioSources [sfxCounter].clip = excuseMeClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayClickSFX()
+	public void PlayClickSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 0.8f;
 		sfxAudioSources [sfxCounter].clip = clickClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayEndOfLevelSFX()
+	public void PlayEndOfLevelSFX(float p_pitch = 1f)
 	{
-		sfxAudioSources [sfxCounter].volume = 1f;
+        sfxAudioSources[sfxCounter].volume = p_pitch < 1f ? 0.5f : 1f ;
 		sfxAudioSources [sfxCounter].clip = endOfLevelClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayDefeatSFX()
+	public void PlayDefeatSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 0.4f;
 		sfxAudioSources [sfxCounter].clip = defeatClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayErrorSFX()
+	public void PlayErrorSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 0.2f;
 		sfxAudioSources [sfxCounter].clip = errorClip;
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayEnemyYawnSFX()
+	public void PlayEnemyYawnSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 0.5f;
 		sfxAudioSources [sfxCounter].clip = enemyYawnClips[Random.Range(0,2)];
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	public void PlayPlayerYawnSFX()
+	public void PlayPlayerYawnSFX(float p_pitch = 1f)
 	{
 		sfxAudioSources [sfxCounter].volume = 1f;
 		sfxAudioSources [sfxCounter].clip = playerYawnClips[Random.Range(0,2)];
-		IncreaseSFXCounter ();
+        IncreaseSFXCounter (p_pitch);
 	}
-	private void IncreaseSFXCounter()
+	private void IncreaseSFXCounter(float p_pitch = 1f)
 	{
-		sfxAudioSources [sfxCounter].Play ();
+        sfxAudioSources[sfxCounter].pitch = p_pitch;
+        sfxAudioSources [sfxCounter].Play ();
 		sfxCounter ++;
 		if (sfxCounter == sfxAudioSources.Count)
 			sfxCounter = 0;

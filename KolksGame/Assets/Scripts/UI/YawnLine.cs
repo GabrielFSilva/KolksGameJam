@@ -94,6 +94,4 @@ public class YawnLine : MonoBehaviour
         if (_lineTimer > lineDuration)
             OnRemoveYawnLine(this);
     }
-
-    
 }

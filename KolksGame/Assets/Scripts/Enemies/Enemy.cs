@@ -34,7 +34,16 @@ public class Enemy : MonoBehaviour
 	public ActionEffectType helloEffect;
 	public ActionEffectType excuseMeEffect;
 
-	public void EnemySetUp () 
+    void Update()
+    {
+        if (_isMoving)
+        {
+            UpdateEnemyPosition();
+            UpdateSortingOrder();
+        }
+    }
+
+    public void EnemySetUp () 
 	{
 		animator.SetInteger ("Orientation",(int)enemyOrientation);
 		yawned = false;
@@ -43,16 +52,16 @@ public class Enemy : MonoBehaviour
 		_isGliding = false;
 		UpdateSortingOrder ();
 	}
-	void Update()
-	{
-		if (_isMoving) 
-		{
-			UpdateEnemyPosition ();
-			UpdateSortingOrder ();
-			return;
-		}
-	}
-	private void UpdateSortingOrder()
+
+    public virtual bool GetActionCostEnergy(ActionType p_type)
+    {
+        return true;
+    }
+    public virtual bool GetShowActionDeniedIcon(ActionType p_type)
+    {
+        return false;
+    }
+    private void UpdateSortingOrder()
 	{
 		enemySprite.sortingOrder = Mathf.RoundToInt (transform.localPosition.y * -10f) - 2;
 	}
@@ -101,6 +110,7 @@ public class Enemy : MonoBehaviour
 		if (yawned) return;
 		StartCoroutine (Yawn ());
 	}
+   
 	IEnumerator MovimentSFXDelay(float p_delay)
 	{
 		if (p_delay > 0f)
@@ -142,16 +152,16 @@ public class Enemy : MonoBehaviour
 	{
 		if (helloEffect == ActionEffectType.STANDARD)
 			ChangeEnemyOrientation (p_playerOrientation);
-        else if (helloEffect == ActionEffectType.NONE && enemyType == EnemyType.COCKY)
-            marksController.PlayActionDenied();
+        if (GetShowActionDeniedIcon(ActionType.HELLO))
+            marksController.PlayActionDenied(enemySprite.sortingOrder);
     }
 	public void HitByExcuseMeAction(Orientation p_playerOrientation)
 	{
         if (excuseMeEffect != ActionEffectType.NONE)
             SetEnemyDestination(p_playerOrientation);
-        else if (excuseMeEffect == ActionEffectType.NONE && enemyType == EnemyType.COCKY)
-            marksController.PlayActionDenied();
-	}
+        if (GetShowActionDeniedIcon(ActionType.EXCUSE_ME))
+            marksController.PlayActionDenied(enemySprite.sortingOrder);
+    }
 	public void SawPlayer(Orientation p_playerOrientation)
 	{
 		if (enemyType == EnemyType.SHY)

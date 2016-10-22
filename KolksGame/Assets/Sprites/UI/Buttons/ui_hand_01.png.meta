@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: f70e88436ef0c354eb8d6b75f9b678ef
-timeCreated: 1473035422
+timeCreated: 1477113260
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: ui_hand_01_0
+    21300002: ui_hand_01_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -76,6 +77,37 @@ TextureImporter:
         - {x: 114, y: -122.5}
         - {x: 114, y: 42.5}
         - {x: 11, y: 52.5}
+    - name: ui_hand_01_1
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 117
+        width: 106
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34, y: 53}
+        - {x: -53, y: 29}
+        - {x: -53, y: -41}
+        - {x: -51, y: -53}
+        - {x: 41, y: -53}
+        - {x: 53, y: -39}
+        - {x: 53, y: 30}
+        - {x: 43, y: 53}
+      - - {x: -38, y: -22}
+        - {x: -40, y: 16}
+        - {x: 16, y: 40}
+        - {x: 40, y: -16}
+      - - {x: -24, y: 40}
+        - {x: -41, y: 32}
+        - {x: -41, y: -33}
+        - {x: -30, y: -40}
+        - {x: 33, y: -40}
+        - {x: 40, y: -38}
+        - {x: 40, y: 35}
+        - {x: 19, y: 40}
     outline: []
   spritePackingTag: transp
   userData: 

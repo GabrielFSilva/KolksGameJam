@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 	public KeyCode playerDirection = KeyCode.Q;
 
 	public bool yawned = false;
-	private float _playerSpeed = 3.3f;
+	private float _playerSpeed = 4.0f;
 	private float _moveTimerThreshold = 0.25f;
 	public float talkTimerCooldown;
 	public float moveKeyPressedTimer = 0f;
@@ -136,7 +136,7 @@ public class Player : MonoBehaviour
 	}
 	public void ChangeOrientation(Orientation p_oritentation)
 	{
-		if (yawned || isMoving || isTalking) 
+		if (yawned || isMoving || isTalking || p_oritentation == playerOrientation) 
 			return;
 		playerOrientation = p_oritentation;
 		UpdateSpriteOriantation ();

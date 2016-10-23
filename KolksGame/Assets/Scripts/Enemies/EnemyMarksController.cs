@@ -12,14 +12,15 @@ public class EnemyMarksController : MonoBehaviour
     public SpriteRenderer   actionDeniedIcon;
     public Animator         actionDeniedController;
     public CustomAnimEvent  actionDeniedAnimEvent;
-    // Use this for initialization
+    
     void Start ()
     {
         actionDeniedAnimEvent.OnAnimationCalled += ActionDeniedAnimEnded;
 	}
 	
-    public void PlayActionDenied()
+    public void PlayActionDenied(int p_sortingOrder)
     {
+        actionDeniedIcon.sortingOrder = p_sortingOrder + 10;
         actionDeniedIcon.gameObject.SetActive(true);
         actionDeniedController.SetTrigger("Play");
     }

@@ -13,6 +13,13 @@ public enum ActionEffectType
 	STANDARD,
 	GLIDE
 }
+public enum ActionType
+{
+    WALK,
+    YAWN,
+    HELLO,
+    EXCUSE_ME
+}
 //Entity Orientations
 public enum Orientation
 {

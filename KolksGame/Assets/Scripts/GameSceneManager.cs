@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class GameSceneManager : MonoBehaviour 
 {
-	public static int 		currentLevelIndex = 0;
+	public static int 		currentLevelIndex = 1;
 	public enum ActionsAvailable
 	{
 		YAWN,
@@ -103,7 +103,8 @@ public class GameSceneManager : MonoBehaviour
         levelLoader.LoadLevel (currentLevelIndex + 1, levelToTest, isOnTestMode);
         
 		inputManager.player = player;
-		inputManager.OnScreenClicked += InputManager_OnScreenClicked;
+		inputManager.OnSwipe += InputManager_OnScreenClicked;
+        inputManager.OnClick += InputManager_OnClick;
 
         tutorialManager.SceneLoaded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 
@@ -112,7 +113,9 @@ public class GameSceneManager : MonoBehaviour
 
         playerMovimentCount = 0;
     }
-	void Player_OnPlayerMovementEnd ()
+
+    
+    void Player_OnPlayerMovementEnd ()
 	{
 		entitiesManager.coinsManager.CheckPlayerGotCoin (player.gridPos);
 		Enemy __enemyHit;
@@ -131,12 +134,19 @@ public class GameSceneManager : MonoBehaviour
 	{
         if (p_orientation == Orientation.LEFT)
             tutorialManager.OnLeftSwipeDone(currentLevelIndex + 1);
-		if (p_orientation == player.playerOrientation)
-			player.SetPlayerDestination ();
-		else
-			player.ChangeOrientation (p_orientation);
-	}
-	void Update()
+        //if (p_orientation == player.playerOrientation)
+        player.ChangeOrientation(p_orientation);
+        player.SetPlayerDestination ();
+        
+        //else
+        //	player.ChangeOrientation (p_orientation);
+    }
+    private void InputManager_OnClick(Orientation p_orientation)
+    {
+        player.ChangeOrientation(p_orientation);
+    }
+
+    void Update()
 	{
 		enemyYawnCount = 0;
 		foreach (Enemy __enemy in enemies)
@@ -338,8 +348,15 @@ public class GameSceneManager : MonoBehaviour
 			soundManager.PlayErrorSFX ();
 			return;
 		}
+        int __ori = (int)p_orientation + 2;
+        if (__ori >= 4)
+            __ori -= 4;
+
+        if ((int)__enemyHit.enemyOrientation == __ori)
+            return;
 		__enemyHit.HitByHelloAction (p_orientation);
-		playerMovimentCount++;
+        if (__enemyHit.GetActionCostEnergy(ActionType.HELLO))
+		    playerMovimentCount++;
 		soundManager.PlayHelloSFX ();
 	}
 	public void PlayerExcuseMeAction(TupleInt p_position, Orientation p_orientation)
@@ -362,8 +379,9 @@ public class GameSceneManager : MonoBehaviour
 		if (gridManager.TileWalkable (__pos))
 		{
 			__enemyHit.HitByExcuseMeAction (p_orientation);
-			playerMovimentCount++;
-			soundManager.PlayExcuseMeSFX ();
+            if (__enemyHit.GetActionCostEnergy(ActionType.EXCUSE_ME))
+                playerMovimentCount++;
+            soundManager.PlayExcuseMeSFX ();
 		}
 		
 	}

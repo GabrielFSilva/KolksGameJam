@@ -5,7 +5,7 @@ using System;
 public class InputManager : MonoBehaviour 
 {
 	public event Action<Orientation>	OnSwipe;
-    public event Action<Orientation>    OnClick;
+    public event Action<Orientation>    OnTap;
     public BoxCollider2D	inputCollider;
 
 	public Player	player;
@@ -34,13 +34,13 @@ public class InputManager : MonoBehaviour
                     __pos.z = player.transform.position.z;
                     float __angle = AngleBetweenVector2(player.transform.position, Camera.main.ScreenToWorldPoint(__pos));
                     if (__angle > -45f && __angle <= 45f)
-                        OnClick(Orientation.RIGHT);
+                        OnTap(Orientation.RIGHT);
                     else if (__angle > 45f && __angle <= 135f)
-                        OnClick(Orientation.UP);
+                        OnTap(Orientation.UP);
                     else if (__angle > 135f || __angle <= -135f)
-                        OnClick(Orientation.LEFT);
+                        OnTap(Orientation.LEFT);
                     else /*if (__angle > -135f && __angle <= -45f)*/
-                        OnClick(Orientation.DOWN);
+                        OnTap(Orientation.DOWN);
                     return;
                 }
 

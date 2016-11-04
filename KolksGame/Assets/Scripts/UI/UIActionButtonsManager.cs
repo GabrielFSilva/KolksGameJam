@@ -5,13 +5,24 @@ using System.Collections;
 public class UIActionButtonsManager : MonoBehaviour 
 {
 	public Animator yawnButtonAnimator;
-	public RectTransform 	yawnButton;
+    public Animator helloButtonAnimator;
+    public Animator excuseMeButtonAnimator;
+
+    public RectTransform 	yawnButton;
 	public RectTransform 	helloButton;
 	public RectTransform 	excuseMeButton;
 
 	public RectTransform	yawnButtonRectTransform;
 	public RectTransform	yawnSize1;
 	public RectTransform	yawnSize2;
+
+    public void PlayButtonEntryAnimation(bool p_helloButton)
+    {
+        if (p_helloButton)
+            helloButtonAnimator.SetTrigger("Play");
+        else
+            excuseMeButtonAnimator.SetTrigger("Play");
+    }
 
 	public void EnableActionButtons(GameSceneManager.ActionsAvailable p_actions)
 	{

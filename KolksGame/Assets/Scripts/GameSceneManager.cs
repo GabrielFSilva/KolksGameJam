@@ -43,10 +43,6 @@ public class GameSceneManager : MonoBehaviour
 	public Player 			player;
 	public List<Enemy> 		enemies;
 
-	[Header("Extra")]
-	public Text	yawnedCountLabel;
-	public Text	currentLevelLabel;
-
     void Awake()
     {
         if (isOnTestMode)
@@ -94,6 +90,7 @@ public class GameSceneManager : MonoBehaviour
 			else
 				actions = ActionsAvailable.YAWN_HELLO_EXCUSE;
 			uiManager.actionButtonsManager.EnableActionButtons (actions);
+            uiManager.CheckActionButtonsAnimations();
 		};
 		levelLoader.OnSetStarValues += delegate(int p_star3, int p_star2) {
 			star3Value = p_star3;
@@ -103,8 +100,8 @@ public class GameSceneManager : MonoBehaviour
         levelLoader.LoadLevel (currentLevelIndex + 1, levelToTest, isOnTestMode);
         
 		inputManager.player = player;
-		inputManager.OnSwipe += InputManager_OnScreenClicked;
-        inputManager.OnClick += InputManager_OnClick;
+		inputManager.OnSwipe += InputManager_OnSwipe;
+        inputManager.OnTap += InputManager_OnTap;
 
         tutorialManager.SceneLoaded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 
@@ -118,6 +115,8 @@ public class GameSceneManager : MonoBehaviour
     void Player_OnPlayerMovementEnd ()
 	{
 		entitiesManager.coinsManager.CheckPlayerGotCoin (player.gridPos);
+        if (player.gridPos.Equals(new TupleInt(2, 3)))
+            tutorialManager.PlayerMoveToTargetPosition(currentLevelIndex + 1);
 		Enemy __enemyHit;
 		for (int i = 0; i < 4; i++) 
 		{
@@ -130,19 +129,20 @@ public class GameSceneManager : MonoBehaviour
 
 		}
 	}
-	void InputManager_OnScreenClicked (Orientation p_orientation)
+	void InputManager_OnSwipe (Orientation p_orientation)
 	{
         if (p_orientation == Orientation.LEFT)
-            tutorialManager.OnLeftSwipeDone(currentLevelIndex + 1);
-        //if (p_orientation == player.playerOrientation)
+            tutorialManager.OnSwipeLeft(currentLevelIndex + 1);
         player.ChangeOrientation(p_orientation);
         player.SetPlayerDestination ();
-        
-        //else
-        //	player.ChangeOrientation (p_orientation);
     }
-    private void InputManager_OnClick(Orientation p_orientation)
+    private void InputManager_OnTap(Orientation p_orientation)
     {
+        if (currentLevelIndex == 0)
+            return;
+
+        if (p_orientation == Orientation.RIGHT)
+            tutorialManager.OnTapRight(currentLevelIndex + 1);
         player.ChangeOrientation(p_orientation);
     }
 
@@ -152,9 +152,6 @@ public class GameSceneManager : MonoBehaviour
 		foreach (Enemy __enemy in enemies)
 			if (__enemy.yawned)
 				enemyYawnCount++;
-		yawnedCountLabel.text = enemyYawnCount.ToString () + "/" + enemies.Count.ToString();
-		currentLevelLabel.text = "Level " + (currentLevelIndex+1).ToString() + " / 50";
-
 		uiManager.energyBarManager.UpdateEnergyBar(movesAvailable,playerMovimentCount);
 		if (playerMovimentCount - movesAvailable == 0 && !player.yawned) 
 			uiManager.actionButtonsManager.SetYawnButtonGlow ();

@@ -179,7 +179,7 @@ public class Enemy : MonoBehaviour
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 	//Enables the Yawn icons within the enemy
-	private void EnableIcons(bool p_yawned, float p_delay = 0.8f)
+	private void EnableIcons(bool p_yawned, float p_delay = 0.5f)
 	{
         marksController.ShowYawnIcon(p_yawned, p_delay, enemySprite.sortingOrder);
 	}

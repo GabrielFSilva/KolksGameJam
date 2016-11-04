@@ -15,11 +15,14 @@ public class UIManager : MonoBehaviour
 
 	void Start()
 	{
-		extraButtonsManager.OnMuteButtonClicked += ExtraButtonsManager_OnMuteButtonClicked;
 		levelNameLabel.text = "LEVEL #" + (GameSceneManager.currentLevelIndex + 1).ToString ();
-	}
-	void ExtraButtonsManager_OnMuteButtonClicked ()
-	{
-		extraButtonsManager.UpdateMuteButtonSprite ();
-	}
+    }
+
+    public void CheckActionButtonsAnimations()
+    {
+        if (GameSceneManager.currentLevelIndex == 11)
+            actionButtonsManager.PlayButtonEntryAnimation(true);
+        else if (GameSceneManager.currentLevelIndex == 17)
+            actionButtonsManager.PlayButtonEntryAnimation(false);
+    }
 }

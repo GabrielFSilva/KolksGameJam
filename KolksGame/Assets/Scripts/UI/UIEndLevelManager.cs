@@ -9,10 +9,11 @@ public class UIEndLevelManager : MonoBehaviour
 
     public List<Animator> starAnimators;
 
-    public RectTransform starBar;
-	public RectTransform starBarFull;
-	public RectTransform starBarEmpty;
-    public RectTransform success;
+    public Animator         starBarAnimator;
+    public RectTransform    starBar;
+	public RectTransform    starBarFull;
+	public RectTransform    starBarEmpty;
+    public RectTransform    success;
 
     public Image star1;
 	public Image star2;
@@ -20,9 +21,11 @@ public class UIEndLevelManager : MonoBehaviour
 	public Color starOffColor;
 	public Color starOnColor;
 
-	public Button nextButton;
-	public Button replay2Button;
-	public RectTransform replayButtonCenterRef;
+    public Animator         nextButtonAnimator;
+    public Button           nextButton;
+    public Animator         replay2ButtonAnimator;
+    public Button           replay2Button;
+	public RectTransform    replayButtonCenterRef;
 
 	public SoundManager soundManager;
     public int activeStarsCount = 0;
@@ -43,6 +46,8 @@ public class UIEndLevelManager : MonoBehaviour
 	{
 		endLevelPanel.gameObject.SetActive (p_enable);
 		buttonsPanel.gameObject.SetActive (!p_enable);
+        if (p_enable)
+            starBarAnimator.SetTrigger("Play");
 	}
 	public void EnableEndLevelButtons(float p_value)
 	{
@@ -51,12 +56,15 @@ public class UIEndLevelManager : MonoBehaviour
 			nextButton.gameObject.SetActive (true);
 			replay2Button.gameObject.SetActive (true);
             success.gameObject.SetActive(true);
+            nextButtonAnimator.SetTrigger("Play");
+            replay2ButtonAnimator.SetTrigger("Play");
         }
         else 
 		{
 			replay2Button.gameObject.SetActive (true);
 			replay2Button.GetComponent<RectTransform> ().anchoredPosition = replayButtonCenterRef.anchoredPosition;
-		}
+            replay2ButtonAnimator.SetTrigger("Play");
+        }
 	}
 	public void UpdateStarBarPosition(float p_value, float p_limit)
 	{

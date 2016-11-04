@@ -14,17 +14,23 @@ public class TutorialManager : MonoBehaviour
     {
         if (p_levelIndex == 1)
             LoadTutorial(0);
-        else if (p_levelIndex == 2)
+         else if (p_levelIndex == 2)
             LoadTutorial(1);
         else if (p_levelIndex == 5 && p_coinCount == 2)
-            LoadTutorial(2);
+            LoadTutorial(3);
         else if (p_levelIndex == 9)
-            LoadTutorial(4);
+            LoadTutorial(5);
     }
     public void LevelEnded(int p_levelIndex, int p_coinCount)
     {
         if (p_levelIndex == 5 && p_coinCount == 1)
-            LoadTutorial(3);
+            LoadTutorial(4);
+    }
+
+    public void PlayerMoveToTargetPosition(int p_levelIndex)
+    {
+        if (p_levelIndex == 2)
+            LoadTutorial(2);
     }
 	
 	public void LoadTutorial(int p_tutorialIndex)
@@ -41,9 +47,14 @@ public class TutorialManager : MonoBehaviour
 
         onTutorial = true;
     }
-    public void OnLeftSwipeDone(int p_tutorialIndex)
+    public void OnSwipeLeft(int p_levelIndex)
     {
-        if (onTutorial && p_tutorialIndex == 2)
+        if (onTutorial && p_levelIndex == 2)
+            CloseTutorial();
+    }
+    public void OnTapRight(int p_levelIndex)
+    {
+        if (onTutorial && p_levelIndex == 2)
             CloseTutorial();
     }
     public void CloseTutorial()

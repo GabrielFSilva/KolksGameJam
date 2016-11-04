@@ -19,7 +19,6 @@ public class UIExtraButtonsManager : MonoBehaviour
 	void Start()
 	{
 		soundManager = SoundManager.GetInstance ();
-		UpdateMuteButtonSprite ();
 	}
 	void Update()
 	{
@@ -41,12 +40,5 @@ public class UIExtraButtonsManager : MonoBehaviour
 		soundManager.PlayClickSFX ();
 		AudioListener.volume = 1f - AudioListener.volume;
 		OnMuteButtonClicked();
-	}
-	public void UpdateMuteButtonSprite()
-	{
-		if (AudioListener.volume == 0f)
-			muteButtonImage.sprite = soundOffSprite;
-		else
-			muteButtonImage.sprite = soundOnSprite;
 	}
 }

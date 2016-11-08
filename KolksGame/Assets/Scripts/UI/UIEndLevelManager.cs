@@ -84,7 +84,7 @@ public class UIEndLevelManager : MonoBehaviour
     }
     private void PlayStarAnimation(int p_starIndex, bool p_firstTime)
     {
-        starAnimators[p_starIndex].SetTrigger(p_firstTime ? "Play" : "PlayAgain");
+        starAnimators[p_starIndex].SetTrigger(p_firstTime ? "Play1" : "Play2");
         soundManager.PlayEndOfLevelSFX(p_firstTime ? 1f : 0.75f);
     }
 	public void UpdateStarSprites(float p_value)

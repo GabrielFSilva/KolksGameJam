@@ -10,7 +10,6 @@ public class YawnLine : MonoBehaviour
     private Vector2 _startPosition;
     private Vector2 _endPosition;
     private Vector2 _distance;
-    private Orientation _orientation;
 
     public float lineDuration;
     public float lineCompletionTime;
@@ -31,7 +30,6 @@ public class YawnLine : MonoBehaviour
     
     public void SetPoints(Vector2 p_start, Vector2 p_end, Orientation p_ori)
     {
-        _orientation = p_ori;
         if (p_ori == Orientation.RIGHT)
         {
             _startPosition = p_start + (Vector2.right * 0.4f) + (Vector2.down * 0.15f);

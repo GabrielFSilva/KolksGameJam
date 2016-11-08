@@ -132,7 +132,7 @@ public class GameSceneManager : MonoBehaviour
 	void InputManager_OnSwipe (Orientation p_orientation)
 	{
         if (p_orientation == Orientation.LEFT)
-            tutorialManager.OnSwipeLeft(currentLevelIndex + 1);
+            tutorialManager.OnSwipeLeft();
         player.ChangeOrientation(p_orientation);
         player.SetPlayerDestination ();
     }
@@ -140,9 +140,8 @@ public class GameSceneManager : MonoBehaviour
     {
         if (currentLevelIndex == 0)
             return;
-
-        if (p_orientation == Orientation.RIGHT)
-            tutorialManager.OnTapRight(currentLevelIndex + 1);
+        
+        tutorialManager.OnTap(p_orientation);
         player.ChangeOrientation(p_orientation);
     }
 

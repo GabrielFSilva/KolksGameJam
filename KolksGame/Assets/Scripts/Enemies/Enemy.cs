@@ -5,11 +5,11 @@ public class Enemy : MonoBehaviour
 {
 	public GameSceneManager	gameSceneManager;
 	public bool 			yawned;
-    public bool             yawning;
+    public bool             yawning { get; private set; }
     //Graphics
-    public SpriteRenderer 	    enemySprite;
-	public Animator 		    animator;
-    public EnemyMarksController marksController;
+    public AnimalSpriteController   spriteController;
+    public SpriteRenderer 	        enemySprite;
+    public EnemyMarksController     marksController;
 
 	//Grid Info
 	public TupleInt 		gridPos;
@@ -45,9 +45,8 @@ public class Enemy : MonoBehaviour
 
     public void EnemySetUp () 
 	{
-		animator.SetInteger ("Orientation",(int)enemyOrientation);
+        spriteController.SetOrientation(enemyOrientation);
 		yawned = false;
-        yawning = false;
         _isMoving = false;
 		_isGliding = false;
 		UpdateSortingOrder ();
@@ -119,30 +118,31 @@ public class Enemy : MonoBehaviour
 	}
 	IEnumerator Yawn()
 	{
-        yawning = true;
 		yawned = true;
+        yawning = true;
 		yield return new WaitForSeconds (_enemyYawnDelay);
-
-		animator.SetBool ("Yawning",true);
+        spriteController.StartYawn();
 		EnableIcons (true);
 		gameSceneManager.PlayerYawnAction (gridPos,enemyOrientation,gameObject);
 		yield return new WaitForSeconds (0.3f);
-		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
         yawning = false;
+		SoundManager.GetInstance ().PlayEnemyYawnSFX ();
 	}
 	public void StopYawnChain()
 	{
 		yawned = false;
 		StopCoroutine (Yawn ());
 	}
+    /*
 	public void EndYawn()
 	{
+        spriteController.EndYawn();
 		animator.SetBool ("Yawning", false);
-	}
-	public void ChangeOrientationInstantly(Orientation p_orientation)
+	}*/
+	public void ChangeOrientationInstantly(Orientation p_ori)
 	{
-		enemyOrientation = p_orientation;
-		animator.SetInteger ("Orientation", (int)p_orientation);
+		enemyOrientation = p_ori;
+        spriteController.SetOrientation(p_ori);
 	}
 	protected void ChangeEnemyOrientation(Orientation p_playerOrientation)
 	{
@@ -170,12 +170,12 @@ public class Enemy : MonoBehaviour
 	IEnumerator ChangeOrientation(Orientation p_playerOrientation)
 	{
 		yield return new WaitForSeconds (_enemyTalkDelay);
-		int __orientation = (int)p_playerOrientation + 2;
-		if (__orientation >= 4)
-			__orientation -= 4;
+		int __ori = (int)p_playerOrientation + 2;
+		if (__ori >= 4)
+			__ori -= 4;
 
-		enemyOrientation = (Orientation)__orientation;
-		animator.SetInteger ("Orientation", __orientation);
+		enemyOrientation = (Orientation)__ori;
+		spriteController.SetOrientation (enemyOrientation);
 		SoundManager.GetInstance ().PlayMovimentSFX ();
 	}
 	//Enables the Yawn icons within the enemy

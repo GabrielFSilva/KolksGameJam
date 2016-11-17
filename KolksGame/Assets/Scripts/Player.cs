@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 
 	public GameSceneManager	gameSceneManager;
 	public SpriteRenderer playerSprite;
-	public PlayerSpriteAnimator animator;
+	public AnimalSpriteController animator;
 	public Rigidbody2D	rigidBody2D;
 
 	public Orientation playerOrientation = Orientation.RIGHT;
@@ -16,10 +16,8 @@ public class Player : MonoBehaviour
 
 	public bool yawned = false;
 	private float _playerSpeed = 4.0f;
-	private float _moveTimerThreshold = 0.25f;
 	public float talkTimerCooldown;
-	public float moveKeyPressedTimer = 0f;
-	//public Vector2 gridPosition;
+
 	public TupleInt gridPos;
 	public Vector2 moveStartPosition;
 	public Vector2 moveEndPosition;
@@ -30,7 +28,7 @@ public class Player : MonoBehaviour
 
 	void Start () 
 	{
-		animator.SetPlayerOrientation ((int)playerOrientation);
+		animator.SetOrientation ((int)playerOrientation);
 		if (playerOrientation == Orientation.UP)
 			playerDirection = KeyCode.W;
 		else if (playerOrientation == Orientation.RIGHT)
@@ -45,7 +43,7 @@ public class Player : MonoBehaviour
 
 	void Update () 
 	{
-		if (yawned)
+        if (yawned)
 			return;
 		if (isMoving) 
 		{
@@ -60,74 +58,6 @@ public class Player : MonoBehaviour
 				isTalking = false;
 			return;
 		}
-			
-		if (!Input.GetKey (playerDirection)) 
-		{
-			moveKeyPressedTimer = 0f;
-			if (Input.GetKey (KeyCode.W)) 
-			{
-				playerDirection = KeyCode.W;
-				playerOrientation = Orientation.UP;
-			} 
-			else if (Input.GetKey (KeyCode.UpArrow)) 
-			{
-				playerDirection = KeyCode.UpArrow;
-				playerOrientation = Orientation.UP;
-			} 
-			else if (Input.GetKey (KeyCode.A)) 
-			{
-				playerDirection = KeyCode.A;
-				playerOrientation = Orientation.LEFT;
-			} 
-			else if (Input.GetKey (KeyCode.LeftArrow)) 
-			{
-				playerDirection = KeyCode.LeftArrow;
-				playerOrientation = Orientation.LEFT;
-			}
-			else if (Input.GetKey (KeyCode.S)) 
-			{
-				playerDirection = KeyCode.S;
-				playerOrientation = Orientation.DOWN;
-			} 
-			else if (Input.GetKey (KeyCode.DownArrow)) 
-			{
-				playerDirection = KeyCode.DownArrow;
-				playerOrientation = Orientation.DOWN;
-			}
-			else if (Input.GetKey (KeyCode.D)) 
-			{
-				playerDirection = KeyCode.D;
-				playerOrientation = Orientation.RIGHT;
-			} 
-			else if (Input.GetKey (KeyCode.RightArrow)) 
-			{
-				playerDirection = KeyCode.RightArrow;
-				playerOrientation = Orientation.RIGHT;
-			} 
-			else if (Input.GetKeyDown(KeyCode.Q))
-			{
-				gameSceneManager.HelloButtonClicked (false);
-				return;
-			} 
-			else if (Input.GetKeyDown(KeyCode.E))
-			{
-				gameSceneManager.ExcuseMeButtonClicked (false);
-				return;
-			} 
-			else if (Input.GetKey (KeyCode.Space))
-			{
-				gameSceneManager.YawnButtonClicked (false);
-				return;
-			}
-			UpdateSpriteOriantation ();
-		} 
-		else 
-		{
-			if (!animator.yawning)
-				moveKeyPressedTimer += Time.deltaTime;
-			if (moveKeyPressedTimer >= _moveTimerThreshold) 
-				SetPlayerDestination ();
-		}
 	}
 	public void StartAction()
 	{
@@ -139,6 +69,7 @@ public class Player : MonoBehaviour
 		if (yawned || isMoving || isTalking || p_oritentation == playerOrientation) 
 			return;
 		playerOrientation = p_oritentation;
+        animator.PlayRotate();
 		UpdateSpriteOriantation ();
 	}
 	private void UpdateSortingOrder()
@@ -174,12 +105,13 @@ public class Player : MonoBehaviour
 				Mathf.Sin ((int)playerOrientation * 90f * Mathf.Deg2Rad)) * 2f;
 			
 			gameSceneManager.playerMovimentCount++;
-			SoundManager.GetInstance ().PlayMovimentSFX ();
+            animator.PlayRotate();
+            SoundManager.GetInstance ().PlayMovimentSFX ();
 		}
 	}
 
 	private void UpdateSpriteOriantation()
 	{
-		animator.SetPlayerOrientation ((int)playerOrientation);
+		animator.SetOrientation ((int)playerOrientation);
 	}
 }

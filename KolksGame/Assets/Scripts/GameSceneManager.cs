@@ -102,6 +102,7 @@ public class GameSceneManager : MonoBehaviour
 		inputManager.player = player;
 		inputManager.OnSwipe += InputManager_OnSwipe;
         inputManager.OnTap += InputManager_OnTap;
+        inputManager.OnKeyPress += InputManager_OnKeyPress;
 
         tutorialManager.SceneLoaded(currentLevelIndex + 1, entitiesManager.coinsManager.GetActiveCoins().Count);
 
@@ -111,7 +112,6 @@ public class GameSceneManager : MonoBehaviour
         playerMovimentCount = 0;
     }
 
-    
     void Player_OnPlayerMovementEnd ()
 	{
 		entitiesManager.coinsManager.CheckPlayerGotCoin (player.gridPos);
@@ -129,22 +129,36 @@ public class GameSceneManager : MonoBehaviour
 
 		}
 	}
-	void InputManager_OnSwipe (Orientation p_orientation)
+	private void InputManager_OnSwipe (Orientation p_ori)
 	{
-        if (p_orientation == Orientation.LEFT)
+        if (p_ori == Orientation.LEFT)
             tutorialManager.OnSwipeLeft();
-        player.ChangeOrientation(p_orientation);
+        player.ChangeOrientation(p_ori);
         player.SetPlayerDestination ();
     }
-    private void InputManager_OnTap(Orientation p_orientation)
+    private void InputManager_OnTap(Orientation p_ori)
     {
         if (currentLevelIndex == 0)
             return;
         
-        tutorialManager.OnTap(p_orientation);
-        player.ChangeOrientation(p_orientation);
+        tutorialManager.OnTap(p_ori);
+        player.ChangeOrientation(p_ori);
     }
+    private void InputManager_OnKeyPress(Orientation p_ori)
+    {
+        if (player.playerOrientation == p_ori)
+        {
+            if (p_ori == Orientation.LEFT)
+                tutorialManager.OnSwipeLeft();
+            player.SetPlayerDestination();
+        }
+        else
+        {
+            tutorialManager.OnTap(p_ori);
+            player.ChangeOrientation(p_ori);
+        }
 
+    }
     void Update()
 	{
 		enemyYawnCount = 0;
@@ -336,8 +350,12 @@ public class GameSceneManager : MonoBehaviour
 	}
 	public void PlayerHelloAction(TupleInt p_position, Orientation p_orientation)
 	{
-		if (playerMovimentCount >= movesAvailable)
-			return;
+        if (playerMovimentCount >= movesAvailable)
+        {
+            uiManager.PlayBarShakeAnimation();
+            soundManager.PlayErrorSFX();
+            return;
+        }
 		Enemy __enemyHit = TryToHitEnemy(player.gameObject ,p_position, p_orientation, true, false);
 		if (__enemyHit == null) 
 		{
@@ -357,8 +375,12 @@ public class GameSceneManager : MonoBehaviour
 	}
 	public void PlayerExcuseMeAction(TupleInt p_position, Orientation p_orientation)
 	{
-		if (playerMovimentCount >= movesAvailable)
-			return;
+        if (playerMovimentCount >= movesAvailable)
+        {
+            uiManager.PlayBarShakeAnimation();
+            soundManager.PlayErrorSFX();
+            return;
+        }
 		Enemy __enemyHit = TryToHitEnemy(player.gameObject, p_position, p_orientation, false, false);
 		if (__enemyHit == null) 
 		{
@@ -394,9 +416,12 @@ public class GameSceneManager : MonoBehaviour
 	public bool GetPathCollision(TupleInt p_position, Orientation p_orientation)
 	{
 		TupleInt __pos = TupleInt.AddTuples (p_position, p_orientation);
-		//Moviment Cap Reached
-		if (playerMovimentCount >= movesAvailable)
-			return false;
+        if (playerMovimentCount >= movesAvailable)
+        {
+            uiManager.PlayBarShakeAnimation();
+            soundManager.PlayErrorSFX();
+            return false;
+        }
 		//Map Limit Block
 		if (!gridManager.TileIsWithinGrid(__pos))
 			return false;

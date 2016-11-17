@@ -16,53 +16,61 @@ public class LevelSelectScreenManager : MonoBehaviour
 		unlockedLevel = PlayerPrefs.GetInt ("UnlockedLevel");
 		int __stars = 0;
         int __totalStarCount = 0;
+        List<GameObject> __childs;
 		foreach (Button __button in levelButtons) 
 		{
-			__button.gameObject.name = "Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Button";
+            __childs = new List<GameObject>();
+            foreach (Transform __trans in __button.transform.parent)
+                __childs.Add(__trans.gameObject);
+			__button.transform.parent.name = "Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Button";
 			if (levelButtons.IndexOf (__button) + 1 > unlockedLevel) 
 			{
 				__button.transition = Selectable.Transition.None;
-				__button.transform.GetChild (0).gameObject.SetActive (false);
-				__button.transform.GetChild (1).gameObject.SetActive (false);
-				__button.transform.GetChild (2).gameObject.SetActive (false);
-				__button.transform.GetChild (5).GetComponent<Text> ().color = Color.gray; 
-				__button.transform.GetChild (5).GetComponent<Text> ().text = 
-					(levelButtons.IndexOf (__button) + 1).ToString ();
+                __childs[0].SetActive (false);
+                __childs[1].SetActive (false);
+                __childs[1].SetActive (false);
+                __childs[5].GetComponent<Text> ().color = Color.gray;
+                __childs[5].GetComponent<Text> ().text = (levelButtons.IndexOf (__button) + 1).ToString ();
 				__button.GetComponent<Image> ().color = new Color(0.8f,0.8f,0.8f);
 			}
 			else 
 			{
-				__button.transform.GetChild (5).GetComponent<Text> ().text = 
+				__button.transform.parent.transform.GetChild (5).GetComponent<Text> ().text = 
 					(levelButtons.IndexOf (__button) + 1).ToString ();
-				if (PlayerPrefs.HasKey ("Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Stars")) 
+                //Played the level
+                //3 Stars don't change the state (all stars start enabled)
+                if (PlayerPrefs.HasKey ("Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Stars")) 
 				{
 					__stars = PlayerPrefs.GetInt ("Level_" + (levelButtons.IndexOf (__button) + 1).ToString () + "_Stars");
                     __totalStarCount += __stars;
+                    //1 Star
                     if (__stars == 1) 
 					{
-						__button.transform.GetChild (0).gameObject.SetActive (false);
-						__button.transform.GetChild (2).gameObject.SetActive (false);
-					} 
-					else if (__stars == 2) 
-					{
-						__button.transform.GetChild (0).GetComponent<RectTransform> ().anchoredPosition = 
-							__button.transform.GetChild (3).GetComponent<RectTransform> ().anchoredPosition;
-						__button.transform.GetChild (1).GetComponent<RectTransform> ().anchoredPosition = 
-							__button.transform.GetChild (4).GetComponent<RectTransform> ().anchoredPosition;
-						__button.transform.GetChild (2).gameObject.SetActive (false);
+                        __childs[0].SetActive (false);
+                        __childs[2].SetActive (false);
 					}
-					else if (__stars == 0)
+                    //2 Stars
+                    //Change 0 and 1 position, disable 2
+                    else if (__stars == 2) 
 					{
-						__button.transform.GetChild (0).gameObject.SetActive (false);
-						__button.transform.GetChild (1).gameObject.SetActive (false);
-						__button.transform.GetChild (2).gameObject.SetActive (false);
+                        __childs[0].GetComponent<RectTransform> ().anchoredPosition = __childs[3].GetComponent<RectTransform> ().anchoredPosition;
+                        __childs[1].GetComponent<RectTransform> ().anchoredPosition = __childs[4].GetComponent<RectTransform> ().anchoredPosition;
+                        __childs[2].SetActive (false);
+					}
+                    //0 Stars
+                    else if (__stars == 0)
+					{
+                        __childs[0].SetActive (false);
+                        __childs[1].SetActive (false);
+                        __childs[2].SetActive (false);
 					}
 				}
+                //Didn't player the level
 				else
 				{
-					__button.transform.GetChild (0).gameObject.SetActive (false);
-					__button.transform.GetChild (1).gameObject.SetActive (false);
-					__button.transform.GetChild (2).gameObject.SetActive (false);
+                    __childs[0].SetActive (false);
+                    __childs[1].SetActive (false);
+                    __childs[2].SetActive (false);
 				}
 			}
 		}

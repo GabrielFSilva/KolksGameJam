@@ -25,4 +25,8 @@ public class UIManager : MonoBehaviour
         else if (GameSceneManager.currentLevelIndex == 17)
             actionButtonsManager.PlayButtonEntryAnimation(false);
     }
+    public void PlayBarShakeAnimation()
+    {
+        energyBarManager.PlayShakeAnimation();
+    }
 }

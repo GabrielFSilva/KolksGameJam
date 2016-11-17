@@ -2,33 +2,62 @@
 using System.Collections;
 using System;
 
-public class InputManager : MonoBehaviour 
+public class InputManager : MonoBehaviour
 {
-	public event Action<Orientation>	OnSwipe;
-    public event Action<Orientation>    OnTap;
-    public BoxCollider2D	inputCollider;
+    public event Action<Orientation> OnSwipe;
+    public event Action<Orientation> OnTap;
+    public event Action<Orientation> OnKeyPress;
+    public BoxCollider2D inputCollider;
 
-	public Player	player;
+    public Player player;
 
-	private Vector2 _firstPressPos;
-	private Vector2 _secondPressPos;
-	private Vector2 _currentSwipe;
+    private Vector2 _firstPressPos;
+    private Vector2 _secondPressPos;
+    private Vector2 _currentSwipe;
 
-	void Update()
-	{
-		if(Input.touches.Length > 0)
-		{
-			Touch __touch = Input.GetTouch(0);
-			if(__touch.phase == TouchPhase.Began)
-			{
-				_firstPressPos = new Vector2(__touch.position.x,__touch.position.y);
-			}
-			else if(__touch.phase == TouchPhase.Ended)
-			{
-				_secondPressPos = new Vector2(__touch.position.x,__touch.position.y);
-				_currentSwipe = new Vector3(_secondPressPos.x - _firstPressPos.x, _secondPressPos.y - _firstPressPos.y);
+    void Update()
+    {
+#if UNITY_EDITOR
+        EditorInputCheck();
+#elif UNITY_ANDROID
+        MobileInputCheck();
+#endif
+    }
 
-				if (_currentSwipe.magnitude < 100f)
+    private float AngleBetweenVector2(Vector2 p_vec1, Vector2 p_vec2)
+    {
+        Vector2 __difference = p_vec2 - p_vec1;
+        float __sign = (p_vec2.y < p_vec1.y) ? -1f : 1f;
+        return Vector2.Angle(Vector2.right, __difference) * __sign;
+    }
+
+    private void EditorInputCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+            OnKeyPress(Orientation.UP);
+        else if (Input.GetKeyDown(KeyCode.A))
+            OnKeyPress(Orientation.LEFT);
+        else if (Input.GetKeyDown(KeyCode.D))
+            OnKeyPress(Orientation.RIGHT);
+        else if (Input.GetKeyDown(KeyCode.S))
+            OnKeyPress(Orientation.DOWN);
+    }
+
+    private void MobileInputCheck()
+    {
+        if (Input.touches.Length > 0)
+        {
+            Touch __touch = Input.GetTouch(0);
+            if (__touch.phase == TouchPhase.Began)
+            {
+                _firstPressPos = new Vector2(__touch.position.x, __touch.position.y);
+            }
+            else if (__touch.phase == TouchPhase.Ended)
+            {
+                _secondPressPos = new Vector2(__touch.position.x, __touch.position.y);
+                _currentSwipe = new Vector3(_secondPressPos.x - _firstPressPos.x, _secondPressPos.y - _firstPressPos.y);
+
+                if (_currentSwipe.magnitude < 100f)
                 {
                     Vector3 __pos = __touch.position;
                     __pos.z = player.transform.position.z;
@@ -44,25 +73,18 @@ public class InputManager : MonoBehaviour
                     return;
                 }
 
-				_currentSwipe.Normalize();
+                _currentSwipe.Normalize();
 
                 if (_currentSwipe.y > 0 && _currentSwipe.x > -0.5f && _currentSwipe.x < 0.5f)
                     OnSwipe(Orientation.UP);
-				else if(_currentSwipe.y < 0 && _currentSwipe.x > -0.5f && _currentSwipe.x < 0.5f)
-					OnSwipe (Orientation.DOWN);
+                else if (_currentSwipe.y < 0 && _currentSwipe.x > -0.5f && _currentSwipe.x < 0.5f)
+                    OnSwipe(Orientation.DOWN);
                 else if (_currentSwipe.x < 0 && _currentSwipe.y > -0.5f && _currentSwipe.y < 0.5f)
-					OnSwipe (Orientation.LEFT);
+                    OnSwipe(Orientation.LEFT);
                 else /*if (_currentSwipe.x > 0 && _currentSwipe.y > -0.5f && _currentSwipe.y < 0.5f)*/
-					OnSwipe (Orientation.RIGHT);
-			}
-		}
-	}
-
-	private float AngleBetweenVector2(Vector2 p_vec1, Vector2 p_vec2)
-	{
-		Vector2 __difference = p_vec2 - p_vec1;
-		float __sign = (p_vec2.y < p_vec1.y) ? -1f : 1f;
-		return Vector2.Angle (Vector2.right, __difference) * __sign;
-	}
+                    OnSwipe(Orientation.RIGHT);
+            }
+        }
+    }
 }
 

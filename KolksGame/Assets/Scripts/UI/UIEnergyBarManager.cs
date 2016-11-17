@@ -4,9 +4,11 @@ using System.Collections;
 
 public class UIEnergyBarManager : MonoBehaviour 
 {
-	public RectTransform energyBar;
-	public RectTransform energyBarFull;
-	public RectTransform energyBarEmpty;
+    public Animator         energyBarAnimator;
+
+	public RectTransform    energyBar;
+	public RectTransform    energyBarFull;
+	public RectTransform    energyBarEmpty;
 
 	public Text	energyCurrentLabel;
 	public Text	energyMaxLabel;
@@ -30,4 +32,9 @@ public class UIEnergyBarManager : MonoBehaviour
 		energyCurrentLabel.text = (p_movesAvailable-p_playerMovCount).ToString ();
 		energyMaxLabel.text = p_movesAvailable.ToString ();
 	}
+
+    public void PlayShakeAnimation()
+    {
+        energyBarAnimator.SetTrigger("Play");
+    }
 }

@@ -41,7 +41,6 @@ public class AnimalSpriteController : MonoBehaviour
 	}
 	public void EndYawn()
 	{
-        Debug.Log("End");
 		yawning = false;
         yawnCooldownTimer = 0f;
 		animator.SetBool ("Yawning", false);

@@ -80,7 +80,7 @@ public class LevelSelectScreenManager : MonoBehaviour
 	public void HomeButtonClicked()
 	{
 		SoundManager.GetInstance ().PlayClickSFX ();
-		SceneManager.LoadScene ("TitleScreen");
+		SceneManager.LoadScene ("TitleScene");
 	}
 	public void LevelButtonClicked(int p_level)
 	{

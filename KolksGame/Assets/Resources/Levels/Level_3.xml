@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="5" height="5" tilewidth="32" tileheight="32" nextobjectid="4">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="left-up" width="5" height="5" tilewidth="32" tileheight="32" nextobjectid="4">
  <tileset firstgid="1" name="Floor" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="../../LevelEditor/Tilesets/Tileset_Floor.png" width="256" height="256"/>
  </tileset>
@@ -43,20 +43,18 @@
  </layer>
  <layer name="Scenery" width="5" height="5">
   <data>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="75"/>
+   <tile gid="69"/>
    <tile gid="75"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="75"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="69"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -67,18 +65,20 @@
    <tile gid="69"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="69"/>
+   <tile gid="69"/>
    <tile gid="0"/>
   </data>
  </layer>
  <layer name="Entities" width="5" height="5">
   <data>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="129"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -90,7 +90,7 @@
    <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="130"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -102,10 +102,10 @@
  <layer name="IA" width="5" height="5">
   <data>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="196"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="196"/>
@@ -119,7 +119,7 @@
    <tile gid="193"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="195"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -133,7 +133,7 @@
    <properties>
     <property name="2Star" type="int" value="1"/>
     <property name="3Star" type="int" value="2"/>
-    <property name="Energy" type="int" value="6"/>
+    <property name="Energy" type="int" value="7"/>
     <property name="ExcuseMe" type="bool" value="false"/>
     <property name="Hello" type="bool" value="false"/>
    </properties>

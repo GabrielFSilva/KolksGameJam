@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="5" height="5" tilewidth="32" tileheight="32" nextobjectid="4">
+ <tileset firstgid="1" name="Floor" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="../../LevelEditor/Tilesets/Tileset_Floor.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="65" name="Scenery" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="../../LevelEditor/Tilesets/Tileset_Scenery.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="129" name="Entities" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="../../LevelEditor/Tilesets/Tileset_Entities.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="193" name="IA" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="../../LevelEditor/Tilesets/Tileset_IA.png" width="256" height="256"/>
+ </tileset>
+ <layer name="Floor" width="5" height="5">
+  <data>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+  </data>
+ </layer>
+ <layer name="Scenery" width="5" height="5">
+  <data>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="69"/>
+   <tile gid="0"/>
+   <tile gid="75"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+  </data>
+ </layer>
+ <layer name="Entities" width="5" height="5">
+  <data>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="133"/>
+   <tile gid="137"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="130"/>
+   <tile gid="137"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="132"/>
+   <tile gid="0"/>
+   <tile gid="137"/>
+   <tile gid="0"/>
+   <tile gid="137"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="129"/>
+   <tile gid="0"/>
+  </data>
+ </layer>
+ <layer name="IA" width="5" height="5">
+  <data>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="195"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="195"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="193"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="196"/>
+   <tile gid="0"/>
+  </data>
+ </layer>
+ <objectgroup name="LevelInfo">
+  <object id="1" name="LevelInfo" x="0" y="0" width="32" height="32">
+   <properties>
+    <property name="2Star" type="int" value="1"/>
+    <property name="3Star" type="int" value="2"/>
+    <property name="Energy" type="int" value="14"/>
+    <property name="ExcuseMe" type="bool" value="true"/>
+    <property name="Hello" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

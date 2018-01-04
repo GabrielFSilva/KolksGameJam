@@ -58,7 +58,12 @@ public class EntitiesManager : MonoBehaviour
 				enemiesManager.LoadEnemy (EnemyType.POLITE, i);
 				coinsManager.LoadCoin (i);
 			}
-		}
+            else if (entitiesData[i] == 13)
+            {
+                enemiesManager.LoadEnemy(EnemyType.NASTY, i);
+                coinsManager.LoadCoin(i);
+            }
+        }
 		OnPlayerLoaded (playerManager.player);
 		OnEnemiesLoaded (enemiesManager.enemies);
 		coinsManager.CallUpdateCoinsLabel ();

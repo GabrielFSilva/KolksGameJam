@@ -167,7 +167,16 @@ public class Enemy : MonoBehaviour
 		if (enemyType == EnemyType.SHY)
 			ChangeOrientationInstantly (p_playerOrientation);
 	}
-	IEnumerator ChangeOrientation(Orientation p_playerOrientation)
+    public void NextToPlayer(Orientation p_playerOrientation)
+    {
+        if (enemyType != EnemyType.NASTY)
+            return;
+        TupleInt __pos = TupleInt.AddTuples(gridPos, p_playerOrientation);
+        if (gameSceneManager.gridManager.TileIsWithinGrid(__pos) 
+            && gameSceneManager.gridManager.TileWalkable(__pos))
+            SetEnemyDestination(p_playerOrientation);
+    }
+    IEnumerator ChangeOrientation(Orientation p_playerOrientation)
 	{
 		yield return new WaitForSeconds (_enemyTalkDelay);
 		int __ori = (int)p_playerOrientation + 2;

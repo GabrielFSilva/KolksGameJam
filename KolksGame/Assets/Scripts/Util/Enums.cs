@@ -4,7 +4,8 @@ public enum EnemyType
 	STANDARD,
 	COCKY,
 	SHY,
-	POLITE
+	POLITE,
+    NASTY
 }
 //Player Action Effect on Enemy
 public enum ActionEffectType

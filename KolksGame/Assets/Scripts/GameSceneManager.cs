@@ -123,8 +123,9 @@ public class GameSceneManager : MonoBehaviour
 			__enemyHit = TryToHitEnemy (player.gameObject ,player.gridPos,(Orientation)i, true, false);
 			if (__enemyHit == null) 
 				continue;
-			
-			if (Util.IsOpposeOrientation(__enemyHit.enemyOrientation, (Orientation)i))
+            if (Util.GridDistance(player.gridPos, __enemyHit.gridPos) == 1)
+                __enemyHit.NextToPlayer((Orientation)i);
+            if (Util.IsOpposeOrientation(__enemyHit.enemyOrientation, (Orientation)i))
 				__enemyHit.SawPlayer (player.playerOrientation);
 
 		}

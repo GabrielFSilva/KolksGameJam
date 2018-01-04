@@ -10,4 +10,8 @@ public class Util : MonoBehaviour
 			__orientation -= 4;
 		return __orientation == (int)p_ori2 ? true : false;
 	}
+    public static int GridDistance(TupleInt p_pos1, TupleInt p_pos2)
+    {
+        return Mathf.Abs(p_pos1.Item1 - p_pos2.Item1) + Mathf.Abs(p_pos1.Item2 - p_pos2.Item2);
+    }
 }

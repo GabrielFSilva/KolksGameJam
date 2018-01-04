@@ -34,7 +34,9 @@ public class EntitiesManager : MonoBehaviour
 				enemiesManager.LoadEnemy (EnemyType.SHY, i);
 			else if (entitiesData [i] == 4)
 				enemiesManager.LoadEnemy (EnemyType.POLITE, i);
-			else if (entitiesData [i] == 8)
+            else if (entitiesData[i] == 5)
+                enemiesManager.LoadEnemy(EnemyType.NASTY, i);
+            else if (entitiesData [i] == 8)
 				coinsManager.LoadCoin (i);
 			else if (entitiesData [i] == 9) 
 			{

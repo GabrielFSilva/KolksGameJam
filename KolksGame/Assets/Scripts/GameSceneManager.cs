@@ -34,6 +34,7 @@ public class GameSceneManager : MonoBehaviour
 	public GridManager 		gridManager;
 	public EntitiesManager	entitiesManager;
 	public InputManager 	inputManager;
+    public VictoryManager   victoryManager;
 	public UIManager 		uiManager;
     public TutorialManager  tutorialManager;
 	public SoundManager 	soundManager;
@@ -213,13 +214,6 @@ public class GameSceneManager : MonoBehaviour
 		}
 		if (__limit >= 0.5f)
 			PlayerPrefsManager.SetUnlockedLevel(currentLevelIndex + 2);
-		/*while (__t < __limit) 
-		{
-			__t += Time.deltaTime * 0.6f;
-			uiManager.endLevelPanelManager.UpdateStarBarPosition (__t, __limit);
-			uiManager.endLevelPanelManager.UpdateStarSprites (__t);
-			yield return null;
-		}*/
 		//Failed Stage
 		if (__limit < 0.5f)
 			soundManager.PlayDefeatSFX ();
@@ -227,15 +221,14 @@ public class GameSceneManager : MonoBehaviour
 		else
 			entitiesManager.coinsManager.SaveCollectedCoins ();
 
-   
 		yield return new WaitForSeconds (0.25f);
-		uiManager.endLevelPanelManager.EnableEndLevelButtons (__limit);
-
-        //Change Scene Fade
+        uiManager.endLevelPanelManager.PlayVictorySequence();
         yield return new WaitForSeconds(0.5f + UIEndLevelManager.FadeDuration + 
             UIEndLevelManager.SuccessMessageDuration);
         if (__limit >= 0.5f)
-            SceneManager.LoadScene("VictoryScene");
+        {
+            victoryManager.EnableVictoryPanel();
+        }
     }
 
 	public void NextButtonClicked()

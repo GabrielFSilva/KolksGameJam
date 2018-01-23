@@ -26,7 +26,7 @@ public class UIEndLevelManager : MonoBehaviour
     public Button replayButton;
     public RectTransform replayButtonCenterRef;
 
-    
+    public Animation fadeAnimation;
 
     public SoundManager soundManager;
     public int activeStarsCount = 0;
@@ -42,27 +42,18 @@ public class UIEndLevelManager : MonoBehaviour
         endLevelPanel.gameObject.SetActive(p_enable);
         buttonsPanel.gameObject.SetActive(!p_enable);
     }
-    public void EnableEndLevelButtons(float p_value)
+    public void PlayVictorySequence()
     {
-        if (p_value >= 0.5f)
-        {
-            successImage.gameObject.SetActive(true);
-            StartCoroutine(EndLevelFade());
-        }
+        StartCoroutine(EndLevelSequence());
     }
    
-    IEnumerator EndLevelFade()
+    IEnumerator EndLevelSequence()
     {
-        yield return new WaitForSeconds(successMessageDuration);
-        float __alpha = -Time.deltaTime;
-        while(true)
-        {
-            __alpha += (Time.deltaTime / fadeDuration);
-            fadeImage.color = new Color(1f, 1f, 1f, __alpha);
-            if (__alpha >= 1f)
-                break;
-            yield return null;
-        }
+        successImage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        fadeAnimation.playAutomatically = true;
+        fadeAnimation.Play();
+        yield break;
     }
 }
 

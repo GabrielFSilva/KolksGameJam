@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 59ef1bff7630c0b4796c1171c1f3cc2a
-timeCreated: 1517457022
+guid: d423a5599d48b2844bba37e4ec79ba26
+timeCreated: 1517534390
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Frog_Front_Idle
-    21300002: Frog_Front_Yawn
-    21300004: Frog_Side_Idle
-    21300006: Frog_Side_Yawn
-    21300008: Frog_Back_Idle
-    21300010: Frog_Back_Yawn
+    21300000: Monkey_Front_Idle
+    21300002: Monkey_Front_Yan
+    21300004: Monkey_Side_Idle
+    21300006: Monkey_Side_Yawn
+    21300008: Monkey_Back_Idle
+    21300010: Monkey_Back_Yawn
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -58,7 +58,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Frog_Front_Idle
+      name: Monkey_Front_Idle
       rect:
         serializedVersion: 2
         x: 0
@@ -71,7 +71,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Frog_Front_Yawn
+      name: Monkey_Front_Yan
       rect:
         serializedVersion: 2
         x: 204
@@ -84,7 +84,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Frog_Side_Idle
+      name: Monkey_Side_Idle
       rect:
         serializedVersion: 2
         x: 408
@@ -97,7 +97,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Frog_Side_Yawn
+      name: Monkey_Side_Yawn
       rect:
         serializedVersion: 2
         x: 612
@@ -110,7 +110,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Frog_Back_Idle
+      name: Monkey_Back_Idle
       rect:
         serializedVersion: 2
         x: 816
@@ -123,7 +123,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Frog_Back_Yawn
+      name: Monkey_Back_Yawn
       rect:
         serializedVersion: 2
         x: 1020

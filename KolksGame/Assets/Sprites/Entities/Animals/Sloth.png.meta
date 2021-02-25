@@ -1,25 +1,42 @@
 fileFormatVersion: 2
 guid: f114f4a4ce605a84cb6882a12f9db2b7
-timeCreated: 1475194279
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Sloth_Front_Idle
-    21300002: Sloth_Front_Yawn
-    21300004: Sloth_Side_Idle
-    21300006: Sloth_Side_Yawn
-    21300008: Sloth_Back_Idle
-    21300010: Sloth_Down_Yawn
-    21300012: Sloth_Side2_Idle
-    21300014: Sloth_Side2_Yawn
-  serializedVersion: 2
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Sloth_Front_Idle
+  - first:
+      213: 21300002
+    second: Sloth_Front_Yawn
+  - first:
+      213: 21300004
+    second: Sloth_Side_Idle
+  - first:
+      213: 21300006
+    second: Sloth_Side_Yawn
+  - first:
+      213: 21300008
+    second: Sloth_Back_Idle
+  - first:
+      213: 21300010
+    second: Sloth_Down_Yawn
+  - first:
+      213: 21300012
+    second: Sloth_Side2_Idle
+  - first:
+      213: 21300014
+    second: Sloth_Side2_Yawn
+  externalObjects: {}
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -28,37 +45,61 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 78
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: Sloth_Front_Idle
+    - serializedVersion: 2
+      name: Sloth_Front_Idle
       rect:
         serializedVersion: 2
         x: 0
@@ -68,13 +109,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -62, y: 62}
-        - {x: -62, y: -62}
-        - {x: 63, y: -62}
-        - {x: 63, y: 61}
-        - {x: 54, y: 62}
-    - name: Sloth_Front_Yawn
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Front_Yawn
       rect:
         serializedVersion: 2
         x: 204
@@ -84,13 +130,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -62, y: 70}
-        - {x: -62, y: -60}
-        - {x: -58, y: -62}
-        - {x: 63, y: -62}
-        - {x: 63, y: 70}
-    - name: Sloth_Side_Idle
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Side_Idle
       rect:
         serializedVersion: 2
         x: 408
@@ -100,14 +151,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -62, y: 62}
-        - {x: -70, y: -6}
-        - {x: -70, y: -58}
-        - {x: -56, y: -62}
-        - {x: 67, y: -62}
-        - {x: 67, y: 62}
-    - name: Sloth_Side_Yawn
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Side_Yawn
       rect:
         serializedVersion: 2
         x: 612
@@ -117,16 +172,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -62, y: 70}
-        - {x: -70, y: -4}
-        - {x: -70, y: -41}
-        - {x: -62, y: -55}
-        - {x: -52, y: -63}
-        - {x: 62, y: -63}
-        - {x: 67, y: -46}
-        - {x: 67, y: 70}
-    - name: Sloth_Back_Idle
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Back_Idle
       rect:
         serializedVersion: 2
         x: 816
@@ -136,17 +193,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 55, y: 62}
-        - {x: -55, y: 62}
-        - {x: -62, y: 53}
-        - {x: -62, y: -52}
-        - {x: -61, y: -55}
-        - {x: -54, y: -62}
-        - {x: 55, y: -62}
-        - {x: 62, y: -54}
-        - {x: 62, y: 55}
-    - name: Sloth_Down_Yawn
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Down_Yawn
       rect:
         serializedVersion: 2
         x: 1020
@@ -156,15 +214,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -60, y: 70}
-        - {x: -62, y: 63}
-        - {x: -62, y: -52}
-        - {x: -61, y: -55}
-        - {x: -54, y: -62}
-        - {x: 62, y: -62}
-        - {x: 62, y: 70}
-    - name: Sloth_Side2_Idle
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Side2_Idle
       rect:
         serializedVersion: 2
         x: 1224
@@ -174,18 +235,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 56, y: 62}
-        - {x: -57, y: 62}
-        - {x: -63, y: 52}
-        - {x: -67, y: 31}
-        - {x: -67, y: -46}
-        - {x: -60, y: -62}
-        - {x: 56, y: -62}
-        - {x: 70, y: -47}
-        - {x: 70, y: 4}
-        - {x: 63, y: 52}
-    - name: Sloth_Side2_Yawn
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sloth_Side2_Yawn
       rect:
         serializedVersion: 2
         x: 1428
@@ -195,17 +256,29 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 56, y: 70}
-        - {x: -58, y: 70}
-        - {x: -67, y: 63}
-        - {x: -67, y: -62}
-        - {x: 66, y: -62}
-        - {x: 70, y: -54}
-        - {x: 70, y: 7}
-        - {x: 63, y: 60}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: Transparent
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

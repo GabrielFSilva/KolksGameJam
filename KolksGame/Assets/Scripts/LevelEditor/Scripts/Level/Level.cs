@@ -12,6 +12,13 @@ public class Level
 
     public List<Layer> Layers;
 
+    public void UpdateLevel(int rows, int columns, float tileSize)
+    {
+        Rows = rows;
+        Columns = columns;
+        TileSize = tileSize;
+    }
+
     public Level(int rows, int columns, float tileSize)
     {
         Rows = rows;

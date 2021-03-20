@@ -36,6 +36,12 @@ public class EditorLevel : MonoBehaviour
             Grid.Draw();
     }
 
+    public void UpdateGrid()
+    {
+        if (Grid != null && Level != null)
+            Grid.UpdateGrid(Level.Rows, Level.Columns, Level.TileSize);
+    }
+
     public void Setup()
     {
         Instance = this;
@@ -60,6 +66,13 @@ public class EditorLevelGrid
     private float tileSize;
 
     private Color normalColor = Color.grey;
+    
+    public void UpdateGrid(int rows, int columns, float tileSize)
+    {
+        this.rows = rows;
+        this.columns = columns;
+        this.tileSize = tileSize;
+    }
 
     public EditorLevelGrid(Transform transform, int columns, int rows, float tileSize)
     {

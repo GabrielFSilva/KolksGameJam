@@ -46,6 +46,13 @@ public static class LevelCreator
         }
     }
 
+    public static void UpdateLevel(int rows, int columns, float tileSize)
+    {
+        EditorLevel editorLevel = GameObject.FindObjectOfType<EditorLevel>();
+        editorLevel.Level.UpdateLevel(rows, columns, tileSize);
+        editorLevel.UpdateGrid();
+    }
+
     public static void GenerateLevel()
     {
         GameObject editorLevellGO = new GameObject("EditorLevel", typeof(EditorLevel));
